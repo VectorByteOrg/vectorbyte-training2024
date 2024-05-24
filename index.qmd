@@ -1,0 +1,19 @@
+---
+title: ""
+format:
+  html:
+    toc: false
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
+    grid:
+      margin-width: 1000px
+---
+
+# Welcome to the 2024 VectorByte  Training Workshop!
+
+#### Check out our [about](about.html) and [schedule](schedule2024.html) pages to continue.
+
+<br> <br> <br>
+
+<center>![](graphics/VectorByte-logo_lg.png){width="4in"}</center>
