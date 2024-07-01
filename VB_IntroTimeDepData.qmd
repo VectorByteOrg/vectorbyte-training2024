@@ -1,0 +1,180 @@
+---
+title: "VectorByte Methods Training"
+subtitle: "Introduction to Modeling Time-Dependent Population Data"
+author: "The VectorByte Team (Leah R. Johnson, Virginia Tech)"
+title-slide-attributes:
+  data-background-image: VectorByte-logo_lg.png
+  data-background-size: contain
+  data-background-opacity: "0.2"
+format: revealjs
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE,
+                      #fig.height=6, 
+                      #fig.width = 1.777777*6,
+                      tidy = FALSE, 
+                      comment = NA, 
+                      highlight = TRUE, 
+                      prompt = FALSE, 
+                      crop = TRUE,
+                      comment = "#>",
+                      collapse = TRUE)
+library(knitr)
+library(kableExtra)
+library(xtable)
+library(viridis)
+
+options(stringsAsFactors=FALSE)
+knit_hooks$set(no.main = function(before, options, envir) {
+    if (before) par(mar = c(4.1, 4.1, 1.1, 1.1))  # smaller margin on top
+})
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(width = 60)
+source("my_knitter.R")
+#library(tidyverse)
+#library(reshape2)
+#theme_set(theme_light(base_size = 16))
+make_latex_decorator <- function(output, otherwise) {
+  function() {
+      if (knitr:::is_latex_output()) output else otherwise
+  }
+}
+insert_pause <- make_latex_decorator(". . .", "\n")
+insert_slide_break <- make_latex_decorator("----", "\n")
+insert_inc_bullet <- make_latex_decorator("> *", "*")
+insert_html_math <- make_latex_decorator("", "$$")
+## classoption: aspectratio=169
+```
+
+## Learning Objectives
+
+1.  Understand basic concepts in how we understand and model time-dependent population data in VBD applications
+2.  Review basic idea of forecasting
+3.  Overview of course
+
+## Population dynamics of disease
+
+The number of hosts, vectors, pathogens, and infected individuals change over time
+
+We use models to understand and to forecast/predict
+
+## What types of models?
+
+tactical to strategic
+
+We'll focus on the tactical end of things here (i.e., no dif eqs)
+
+## Simple example: A first (deterministic) model
+
+::: columns
+::: {.column width="50%"}
+Suppose we model a population in discrete time as \begin{align*}
+N(t+1) = s N(t) + b(t).
+\end{align*}
+
+Here $s$ is the fraction of individuals surviving each time step and $b(t)$ is the number of new births.
+:::
+
+::: {.column width="50%"}
+`r sk1()`
+
+```{r, echo=FALSE, fig.align='center', fig.height=8}
+Tmax<-60
+times<-1:Tmax
+
+N<-rep(NA, Tmax)
+N0<-20
+N[1]<-N0
+
+
+s<-0.8
+b<-10
+for(i in 2:Tmax) N[i]<- s*N[i-1]+b
+par(mar = c(4.1, 5.1, 1.1, 1.1))
+plot(times, N,  type="l", xlab="Time",
+     ylab="Population", lwd=3, ylim=c(20, 55),
+     main=paste("s = ", s, "   b = ", b, sep=""), 
+     cex.main=2, cex.axis=2, cex.lab=2)
+```
+:::
+:::
+
+## A first (stochastic) model
+
+In that simplest model the population can't go extinct!
+
+`r sk1()`
+
+What if the number of births vary? \begin{align*}
+N(t+1) = s N(t) + b(t) +W(t)
+\end{align*}
+
+Here $W(t)$ is `r mygrn("process uncertainty/stochasticity")`: we assume it is drawn from a particular distribution, and each year/time we observe a particular value $w(t)$. E.g., $W(t) \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, \sigma^2)$.
+
+`r sk1()`
+
+What might we see? `r myblue("When would the population go extinct?")`
+
+------------------------------------------------------------------------
+
+```{=tex}
+\begin{align*}
+N(t+1) = & s N(t) + b(t) + W(t)\\
+W(t) & \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, \sigma^2)
+\end{align*}
+```
+```{r, echo=FALSE, fig.align='center'}
+set.seed(12)
+sigma<-c(5, 15, 25)
+N.stoch<-matrix(NA, ncol=Tmax, nrow=length(sigma))
+N.stoch[,1]<-N0
+for(j in 1:length(sigma)){
+    for(i in 2:Tmax){
+        if(N.stoch[j,i-1]==0){
+            N.stoch[j,i]<-0
+        }else{
+            N.stoch[j,i]<- s*N.stoch[j,i-1]+b+rnorm(1, 0, sd=sigma[j])
+        }
+        if(N.stoch[j,i]<0) N.stoch[j,i]<-0
+    }
+}
+
+par(mfrow=c(1,3), bty="n")
+for(j in 1:length(sigma)){
+    plot(times, N.stoch[j,],  type="l", xlab="Time",
+         ylab="Population", lwd=3, 
+         main=paste("sigma = ", sigma[j], sep=""), ylim=c(0,120))
+}
+```
+
+## Observation Models
+
+We also have to go out into the field and take some observations of the populations. Let's say that we observe $N_{\mathrm{obs}}(t)$ individuals at time $t$. How does this relate to the true population size? One possibility is: \begin{align*}
+N_{\mathrm{obs}}(t) = N(t) + V(t)
+\end{align*} where $V(t)$ is our "observation uncertainty", and all together this equation describes our `r myblue("observation model")`.
+
+------------------------------------------------------------------------
+
+With the observation model, our full system (process + observation models) might be \begin{align*}
+N(t) & = s N(t-1) + b(t-1) +W(t)\\
+N_{\mathrm{obs}}(t) & =  N(t) + V(t)
+\end{align*} plus distributions for $W(t)$, $V(t)$, and the initial population size.
+
+## Observation process matters
+
+Analysis approach depends on the sampling -- evenly or unevenly spaced, goal of the modeling exercise (understanding vs forecasting/prediction).
+
+## Forecasting process
+
+something about forecasting
+
+## Outline of Course
+
+1.  Abundance data from VecDyn and NEON
+2.  Regression refresher for time dep data -- basics plus time dependent predictors, transformations, simple AR
+3.  Analysis of evenly-spaced data: basic time-series methods
+4.  Advanced modeling with Gaussian Process Models

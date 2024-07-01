@@ -1,0 +1,528 @@
+---
+title: "VectorByte Methods Training"
+subtitle: "Regression Review"
+author: "The VectorByte Team (Leah R. Johnson, Virginia Tech)"
+title-slide-attributes:
+  data-background-image: VectorByte-logo_lg.png
+  data-background-size: contain
+  data-background-opacity: "0.2"
+format: revealjs
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE,
+                      #fig.height=6, 
+                      #fig.width = 1.777777*6,
+                      tidy = FALSE, 
+                      comment = NA, 
+                      highlight = TRUE, 
+                      prompt = FALSE, 
+                      crop = TRUE,
+                      comment = "#>",
+                      collapse = TRUE)
+library(knitr)
+library(kableExtra)
+library(xtable)
+library(viridis)
+
+options(stringsAsFactors=FALSE)
+knit_hooks$set(no.main = function(before, options, envir) {
+    if (before) par(mar = c(4.1, 4.1, 1.1, 1.1))  # smaller margin on top
+})
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(width = 60)
+source("my_knitter.R")
+#library(tidyverse)
+#library(reshape2)
+#theme_set(theme_light(base_size = 16))
+make_latex_decorator <- function(output, otherwise) {
+  function() {
+      if (knitr:::is_latex_output()) output else otherwise
+  }
+}
+insert_pause <- make_latex_decorator(". . .", "\n")
+insert_slide_break <- make_latex_decorator("----", "\n")
+insert_inc_bullet <- make_latex_decorator("> *", "*")
+insert_html_math <- make_latex_decorator("", "$$")
+## classoption: aspectratio=169
+```
+
+## Learning Objectives
+
+1.  Review the idea behind regression
+2.  Review how to make predictions from a regression model
+3.  Practice simple regression procedures in `R` including diagnostic plots
+
+## Recall: simple population simulation
+
+\begin{align*}
+N(t) & = s N(t-1) + b +W(t) \\
+N_{\mathrm{obs}}(t) & =  N(t) + V(t)
+\end{align*}
+
+Let's specify a few values/distributions:
+
+- $s=0.75$, $b=10$, $N_0=10$, $T_{\mathrm{max}}=100$
+- $W(t) \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, 5^2)$
+- $V(t) \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, 3^2)$
+
+Let's simulate from this system to generate some test data.
+
+## MC simulation of simple system
+
+```{r, echo=F}
+mod1<-function(N, s=0.8, b=10){
+    s*N+b
+}
+
+### Population parameters
+s<-0.75
+b<-10
+N0<-10
+Tmax<-100
+
+### process stochasticity
+mu.w<-0
+sig.w<-5
+
+### observational stochasticty
+mu.v<-0
+sig.v<-3
+
+### making the structure to hold the output
+N<-N.obs<-rep(NA, length(Tmax))
+
+### I'm setting a random seed so that my results will be reproducable
+### for class
+set.seed(123)
+
+## initializing the vector
+N[1]<-N0
+N.obs[1]<-rnorm(1, N[1], sd=sig.v)
+
+for(t in 2:Tmax){
+
+    N[t]<-mod1(N[t-1], s=s, b=b) + rnorm(1, mu.w, sd=sig.w)
+
+    ## I don't allow my population to drop below zero, or to have
+    ## negative observations. This is a modification of the model above.
+    if(N[t]<0) N[t]<-0
+    if(N[t]!=0){
+        N.obs[t]<- N[t] + rnorm(1, mu.v, sd=sig.v)
+    }else N.obs[t]<-0
+    if(N.obs[t]<0) N.obs[t]<-0
+}
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=6, fig.height=5}
+plot(N, ylim=c(0, 65), xlab="time",
+     ylab="population", type="l")
+points(N, pch=20)
+points(N.obs, col=2)
+```
+
+## Changes in population size
+
+```{r, echo=FALSE, fig.align='center'}
+par(mfrow=c(1,2))
+plot(N.obs-N, xlab="time", type="l")
+hist(N.obs-N, xlab="", freq=FALSE)
+## add the line with the true observational distribution
+x<-seq(-10, 10, length=100)
+lines(x, dnorm(x, mean=mu.v, sd=sig.v), col=2)
+```
+
+
+## Sequential observations
+
+::: columns
+::: {.column width="50%"}
+
+```{r, echo=FALSE, fig.align='center', fig.width=6, fig.height=5.5}
+par(mfrow=c(1,1))
+t<-seq(1, Tmax-1)
+plot(N[t], N[t+1], ylim=c(0, 60), xlim=c(0, 60))
+```
+
+:::
+
+::: {.column width="50%"}
+
+`r sk1()`
+
+If we had just observed these data, how might we try to estimate parameters?
+
+:::
+:::
+
+## Estimating parameters
+
+Our model (assuming no observational stochasticity for now) can be written as
+
+\begin{align*}
+N(t) & = s N(t-1) + b + \varepsilon(t) \\
+\varepsilon(t) & \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, \sigma^2) \\
+\end{align*}
+
+We want to know $s$, $b$, and $\sigma$. Notice that without the error, the process just looks like 
+\begin{align*}
+N(t) = s N(t-1) + b \rightarrow y = b_1 x + b_0
+\end{align*}
+This is just a line! 
+
+------------------------------------
+
+```{r, echo=FALSE, fig.align='center', fig.width=5, fig.height=4}
+par(mfrow=c(1,1))
+t<-seq(1, Tmax-1)
+plot(N[t], N[t+1], ylim=c(0, 60), xlim=c(0, 60))
+abline(5, 0.9, col=3, lwd=3)
+
+```
+
+<center>The line shown was fit by the "eyeball" method.</center>
+
+
+## Review: What is a good line?
+
+`r sk1()`
+
+<center>`r mygrn("Can we do better than the eyeball method?")`</center>
+
+We desire a strategy for estimating the slope and intercept parameters in the model $\hat{Y} = b_0 + b_1 X$.
+
+`r sk1()` 
+This involves
+
+- choosing a `r myred("criteria")`, i.e., quantifying how good a line is
+- and matching that with a `r myblue("solution")`, i.e., finding the best line subject to that criteria.
+
+
+---------------------------
+
+Although there are lots of ways to choose a `r myred("criteria")`
+
+- only a small handful lead to `r myblue("solutions")` that are "easy" to compute
+- and which have nice statistical properties 
+
+`r sk1()`
+Most reasonable `r myred("criteria")` involve measuring the amount by which the `r myblue("fitted value")` obtained from the line differs from the `r myred("observed value")` of the response value(s) in the data.
+
+- This amount is called the `r mygrn("residual")`.
+- Good lines produce small residuals.
+
+-------------------------------------------
+
+<center>![](graphics/fittedval.png){height="4.5in"}</center>
+
+The dots are the `r myred("observed values")` and the line represents our `r myblue("fitted values")` given by 
+$$
+ \hat{Y}_i = b_0 + b_1 X_i.
+$$
+
+
+---------------------------
+
+<center>![](graphics/residual.png){height="4.5in"}</center>
+
+The `r mygrn("residual")` $e_i$ is the discrepancy between the `r myblue("fitted")` $\hat{Y}_i$ and `r myred("observed")` $Y_i$ values.
+
+- Note that we can write
+$Y_i = \hat{Y}_i + (Y_i -\hat{Y}_i) = \hat{Y}_i + e_i$.
+
+## Least Squares
+
+A reasonable goal is to minimize the size of *all* residuals:
+
+- If they were all zero we would have a perfect line.
+- We trade-off between moving closer to some points and at the same time moving away from other points.
+
+Since some residuals are positive and some are negative, we need one more ingredient.
+
+- $|e_i|$ treats positives and negatives equally.
+- So does $e_i^2$, which is easier to work with mathematically.
+
+
+--------------------------------------
+
+***`r myblue("Least squares")`*** chooses $b_0$ and $b_1$ to minimize 
+$$
+SSE = \sum_{i=1}^n e^2_i = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2= \sum_{i=1}^n (Y_i - [b_0 + b_1 X_i])^2.
+$$
+
+<center>![](graphics/negpos.png){height="4in"}</center>
+
+-----------------------------------------
+
+**`r mygrn("Optional Practice Exercise")`**
+
+`r sk1()`
+
+Show that the least squares estimates for $b_0$ and $b_1$ are:
+$$
+b_0 = \bar{Y} - b_1 \bar{X}~~~\mathrm{and}~~~b_1 = \frac{ \sum_{i=1}(X_i Y_i) - n\bar{Y}\bar{X}}{\sum_{i=1}X_i^2 - n\bar{X}^2}
+$$
+where $\bar{X}$ denotes the arithmetic mean of $X$. 
+
+`r sk1()`
+
+Hint: You will take (partial) derivatives of $SSE$ w.r.t.~$b_0$ and $b_1$, set these equal to 0 and solve.
+
+## Estimating parameters
+
+We can use these formulas to estimate our parameters and draw a new line $\Rightarrow$  `r mygrn("make a prediction")`
+
+::: columns
+
+::: {.column width="50%"}
+\begin{align*}
+ \hat{b} & = b_0 = 14.55 \\
+\hat{s} & = b_1 = 0.63
+\end{align*}
+
+- The least squares line is different than our eyeballed line;
+- and we know its the `r myred("best line")` in a certain sense.
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+n<-length(N[t])
+b1<-(sum(N[t]*N[t+1]) - n*mean(N[t])*mean(N[t+1]))/(sum(N[t]^2)-n*mean(N[t])^2)
+b0<-mean(N[t+1])- b1*mean(N[t])
+```
+
+
+```{r, echo=FALSE, fig.align='center', fig.width=5, fig.height=5}
+par(mfrow=c(1,1))
+t<-seq(1, Tmax-1)
+plot(N[t], N[t+1], ylim=c(0, 60), xlim=c(0, 60))
+abline(5, 0.9, col=3, lwd=3)
+abline(b0, b1, col=2, lwd=3)
+abline(b, s, col="blue", lwd=3)
+legend("bottomright", legend=c("eyeball", "LS", "true"), col=c(3,2,4), lwd=3)
+```
+
+:::
+:::
+
+## Estimation of error variance
+
+We also want to estimate $\sigma$. If we think about the definition of the variance in our system in terms of the residuals:
+
+$$
+\sigma^2 = \text{var}(\varepsilon_i) 
+= \mathbb{E}[(\varepsilon_i - \mathbb{E}[\varepsilon_i])^2] =
+\mathbb{E}[\varepsilon_i^2].
+$$
+
+This *seems* to indicate that a sensible strategy would be to estimate the average for squared errors with the sample average squared residuals:
+$$
+\hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^n e_i^2
+$$
+
+--------------------------------------------
+
+However, this is ***not*** an `r myred("unbiased")` estimator of $\sigma^2$. 
+
+- This means that $\mathbb{E}[\hat{\sigma}^2] \ne \sigma^2$.
+
+For that, we have to alter the
+denominator slightly:
+$$
+s^2 = \frac{1}{n-p} \sum_{i=1}^n e_i^2 = \frac{SSE}{n-2}
+$$
+($p$ is the number of other parameters we estimate; i.e. `r myred("2")` for  $b_0 +
+b_1$).
+
+- We have $n-p$ degrees of freedom because $p$ ($=2$) have been "used up" in the estimation of $b_0$ and $b_1$.
+
+
+It is often convenient to report $s = \sqrt{SSE/(n-p)}$, which is in the same units as $Y$.
+
+## Estimating parameters
+
+Now we can get (point) estimates of all of the parameters for our system.
+
+::: columns
+
+::: {.column width="50%"}
+
+`r sk1()`
+
+\begin{align*}
+ \hat{b} & = 14.55\mathrm{,}~~ b_{\mathrm{true}}=10\\
+\hat{s} & = 0.63\mathrm{,}~~ s_{\mathrm{true}}=0.75\\
+\hat{\sigma} & = 4.88\mathrm{,}~~ \sigma_{\mathrm{true}}=5
+\end{align*}
+:::
+
+::: {.column width="50%"}
+
+```{r}
+n<-length(N[t])
+b1<-(sum(N[t]*N[t+1]) - n*mean(N[t])*mean(N[t+1]))/(sum(N[t]^2)-n*mean(N[t])^2)
+b0<-mean(N[t+1])- b1*mean(N[t])
+```
+
+
+```{r, echo=FALSE, fig.align='center', fig.width=5, fig.height=5}
+par(mfrow=c(1,1))
+t<-seq(1, Tmax-1)
+plot(N[t], N[t+1], ylim=c(0, 60), xlim=c(0, 60))
+abline(5, 0.9, col=3, lwd=3)
+abline(b0, b1, col=2, lwd=3)
+abline(b, s, col="blue", lwd=3)
+legend("bottomright", legend=c("eyeball", "LS", "true"), col=c(3,2,4), lwd=3)
+```
+
+:::
+:::
+
+## Prediction and the modeling goal
+
+A prediction rule is any function where you input $X$ and it outputs $\hat{Y}$ as a predicted  response at $X$.
+
+`r sk1()` 
+The least squares line is a prediction rule:
+$$
+\hat{Y} = f(X) = b_0 + b_1 X
+$$
+
+This rule tells us what to do when a **new $X$** comes along \dots just run it through the formula above and obtain a guess $\hat{Y}$!
+
+However, **`r mygrn("it is not going to be a perfect prediction")`**.
+
+
+--------------------------------
+
+We need to devise a notion of `r mygrn("forecast accuracy")`.
+
+- How sure are we about our forecast? Or
+- How different could $Y$ be from what we expect?
+
+`r sk1()`
+`r mygrn("Forecasts are useless without some kind of uncertainty qualification")`/`r myblue("quantification")`.
+
+`r sk1()` 
+
+One method is to specify a range
+of $Y$ values that are likely, given an $X$ value.
+
+- a `r myred("prediction interval")`: a probable range for $Y\!\,$s given $X$.
+
+--------------------------------
+
+`r mygrn("Key insight")`: to construct a prediction interval, 
+we will have to assess the likely range of residual values
+corresponding to a Y value that has `r myred("not")` yet been observed!
+
+`r sk1()`
+We must "invest" in a `r myblue("probability model")`. For our population model, for instance, we chose a `r mygrn("normal distribution")` for the observation error.
+
+`r sk1()`
+We must also acknowledge that the "fitted" line may be fooled by particular realizations of the residuals.
+
+- i.e., that our estimated coefficients $b_0$ & $b_1$ are random
+
+----------------------------------------
+
+`r sk2()`
+
+Luckily for us, the case of a `r myred("line with normally distributed noise")` around it is well studied theoretically, and you've probably seen it before\dots
+
+## Simple linear regression (SLR) model
+
+$$
+Y = \beta_0 + \beta_1 X + \varepsilon, \;\;\;\;\;
+\varepsilon \sim \mathcal{N}(0, \sigma^2)
+$$
+
+- It is a `r myred("model")`, so we are ***assuming*** this relationship holds for some `r myred("true but unknown")` values of $\beta_0$, $\beta_1$.
+- Greek letters remind us they are not the same as the LS estimates $b_0$ and $b_1$.
+
+The error $\varepsilon$ is independent, additive, "idosyncratic noise".
+
+- Its distribution is *known* up to its spread $\sigma^2$.
+- Greek letters remind us that $\varepsilon$ is not the same as $e$.
+
+---------------------------------------------
+
+`r myred("Before looking at any data")`, the model specifies 
+
+- how $Y$ varies with $X$ `r myred("on average")`: $\mathbb{E}[Y|X] = \beta_0 + \beta_1 X$;
+- and the influence of factors other than $X$, $\varepsilon \sim \mathcal{N}(0, \sigma^2)$
+independently of $X$.
+
+<center>![](graphics/adderror_new.png){height="4in"}</center>
+
+## Context from the population example
+
+Think of $\mathbb{E}[Y|X]$ as the average size of the population at time $t+1$ if the population had size $X$ at time $t$, and $\sigma^2$ is the spread around that average. When we specify the SLR `r myred("model")` we say that 
+
+- the average population depends is linearly on its previous size, but we don't know the
+coefficients.
+- Observations could have a higher or lower value  than the average, but how much they differ is unknown and
+  - is independent of the previous population size
+  - is normally distributed
+	
+---------------------------------------
+
+We think about the data as being `r myred("one possible realization")` of data that *could* have been `r myblue("generated from the model")`
+$$
+Y|X \sim \mathcal{N}(\beta_0 + \beta_1 X, \sigma^2)
+$$
+
+$\Rightarrow$ $\sigma^2$ controls the `r myred(" dispersion")` of $Y$ around $\beta_0 + \beta_1 X$
+
+
+<center>![](graphics/cnd_new.png){height="4in"}</center>
+
+## Prediction intervals in the ***true model***
+
+You are told (without looking at the data) that
+$\beta_0 = 13$ ; $\beta_1= 0.9$ ; and $\sigma = 3$. You are asked to predict the population next year if the current population has 90 individuals.  
+What do you know about $Y$ from the model?
+\begin{eqnarray*}
+Y &=& 13 + 0.9(90) + \varepsilon\\
+&=& 94 + \varepsilon
+\end{eqnarray*}
+
+Thus `r myblue("our prediction for the population at the next time point is")`
+$$ 
+Y \sim \mathcal{N}(94, 3^2).
+$$
+
+--------------------------------
+
+Thus, the model says that the mean number of individuals next year if there are 90 this year is 94 and that deviation from mean is within $\approx$ 6 (95% level).
+
+`r sk1()`
+We are 95\% sure that
+
+- $-6< \varepsilon < 6$
+- $88 < Y < 100$
+
+In general, the 95% ***P***rediction ***I***nterval 
+is: PI $= \beta_0 +\beta_1 X \pm 2\sigma$.
+
+
+------------------------------------------
+
+This PI only incorporates uncertainty due to the inherent stochasticity. 
+
+`r sk1()`
+
+We also must incorporate another
+source of risk: `r myblue("uncertainty in the parameters")` $\beta_0$ and $\beta_1$
+
+	
+	
+
+
+
+

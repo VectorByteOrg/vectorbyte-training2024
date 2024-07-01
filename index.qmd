@@ -3,7 +3,7 @@ title: ""
 format:
   html:
     toc: false
-    toc-location: left
+    toc-location: right
     html-math-method: katex
     css: styles.css
     grid:
@@ -12,7 +12,7 @@ format:
 
 # Welcome to the 2024 VectorByte  Training Workshop!
 
-#### Check out our [about](about.html) and [schedule](schedule2024.html) pages to continue.
+#### Check out our [about](about.qmd) and [schedule: coming soon!]() pages to continue.
 
 <br> <br> <br>
 

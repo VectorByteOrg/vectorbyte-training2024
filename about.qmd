@@ -1,9 +1,22 @@
 ---
-title: "About"
+title: "About the VectorByte Training Materials 2024"
 ---
 
-About this site
+As the VectorByte team has developed [these materials](materials.html), we've aimed to provide resources for both guided (during the workshop) and self-led learning. We assume basic familiarity with:
 
-```{r}
-1 + 1
-```
+-   [The `R` Programming Language](https://cran.r-project.org/)
+-   Basic calculus (especially the mathematical idea of functions)
+-   Basic probability and statistics (e.g., what is a probability distribution, normal and binomial distributions, means, variances)
+-   Basics of regression
+
+We've divided the materials into subject matter modules or units. Each module is designed to build on the previous one, and expects at least knowledge of all of the preceding modules in the sequence in addition to the background material.
+
+Each module consists of four kinds of materials:
+
+-   slides with presentation of materials
+-   labs/hands-on materials to allow you to practice material in a practical way
+-   solutions to exercises, when necessary
+
+We also include links to additional resources/materials/references.
+
+For more information about the goals and approach of VectorByte are available at [vectorbyte.org](http://www.vectorbyte.org).

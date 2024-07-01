@@ -22,25 +22,46 @@ We will also be using Slack for additional support during the training. Please h
 
 ### Pre-requisites
 
-We are assuming familiarity with R basics. In addition, we recommend that you do the following:
 
-1.  Go to [The Multilingual Quantitative Biologist](https://mhasoba.github.io/TheMulQuaBio/intro.html), and read+work through the [Biological Computing in R Chapter](https://mhasoba.github.io/TheMulQuaBio/notebooks/07-R.html) up to the section on Writing R code. Of course, keep going if you want (although we will cover some similar materials here).
+We are assuming familiarity with R basics as well as at least introductory statistics, including up through linear models. If you would like materials to review, we recommend that you do the following:
 
-2.  In addition / alternatively to pre-work element (1), here are some resources for brushing up on R [at the end of the Intro R Chapter you can try](https://mhasoba.github.io/TheMulQuaBio/notebooks/07-R.html#readings-and-resources). But there are many more resources online (e.g., [this](https://www.codecademy.com/learn/learn-r) and [this](https://www.dataquest.io/blog/learn-r-for-data-science/) ) -- pick something that suits your learning style.
+1.  Go to [The Multilingual Quantitative Biologist](https://mhasoba.github.io/TheMulQuaBio/intro.html), and read+work through the [Biological Computing in R Chapter](https://mhasoba.github.io/TheMulQuaBio/notebooks/07-R.html).
 
-3.  Review background on [introductory probability and statistics](Stats_review.qmd) ([solutions to exercises](Stats_review_soln.qmd))
+2.  In addition / alternatively to pre-work element (1), here are some resources for brushing up on R [at the end of the Intro R Chapter you can try](https://mhasoba.github.io/TheMulQuaBio/notebooks/07-R.html#readings-and-resources). There are many more resources online (e.g., [this](https://www.codecademy.com/learn/learn-r) and [this](https://www.dataquest.io/blog/learn-r-for-data-science/) ) -- pick something that suits your learning style.
 
-4.  Inculcate the coding Jedi inside of you - or the Sith - whatever works.
+3.  Review background on [introductory probability and statistics](Stats_review.qmd) ([solutions to exercises](Stats_review_soln.qmd)). You can also use the resources on [The Multilingual Quantitative Biologist - Basic Data Analyses and Statistics](https://mhasoba.github.io/TheMulQuaBio/Stats-Intro.html) through into linear models. 
 
 <br> <br>
 
-## Introduction to the VecTraits database[^1]
+## Introduction to Time Dependent Abundance Data
+
+
+<br> <br>
+
+## Introduction to the VecDyn database[^1]
 
 [^1]: What is the difference between VectorBiTE and VectorByte? We are glad you asked! [VectorBiTE](http://vectorbite.org/) was an RCN or a research coordination network funded by a 5 year grant from the BBSRC. [VectorByte](https://www.vectorbyte.org/) is hosting this training which is a newly funded NSF grant to establish a global open access data platform to study disease vectors. All the databases have transitioned to VectorByte but the legacy options will still be available on the VectorBiTE website.
 
 -   This component will be delivered live & synchronously. The VecDyn website can be found [here](https://vectorbyte.crc.nd.edu/vecdyn-datasets). It might be an idea to explore this prior to the workshop.
 
+<br> <br>
 
+## Regression Refresher
 
 <br> <br>
 
+
+
+## Time dependent regression analysis 
+
+<br> <br>
+
+
+## Basics of Time Series using R
+
+<br> <br>
+
+
+## Gaussian Process models (GPs) for Time Dependent Data
+
+<br> <br>

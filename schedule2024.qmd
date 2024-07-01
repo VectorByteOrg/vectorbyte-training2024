@@ -40,7 +40,7 @@ Although there will be input at the start of most sessions, much of the synchron
 # 23 July 2024 (08:30 - 17:00)
 
 | Time  | Activity                                      | Materials                                                          |
-|-----------------|----------------------|---------------------------------|
+|-------|-----------------------------------------------|--------------------------------------------------------------------|
 | 08:30 | Course overview                               |                                                                    |
 | 09:00 | Intro to traits                               | [Slides](intro_to_traits.pdf); [Paper](Cator2020.pdf)              |
 | 10:30 | Break                                         |                                                                    |
@@ -55,7 +55,7 @@ Although there will be input at the start of most sessions, much of the synchron
 # 24 July 2024 (08:30 - 17:00)
 
 | Time  | Activity                      | Materials                                                            |
-|-----------------|-----------------|---------------------------------------|
+|-------|-------------------------------|----------------------------------------------------------------------|
 | 08:30 | Q & A                         |                                                                      |
 | 09:00 | Allometric analysis using LMs | [Linear models](linear_mod_activity.qmd)                             |
 | 10:30 | Break                         |                                                                      |
