@@ -197,9 +197,11 @@ abline(5, 0.9, col=3, lwd=3)
 
 # Review: What is a good line?
 
-`r sk1()`
+`r sk2()`
 
 <center>`r mygrn("Can we do better than the eyeball method?")`</center>
+
+`r sk1()`
 
 We desire a strategy for estimating the slope and intercept parameters in the model $\hat{Y~} = b_0 + b_1 X$.
 
@@ -495,10 +497,10 @@ $\Rightarrow$ $\sigma^2$ controls the `r myred(" dispersion")` of $Y$ around $\b
 
 You are told (without looking at the data) that
 $\beta_0 = 13$ ; $\beta_1= 0.9$ ; and $\sigma = 3$. You are asked to predict the population next year if the current population has 90 individuals.   What do you know about $Y$ from the model?
-\begin{eqnarray*}
-Y &=& 13 + 0.9(90) + \varepsilon\\
-&=& 94 + \varepsilon
-\end{eqnarray*}
+\begin{align*}
+Y &= 13 + 0.9(90) + \varepsilon\\
+&= 94 + \varepsilon
+\end{align*}
 
 Thus `r myblue("our prediction for the population at the next time point is")`
 $$ 
@@ -784,11 +786,11 @@ We can decompose $e_f$ into two sources of error
 -   Estimation error in the intercept and slope\
     (i.e., discrepancy between our line and "the truth").
     
-\begin{eqnarray*}
+\begin{align*}
 e_f &=& Y_f - \hat{Y~}_f = (Y_f - \mathbb{E}[Y_f | X_f]) + \mathbb{E}[Y_f | X_f]-\hat{Y~}_f \\
 &=& \varepsilon_f + (\mathbb{E}[Y_f | X_f] -\hat{Y~}_f )\\
 &=& \varepsilon_f + (\beta_0 - b_0) +   (\beta_1 - b_1)X_f.
-\end{eqnarray*}
+\end{align*} 
 
 
 -----------------------------------
@@ -807,11 +809,11 @@ $\text{var}(\varepsilon_f) = \sigma^2 \approx s^2$, but what about the fit error
 --------------------------------------
 
 From the sampling distributions derived earlier, $\text{var}(\hat{Y~}_f)$ is 
-\begin{eqnarray*}
+\begin{align*}
  \text{var}(b_0 + b_1 X_f) &=& \text{var}(b_0) + X_f^2 \text{var}(b_1) + 2X_f\mathrm{cov}(b_0,b_1) \\
 &=& {\sigma^2 \left[\frac{1}{n} + \frac{(X_f - \bar{X})^2}{(n-1)
     s_x^2} \right]}.
-\end{eqnarray*}
+\end{align*} 
 
 
 

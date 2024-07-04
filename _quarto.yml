@@ -4,7 +4,7 @@ project:
 website:
   title: "VectorByte Training 2024"
   navbar:
-    background:	"#630031"
+    background:	"primary"
     foreground: "light"
     logo: "graphics/vblogoedit.pdf"
     logo-href: https://www.vectorbyte.org
@@ -25,7 +25,7 @@ website:
         
 format:
   html:
-    theme: cosmo
+    theme: lumen
     css: styles.css
     toc: true
 

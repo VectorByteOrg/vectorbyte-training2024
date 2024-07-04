@@ -334,10 +334,11 @@ The line shown was fit by the “eyeball” method.
 </section>
 <section id="review-what-is-a-good-line" class="level1">
 <h1>Review: What is a good line?</h1>
-<p><br></p>
+<p><br><br></p>
 <center>
 <span style="color: ForestGreen;">Can we do better than the eyeball method?</span>
 </center>
+<p><br></p>
 <p>We desire a strategy for estimating the slope and intercept parameters in the model <span class="math inline">\hat{Y~} = b_0 + b_1 X</span>.</p>
 <p><br> This involves</p>
 <ul>
@@ -553,10 +554,10 @@ Y|X \sim \mathcal{N}(\beta_0 + \beta_1 X, \sigma^2)
 </section>
 <section id="prediction-intervals-in-the-true-model" class="level1">
 <h1>Prediction intervals in the <strong><em>true model</em></strong></h1>
-<p>You are told (without looking at the data) that <span class="math inline">\beta_0 = 13</span> ; <span class="math inline">\beta_1= 0.9</span> ; and <span class="math inline">\sigma = 3</span>. You are asked to predict the population next year if the current population has 90 individuals. What do you know about <span class="math inline">Y</span> from the model? <span class="math display">\begin{eqnarray*}
-Y &amp;=&amp; 13 + 0.9(90) + \varepsilon\\
-&amp;=&amp; 94 + \varepsilon
-\end{eqnarray*}</span></p>
+<p>You are told (without looking at the data) that <span class="math inline">\beta_0 = 13</span> ; <span class="math inline">\beta_1= 0.9</span> ; and <span class="math inline">\sigma = 3</span>. You are asked to predict the population next year if the current population has 90 individuals. What do you know about <span class="math inline">Y</span> from the model? <span class="math display">\begin{align*}
+Y &amp;= 13 + 0.9(90) + \varepsilon\\
+&amp;= 94 + \varepsilon
+\end{align*}</span></p>
 <p>Thus <span style="color: dodgerblue;">our prediction for the population at the next time point is</span> <span class="math display">
 Y \sim \mathcal{N}(94, 3^2).
 </span></p>
@@ -760,11 +761,11 @@ s_{b_0} = \sqrt{s^2 \left(\frac{1}{n} + \frac{\bar{X}^2}{(n-1)s^2_x}\right)}
 <li><p>Estimation error in the intercept and slope<br>
 (i.e., discrepancy between our line and “the truth”).</p></li>
 </ul>
-<p><span class="math display">\begin{eqnarray*}
+<p><span class="math display">\begin{align*}
 e_f &amp;=&amp; Y_f - \hat{Y~}_f = (Y_f - \mathbb{E}[Y_f | X_f]) + \mathbb{E}[Y_f | X_f]-\hat{Y~}_f \\
 &amp;=&amp; \varepsilon_f + (\mathbb{E}[Y_f | X_f] -\hat{Y~}_f )\\
 &amp;=&amp; \varepsilon_f + (\beta_0 - b_0) +   (\beta_1 - b_1)X_f.
-\end{eqnarray*}</span></p>
+\end{align*}</span></p>
 <hr>
 <p>The variance of our prediction error is thus <span class="math display">
 \text{var}(e_f) = \text{var}(\varepsilon_f) + \text{var}(\mathbb{E}[Y_f | X_f] -\hat{Y~}_f )
@@ -774,11 +775,11 @@ e_f &amp;=&amp; Y_f - \hat{Y~}_f = (Y_f - \mathbb{E}[Y_f | X_f]) + \mathbb{E}[Y_
 <img src="graphics/estimerror_new.png" style="height:3in">
 </center>
 <hr>
-<p>From the sampling distributions derived earlier, <span class="math inline">\text{var}(\hat{Y~}_f)</span> is <span class="math display">\begin{eqnarray*}
+<p>From the sampling distributions derived earlier, <span class="math inline">\text{var}(\hat{Y~}_f)</span> is <span class="math display">\begin{align*}
 \text{var}(b_0 + b_1 X_f) &amp;=&amp; \text{var}(b_0) + X_f^2 \text{var}(b_1) + 2X_f\mathrm{cov}(b_0,b_1) \\
 &amp;=&amp; {\sigma^2 \left[\frac{1}{n} + \frac{(X_f - \bar{X})^2}{(n-1)
     s_x^2} \right]}.
-\end{eqnarray*}</span></p>
+\end{align*}</span></p>
 <p>Replacing <span class="math inline">\sigma^2</span> with <span class="math inline">s^2</span> gives the standard error for <span class="math inline">\hat{Y}_f</span>.</p>
 <p>And hence the variance of our predictive error is <span class="math display">
 \text{var}(e_f) = s^2 \left[ 1 + \frac{1}{n} +
