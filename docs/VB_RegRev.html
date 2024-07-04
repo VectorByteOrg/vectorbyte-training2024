@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.552">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="The VectorByte Team (Leah R. Johnson, Virginia Tech)">
+
+<title>VectorByte Training 2024 - VectorByte Methods Training</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="https://www.vectorbyte.org" class="navbar-brand navbar-brand-logo">
+    <img src="./graphics/vblogoedit.pdf" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="https://www.vectorbyte.org">
+    <span class="navbar-title">VectorByte Training 2024</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./schedule2024.html"> 
+<span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./materials.html"> 
+<span class="menu-text">Materials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/VectorByteOrg/vectorbyte-training2024"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/vectorbite_rcn"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#a-simple-population-simulation" id="toc-a-simple-population-simulation" class="nav-link" data-scroll-target="#a-simple-population-simulation">A simple population simulation</a>
+  <ul class="collapse">
+  <li><a href="#mc-simulation-of-simple-system" id="toc-mc-simulation-of-simple-system" class="nav-link" data-scroll-target="#mc-simulation-of-simple-system">MC simulation of simple system</a></li>
+  <li><a href="#changes-in-population-size" id="toc-changes-in-population-size" class="nav-link" data-scroll-target="#changes-in-population-size">Changes in population size</a></li>
+  <li><a href="#sequential-observations" id="toc-sequential-observations" class="nav-link" data-scroll-target="#sequential-observations">Sequential observations</a></li>
+  </ul></li>
+  <li><a href="#estimating-parameters" id="toc-estimating-parameters" class="nav-link" data-scroll-target="#estimating-parameters">Estimating parameters</a></li>
+  <li><a href="#review-what-is-a-good-line" id="toc-review-what-is-a-good-line" class="nav-link" data-scroll-target="#review-what-is-a-good-line">Review: What is a good line?</a></li>
+  <li><a href="#least-squares" id="toc-least-squares" class="nav-link" data-scroll-target="#least-squares">Least Squares</a></li>
+  <li><a href="#estimating-parameters-1" id="toc-estimating-parameters-1" class="nav-link" data-scroll-target="#estimating-parameters-1">Estimating parameters</a></li>
+  <li><a href="#estimation-of-error-variance" id="toc-estimation-of-error-variance" class="nav-link" data-scroll-target="#estimation-of-error-variance">Estimation of error variance</a></li>
+  <li><a href="#estimating-parameters-2" id="toc-estimating-parameters-2" class="nav-link" data-scroll-target="#estimating-parameters-2">Estimating parameters</a></li>
+  <li><a href="#prediction-and-the-modeling-goal" id="toc-prediction-and-the-modeling-goal" class="nav-link" data-scroll-target="#prediction-and-the-modeling-goal">Prediction and the modeling goal</a></li>
+  <li><a href="#simple-linear-regression-slr-model" id="toc-simple-linear-regression-slr-model" class="nav-link" data-scroll-target="#simple-linear-regression-slr-model">Simple linear regression (SLR) model</a></li>
+  <li><a href="#context-from-the-population-example" id="toc-context-from-the-population-example" class="nav-link" data-scroll-target="#context-from-the-population-example">Context from the population example</a></li>
+  <li><a href="#prediction-intervals-in-the-true-model" id="toc-prediction-intervals-in-the-true-model" class="nav-link" data-scroll-target="#prediction-intervals-in-the-true-model">Prediction intervals in the <strong><em>true model</em></strong></a></li>
+  <li><a href="#sampling-distribution-of-ls-estimates" id="toc-sampling-distribution-of-ls-estimates" class="nav-link" data-scroll-target="#sampling-distribution-of-ls-estimates">Sampling distribution of LS estimates</a>
+  <ul class="collapse">
+  <li><a href="#sampling-distribution-of-ls-line" id="toc-sampling-distribution-of-ls-line" class="nav-link" data-scroll-target="#sampling-distribution-of-ls-line">Sampling distribution of LS line</a></li>
+  <li><a href="#central-limit-theorem" id="toc-central-limit-theorem" class="nav-link" data-scroll-target="#central-limit-theorem">Central Limit Theorem</a></li>
+  <li><a href="#sampling-distribution-of-b_1" id="toc-sampling-distribution-of-b_1" class="nav-link" data-scroll-target="#sampling-distribution-of-b_1">Sampling distribution of <span class="math inline">b_1</span></a></li>
+  <li><a href="#sampling-distribution-of-b_0" id="toc-sampling-distribution-of-b_0" class="nav-link" data-scroll-target="#sampling-distribution-of-b_0">Sampling Distribution of <span class="math inline">b_0</span></a></li>
+  <li><a href="#joint-distribution-of-b_0-and-b_1" id="toc-joint-distribution-of-b_0-and-b_1" class="nav-link" data-scroll-target="#joint-distribution-of-b_0-and-b_1">Joint Distribution of <span class="math inline">b_0</span> and <span class="math inline">b_1</span></a></li>
+  <li><a href="#estimated-variance" id="toc-estimated-variance" class="nav-link" data-scroll-target="#estimated-variance">Estimated variance</a></li>
+  <li><a href="#normal-and-student-t" id="toc-normal-and-student-t" class="nav-link" data-scroll-target="#normal-and-student-t">Normal and Student-<span class="math inline">t</span></a></li>
+  </ul></li>
+  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting">Forecasting</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">VectorByte Methods Training</h1>
+<p class="subtitle lead">Regression Review</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>The VectorByte Team (Leah R. Johnson, Virginia Tech) </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="./materials.html">Main materials</a></p>
+<section id="learning-objectives" class="level1">
+<h1>Learning Objectives</h1>
+<ol type="1">
+<li>Review the idea behind regression</li>
+<li>Review how to make predictions from a regression model</li>
+<li>Practice simple regression procedures in <code>R</code> including diagnostic plots</li>
+</ol>
+</section>
+<section id="a-simple-population-simulation" class="level1">
+<h1>A simple population simulation</h1>
+<p><span class="math display">\begin{align*}
+N(t) &amp; = s N(t-1) + b +W(t) \\
+N_{\mathrm{obs}}(t) &amp; =  N(t) + V(t)
+\end{align*}</span></p>
+<p>Let’s specify a few values/distributions:</p>
+<ul>
+<li><span class="math inline">s=0.75</span>, <span class="math inline">b=10</span>, <span class="math inline">N_0=10</span>, <span class="math inline">T_{\mathrm{max}}=100</span></li>
+<li><span class="math inline">W(t) \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, 5^2)</span></li>
+<li><span class="math inline">V(t) \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, 3^2)</span></li>
+</ul>
+<p>Let’s simulate from this system to generate some test data.</p>
+<section id="mc-simulation-of-simple-system" class="level2">
+<h2 class="anchored" data-anchor-id="mc-simulation-of-simple-system">MC simulation of simple system</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VB_RegRev_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="changes-in-population-size" class="level2">
+<h2 class="anchored" data-anchor-id="changes-in-population-size">Changes in population size</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VB_RegRev_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sequential-observations" class="level2">
+<h2 class="anchored" data-anchor-id="sequential-observations">Sequential observations</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VB_RegRev_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><br></p>
+<p>If we had just observed these data, how might we try to estimate parameters?</p>
+</div>
+</div>
+</section>
+</section>
+<section id="estimating-parameters" class="level1">
+<h1>Estimating parameters</h1>
+<p>Our model (assuming no observational stochasticity for now) can be written as</p>
+<p><span class="math display">\begin{align*}
+N(t) &amp; = s N(t-1) + b + \varepsilon(t) \\
+\varepsilon(t) &amp; \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, \sigma^2) \\
+\end{align*}</span></p>
+<p>We want to know <span class="math inline">s</span>, <span class="math inline">b</span>, and <span class="math inline">\sigma</span>. Notice that without the error, the process just looks like <span class="math display">\begin{align*}
+N(t) = s N(t-1) + b \rightarrow y = b_1 x + b_0
+\end{align*}</span> This is just a line!</p>
+<hr>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VB_RegRev_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<center>
+The line shown was fit by the “eyeball” method.
+</center>
+</section>
+<section id="review-what-is-a-good-line" class="level1">
+<h1>Review: What is a good line?</h1>
+<p><br></p>
+<center>
+<span style="color: ForestGreen;">Can we do better than the eyeball method?</span>
+</center>
+<p>We desire a strategy for estimating the slope and intercept parameters in the model <span class="math inline">\hat{Y~} = b_0 + b_1 X</span>.</p>
+<p><br> This involves</p>
+<ul>
+<li>choosing a <span style="color: red;">criteria</span>, i.e., quantifying how good a line is</li>
+<li>and matching that with a <span style="color: dodgerblue;">solution</span>, i.e., finding the best line subject to that criteria.</li>
+</ul>
+<hr>
+<p>Although there are lots of ways to choose a <span style="color: red;">criteria</span></p>
+<ul>
+<li>only a small handful lead to <span style="color: dodgerblue;">solutions</span> that are “easy” to compute</li>
+<li>and which have nice statistical properties</li>
+</ul>
+<p><br> Most reasonable <span style="color: red;">criteria</span> involve measuring the amount by which the <span style="color: dodgerblue;">fitted value</span> obtained from the line differs from the <span style="color: red;">observed value</span> of the response value(s) in the data.</p>
+<ul>
+<li>This amount is called the <span style="color: ForestGreen;">residual</span>.</li>
+<li>Good lines produce small residuals.</li>
+</ul>
+<hr>
+<center>
+<img src="graphics/fittedval.png" style="height:3in">
+</center>
+<p>The dots are the <span style="color: red;">observed values</span> and the line represents our <span style="color: dodgerblue;">fitted values</span> given by <span class="math display">
+\hat{Y~}_i = b_0 + b_1 X_i.
+</span></p>
+<hr>
+<center>
+<img src="graphics/residual.png" style="height:3in">
+</center>
+<p>The <span style="color: ForestGreen;">residual</span> <span class="math inline">e_i</span> is the discrepancy between the <span style="color: dodgerblue;">fitted</span> <span class="math inline">\hat{Y~}_i</span> and <span style="color: red;">observed</span> <span class="math inline">Y_i</span> values.</p>
+<ul>
+<li>Note that we can write <span class="math inline">Y_i = \hat{Y~}_i + (Y_i -\hat{Y~}_i) = \hat{Y~}_i + e_i</span>.</li>
+</ul>
+</section>
+<section id="least-squares" class="level1">
+<h1>Least Squares</h1>
+<p>A reasonable goal is to minimize the size of <em>all</em> residuals:</p>
+<ul>
+<li>If they were all zero we would have a perfect line.</li>
+<li>We trade-off between moving closer to some points and at the same time moving away from other points.</li>
+</ul>
+<p>Since some residuals are positive and some are negative, we need one more ingredient.</p>
+<ul>
+<li><span class="math inline">|e_i|</span> treats positives and negatives equally.</li>
+<li>So does <span class="math inline">e_i^2</span>, which is easier to work with mathematically.</li>
+</ul>
+<hr>
+<p><strong><em><span style="color: dodgerblue;">Least squares</span></em></strong> chooses <span class="math inline">b_0</span> and <span class="math inline">b_1</span> to minimize <span class="math display">
+SSE = \sum_{i=1}^n e^2_i = \sum_{i=1}^n (Y_i - \hat{Y~}_i)^2= \sum_{i=1}^n (Y_i - [b_0 + b_1 X_i])^2.
+</span></p>
+<center>
+<img src="graphics/negpos.png" style="height:3in">
+</center>
+<hr>
+<p><strong><span style="color: ForestGreen;">Optional Practice Exercise</span></strong></p>
+<p><br></p>
+<p>Show that the least squares estimates for <span class="math inline">b_0</span> and <span class="math inline">b_1</span> are: <span class="math display">
+b_0 = \bar{Y} - b_1 \bar{X}~~~\mathrm{and}~~~b_1 = \frac{ \sum_{i=1}(X_i Y_i) - n\bar{Y}\bar{X}}{\sum_{i=1}X_i^2 - n\bar{X}^2}
+</span> where <span class="math inline">\bar{X}</span> denotes the arithmetic mean of <span class="math inline">X</span>.</p>
+<p><br></p>
+<p>Hint: You will take (partial) derivatives of <span class="math inline">SSE</span> w.r.t.~<span class="math inline">b_0</span> and <span class="math inline">b_1</span>, set these equal to 0 and solve.</p>
+</section>
+<section id="estimating-parameters-1" class="level1">
+<h1>Estimating parameters</h1>
+<p>We can use these formulas to estimate our parameters and draw a new line <span class="math inline">\Rightarrow</span> <span style="color: ForestGreen;">make a prediction</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><span class="math display">\begin{align*}
+\hat{b~} &amp; = b_0 = 14.55 \\
+\hat{s~} &amp; = b_1 = 0.63
+\end{align*}</span></p>
+<ul>
+<li>The least squares line is different than our eyeballed line;</li>
+<li>and we know its the <span style="color: red;">best line</span> in a certain sense.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VB_RegRev_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="estimation-of-error-variance" class="level1">
+<h1>Estimation of error variance</h1>
+<p>We also want to estimate <span class="math inline">\sigma</span>. If we think about the definition of the variance in our system in terms of the residuals:</p>
+<p><span class="math display">
+\sigma^2 = \text{var}(\varepsilon_i)
+= \mathbb{E}[(\varepsilon_i - \mathbb{E}[\varepsilon_i])^2] =
+\mathbb{E}[\varepsilon_i^2].
+</span></p>
+<p>This <em>seems</em> to indicate that a sensible strategy would be to estimate the average for squared errors with the sample average squared residuals: <span class="math display">
+\hat{\sigma~}^2 = \frac{1}{n} \sum_{i=1}^n e_i^2
+</span></p>
+<hr>
+<p>However, this is <strong><em>not</em></strong> an <span style="color: red;">unbiased</span> estimator of <span class="math inline">\sigma^2</span>.</p>
+<ul>
+<li>This means that <span class="math inline">\mathbb{E}[\hat{\sigma~}^2] \ne \sigma^2</span>.</li>
+</ul>
+<p>For that, we have to alter the denominator slightly: <span class="math display">
+s^2 = \frac{1}{n-p} \sum_{i=1}^n e_i^2 = \frac{SSE}{n-2}
+</span> (<span class="math inline">p</span> is the number of other parameters we estimate; i.e.&nbsp;<span style="color: red;">2</span> for <span class="math inline">b_0 +b_1</span>).</p>
+<hr>
+<p>Note:</p>
+<ul>
+<li>We have <span class="math inline">n-p</span> degrees of freedom because <span class="math inline">p</span> (<span class="math inline">=2</span>) have been “used up” in the estimation of <span class="math inline">b_0</span> and <span class="math inline">b_1</span>.</li>
+<li>It is often convenient to report <span class="math inline">s = \sqrt{SSE/(n-p)}</span>, which is in the same units as <span class="math inline">Y</span>.</li>
+</ul>
+</section>
+<section id="estimating-parameters-2" class="level1">
+<h1>Estimating parameters</h1>
+<p>Now we can get (point) estimates of all of the parameters for our system.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><br></p>
+<p><span class="math display">\begin{align*}
+\hat{b~} &amp; = 14.55\mathrm{,}~~ b_{\mathrm{true}}=10\\
+\hat{s~} &amp; = 0.63\mathrm{,}~~ s_{\mathrm{true}}=0.75\\
+\hat{\sigma~} &amp; = 4.88\mathrm{,}~~ \sigma_{\mathrm{true}}=5
+\end{align*}</span></p>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VB_RegRev_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="prediction-and-the-modeling-goal" class="level1">
+<h1>Prediction and the modeling goal</h1>
+<p>A prediction rule is any function where you input <span class="math inline">X</span> and it outputs <span class="math inline">\hat{Y~}</span> as a predicted response at <span class="math inline">X</span>.</p>
+<p><br> The least squares line is a prediction rule: <span class="math display">
+\hat{Y~} = f(X) = b_0 + b_1 X
+</span></p>
+<p>This rule tells us what to do when a <strong>new <span class="math inline">X</span></strong> comes along just run it through the formula above and obtain a guess <span class="math inline">\hat{Y~}</span>!</p>
+<p>However, <strong><span style="color: ForestGreen;">it is not going to be a perfect prediction</span></strong>.</p>
+<hr>
+<p>We need to devise a notion of <span style="color: ForestGreen;">forecast accuracy</span>.</p>
+<ul>
+<li>How sure are we about our forecast? Or</li>
+<li>How different could <span class="math inline">Y</span> be from what we expect?</li>
+</ul>
+<p><br> <span style="color: ForestGreen;">Forecasts are useless without some kind of uncertainty qualification</span>/<span style="color: dodgerblue;">quantification</span>.</p>
+<p><br></p>
+<p>One method is to specify a range of <span class="math inline">Y</span> values that are likely, given an <span class="math inline">X</span> value.</p>
+<ul>
+<li>a <span style="color: red;">prediction interval</span>: a probable range for <span class="math inline">Y\!\,</span>s given <span class="math inline">X</span>.</li>
+</ul>
+<hr>
+<p><span style="color: ForestGreen;">Key insight</span>: to construct a prediction interval, we will have to assess the likely range of residual values corresponding to a Y value that has <span style="color: red;">not</span> yet been observed!</p>
+<p><br> We must “invest” in a <span style="color: dodgerblue;">probability model</span>. For our population model, for instance, we chose a <span style="color: ForestGreen;">normal distribution</span> for the observation error.</p>
+<p><br> We must also acknowledge that the “fitted” line may be fooled by particular realizations of the residuals.</p>
+<ul>
+<li>i.e., that our estimated coefficients <span class="math inline">b_0</span> &amp; <span class="math inline">b_1</span> are random</li>
+</ul>
+<hr>
+<p><br><br></p>
+<p>Luckily for us, the case of a <span style="color: red;">line with normally distributed noise</span> around it is well studied theoretically, and you’ve probably seen it before</p>
+</section>
+<section id="simple-linear-regression-slr-model" class="level1">
+<h1>Simple linear regression (SLR) model</h1>
+<p><span class="math display">
+Y = \beta_0 + \beta_1 X + \varepsilon, \;\;\;\;\;
+\varepsilon \sim \mathcal{N}(0, \sigma^2)
+</span></p>
+<ul>
+<li>It is a <span style="color: red;">model</span>, so we are <strong><em>assuming</em></strong> this relationship holds for some <span style="color: red;">true but unknown</span> values of <span class="math inline">\beta_0</span>, <span class="math inline">\beta_1</span>.</li>
+<li>Greek letters remind us they are not the same as the LS estimates <span class="math inline">b_0</span> and <span class="math inline">b_1</span>.</li>
+</ul>
+<p>The error <span class="math inline">\varepsilon</span> is independent, additive, “idosyncratic noise”.</p>
+<ul>
+<li>Its distribution is <em>known</em> up to its spread <span class="math inline">\sigma^2</span>.</li>
+<li>Greek letters remind us that <span class="math inline">\varepsilon</span> is not the same as <span class="math inline">e</span>.</li>
+</ul>
+<hr>
+<p><span style="color: red;">Before looking at any data</span>, the model specifies</p>
+<ul>
+<li>how <span class="math inline">Y</span> varies with <span class="math inline">X</span> <span style="color: red;">on average</span>: <span class="math inline">\mathbb{E}[Y|X] = \beta_0 + \beta_1 X</span>;</li>
+<li>and the influence of factors other than <span class="math inline">X</span>, <span class="math inline">\varepsilon \sim \mathcal{N}(0, \sigma^2)</span> independently of <span class="math inline">X</span>.</li>
+</ul>
+<center>
+<img src="graphics/adderror_new.png" style="height:3in">
+</center>
+</section>
+<section id="context-from-the-population-example" class="level1">
+<h1>Context from the population example</h1>
+<p>Think of <span class="math inline">\mathbb{E}[Y|X]</span> as the average size of the population at time <span class="math inline">t+1</span> if the population had size <span class="math inline">X</span> at time <span class="math inline">t</span>, and <span class="math inline">\sigma^2</span> is the spread around that average. When we specify the SLR <span style="color: red;">model</span> we say that</p>
+<ul>
+<li>the average population depends is linearly on its previous size, but we don’t know the coefficients.</li>
+<li>Observations could have a higher or lower value than the average, but how much they differ is unknown and
+<ul>
+<li>is independent of the previous population size</li>
+<li>is normally distributed</li>
+</ul></li>
+</ul>
+<hr>
+<p>We think about the data as being <span style="color: red;">one possible realization</span> of data that <em>could</em> have been <span style="color: dodgerblue;">generated from the model</span> <span class="math display">
+Y|X \sim \mathcal{N}(\beta_0 + \beta_1 X, \sigma^2)
+</span></p>
+<p><span class="math inline">\Rightarrow</span> <span class="math inline">\sigma^2</span> controls the <span style="color: red;"> dispersion</span> of <span class="math inline">Y</span> around <span class="math inline">\beta_0 + \beta_1 X</span></p>
+<center>
+<img src="graphics/cnd_new.png" style="height:3in">
+</center>
+</section>
+<section id="prediction-intervals-in-the-true-model" class="level1">
+<h1>Prediction intervals in the <strong><em>true model</em></strong></h1>
+<p>You are told (without looking at the data) that <span class="math inline">\beta_0 = 13</span> ; <span class="math inline">\beta_1= 0.9</span> ; and <span class="math inline">\sigma = 3</span>. You are asked to predict the population next year if the current population has 90 individuals. What do you know about <span class="math inline">Y</span> from the model? <span class="math display">\begin{eqnarray*}
+Y &amp;=&amp; 13 + 0.9(90) + \varepsilon\\
+&amp;=&amp; 94 + \varepsilon
+\end{eqnarray*}</span></p>
+<p>Thus <span style="color: dodgerblue;">our prediction for the population at the next time point is</span> <span class="math display">
+Y \sim \mathcal{N}(94, 3^2).
+</span></p>
+<hr>
+<p>Thus, the model says that the mean number of individuals next year if there are 90 this year is 94 and that deviation from mean is within <span class="math inline">\approx</span> 6 (95% level).</p>
+<p><br> We are 95% sure that</p>
+<ul>
+<li><span class="math inline">-6&lt; \varepsilon &lt; 6</span></li>
+<li><span class="math inline">88 &lt; Y &lt; 100</span></li>
+</ul>
+<p>In general, the 95% <strong><em>P</em></strong>rediction <strong><em>I</em></strong>nterval is: PI <span class="math inline">= \beta_0 +\beta_1 X \pm 2\sigma</span>.</p>
+<hr>
+<p>This PI only incorporates uncertainty due to the inherent stochasticity.</p>
+<p><br></p>
+<p>We also must incorporate another source of risk: <span style="color: dodgerblue;">uncertainty in the parameters</span> <span class="math inline">\beta_0</span> and <span class="math inline">\beta_1</span></p>
+</section>
+<section id="sampling-distribution-of-ls-estimates" class="level1">
+<h1>Sampling distribution of LS estimates</h1>
+<p>How much do our estimates depend on the particular random sample that we happen to observe?</p>
+<p>We can run the following experiment:</p>
+<ul>
+<li><p>Randomly draw different samples of the same size.</p></li>
+<li><p>For each sample, compute the estimates <span class="math inline">b_0</span>, <span class="math inline">b_1</span>, and <span class="math inline">s</span>.</p></li>
+</ul>
+<p>If the estimates do vary a lot, then it matters which sample you happen to observe.</p>
+<hr>
+<center>
+<img src="graphics/sampling1_new.png" style="height:4in">
+</center>
+<hr>
+<center>
+<img src="graphics/sampling2_new.png" style="height:4in">
+</center>
+<hr>
+<p>The LS lines are much closer to the true line when <span class="math inline">n=50</span>.</p>
+<p>When <span class="math inline">n=5</span>, some lines are close, others aren’t: we need to get lucky.</p>
+<p>Also notice that the LS lines are, more often than not,</p>
+<ul>
+<li><p>closer to the true line near middle of the cloud of data.</p></li>
+<li><p>They get farther apart away from the middle of the cloud.</p></li>
+<li><p>This is as true for small samples <span class="math inline">(n=5)</span> as it is for large <span class="math inline">(n=50)</span>.</p></li>
+</ul>
+<hr>
+<p>[See a Monte Carlo demonstration in <code>linear.R</code>]</p>
+<center>
+<img src="graphics/linear.png" style="height:3.5in">
+</center>
+<section id="sampling-distribution-of-ls-line" class="level2">
+<h2 class="anchored" data-anchor-id="sampling-distribution-of-ls-line">Sampling distribution of LS line</h2>
+<p>What did we just do?</p>
+<ul>
+<li>We “imagined” through simulation the sampling distribution of a LS line.</li>
+</ul>
+<p>In real life we get just one data set, and <span style="color: red;">we don’t know the true generating model</span>. But we can still imagine.</p>
+<p><br></p>
+<p>We first find the sampling distribution of our LS coefficients, <span class="math inline">b_0</span> and <span class="math inline">b_1</span>...<br>
+... which requires some review.</p>
+<hr>
+<p>In the online reading and review materials you should have come across some useful probability/stats facts, including:</p>
+<ul>
+<li><p><span class="math inline">\mathbb{E}(X_1+X_2)  = \mathbb{E}(X_1)+ \mathbb{E}(X_2)</span></p></li>
+<li><p><span class="math inline">\mathbb{E}(cX_1)  = c \mathbb{E}(X_1)</span></p></li>
+<li><p><span class="math inline">\text{var}(c X_1) = c^2\text{var}(X_1)</span></p></li>
+<li><p><span class="math inline">\text{var}(X_1+X_2) = \text{var}(X_1)+\text{var}(X_2) + 2\text{cov}(X_1 X_2)</span>.</p></li>
+</ul>
+<hr>
+<p><span style="color: ForestGreen;">Recall: distribution of the sample mean</span></p>
+<p><br></p>
+<p>Step back for a moment and consider the mean for an <span class="math inline">iid</span> sample of <span class="math inline">n</span> observations of a random variable <span class="math inline">\{X_1,\ldots,X_n\}</span>.</p>
+<p><br></p>
+<p>Suppose that <span class="math inline">\mathbb{E}(X_i)  = \mu</span> and <span class="math inline">\text{var}(X_i) = \sigma^2</span>, then</p>
+<ul>
+<li><span class="math inline">\mathbb{E}(\bar{X}) = \frac{1}{n} \sum\mathbb{E}(X_i) = \mu</span></li>
+<li><span class="math inline">\text{var}(\bar{X}) = \text{var}\left( \frac{1}{n} \sum X_i \right) =  \frac{1}{n^2} \sum \text{var}\left(  X_i \right) = \displaystyle \frac{\sigma^2}{n}</span>.</li>
+</ul>
+</section>
+<section id="central-limit-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h2>
+<p>The CLT states that for <span class="math inline">iid</span> random variables, <span class="math inline">X</span>, with mean <span class="math inline">\mu</span> and variance <span class="math inline">\sigma^2</span>, the distribution of the sample mean becomes normal as the number of observations, <span class="math inline">n</span>, gets large.</p>
+<p><br></p>
+<p>That is, <span class="math inline">\displaystyle \bar{X} \rightarrow_{n} \mathcal{N}(\mu, \sigma^2/n)</span> , and sample averages tend to be normally distributed in large samples.</p>
+<hr>
+<p>We are now ready to describe the sampling distribution of the least squares line ...</p>
+<p>... in terms of its effect on the sampling distributions of the coefficients</p>
+<ul>
+<li><p><span class="math inline">b_1 = \hat{\beta~}_1</span>, the slope of the line</p></li>
+<li><p><span class="math inline">b_0 = \hat{\beta~}_0</span>, the intercept,</p></li>
+<li><p>and how they covary together,</p></li>
+</ul>
+<p>given a particular (fixed) set of <span class="math inline">X</span>-values.</p>
+</section>
+<section id="sampling-distribution-of-b_1" class="level2">
+<h2 class="anchored" data-anchor-id="sampling-distribution-of-b_1">Sampling distribution of <span class="math inline">b_1</span></h2>
+<p>It turns out that <span class="math inline">b_1</span> is normally distributed: <span class="math inline">b_1 \sim \mathcal{N}(\beta_1, \sigma^2_{b_1})</span>.</p>
+<ul>
+<li><p><span class="math inline">b_1</span> is unbiased: <span class="math inline">\mathbb{E}[b_1] = \beta_1</span>.</p></li>
+<li><p>The sampling sd <span class="math inline">\sigma_{b_1}</span> determines precision of <span class="math inline">b_1</span>: <span class="math display">
+\sigma_{b_1}^2
+= \text{var}(b_1) = \frac{\sigma^2}{\sum (X_i - \bar{X})^2} = \frac{\sigma^2}{(n-1)s_x^2}.
+</span> It depends on three factors: 1) sample size (<span class="math inline">n</span>); 2) error variance (<span class="math inline">\sigma^2 = \sigma_\varepsilon^2</span>); and 3)<span class="math inline">X</span>-spread (<span class="math inline">s_x</span>).</p></li>
+</ul>
+</section>
+<section id="sampling-distribution-of-b_0" class="level2">
+<h2 class="anchored" data-anchor-id="sampling-distribution-of-b_0">Sampling Distribution of <span class="math inline">b_0</span></h2>
+<p>The intercept is also normal and unbiased: <span class="math inline">b_0 \sim \mathcal{N}(\beta_0, \sigma^2_{b_0})</span>, where <span class="math display">
+\sigma^2_{b_0} = \text{var}(b_0)  = \sigma^2 \left(\frac{1}{n} + \frac{\bar{X}^2}{(n-1)
+    s_x^2} \right).
+</span></p>
+<p>What is the intuition here? <span class="math display">
+\text{var}(\bar{Y} - \bar{X} b_1)
+= \text{var}(\bar{Y}) + \bar{X}^2\text{var}(b_1) {~-~ 2\mathrm{cov}(\bar{Y},b_1) }
+</span></p>
+<ul>
+<li><span class="math inline">\bar{Y}</span> and <span class="math inline">b_1</span> are uncorrelated because the slope (<span class="math inline">b_1</span>) is invariant if you shift the data up or down (<span class="math inline">\bar{Y}</span>).</li>
+</ul>
+<hr>
+<p><strong><span style="color: ForestGreen;">Optional Practice Exercise</span></strong></p>
+<ol type="1">
+<li><p>Show that:</p>
+<ol type="1">
+<li><p><span class="math inline">\mathbb{E}[b_1] = \beta_1</span></p></li>
+<li><p><span class="math inline">\mathbb{E}[b_0] = \beta_0</span></p></li>
+<li><p><span class="math inline">\text{var}(b_0)  = \sigma^2 \left(\frac{1}{n} + \frac{\bar{X}^2}{(n-1)
+    s_x^2} \right)</span></p></li>
+</ol></li>
+<li><p>Why is it that <span class="math inline">b_0</span> and <span class="math inline">b_1</span> are normally distributed?</p></li>
+</ol>
+</section>
+<section id="joint-distribution-of-b_0-and-b_1" class="level2">
+<h2 class="anchored" data-anchor-id="joint-distribution-of-b_0-and-b_1">Joint Distribution of <span class="math inline">b_0</span> and <span class="math inline">b_1</span></h2>
+<p>We know that <span class="math inline">b_0</span> and <span class="math inline">b_1</span> <em>can be</em> dependent, i.e., <span class="math display">
+\mathbb{E}[(b_0 -\beta_0)(b_1 - \beta_1)] \ne 0.
+</span> This means that estimation error in the slope is correlated with the estimation error in the intercept. <span class="math display">
+\mathrm{cov}(b_0,b_1) = -\sigma^2 \left(\frac{\bar{X}}{(n-1)s_x^2}\right).
+</span></p>
+<hr>
+<p><strong><span style="color: ForestGreen;">Interpretation</span>:</strong></p>
+<ul>
+<li><p>Usually, if the slope estimate is too high, the intercept estimate is too low (negative correlation).</p></li>
+<li><p>The correlation decreases with more <span class="math inline">X</span> spread (<span class="math inline">s^2_x</span>).</p></li>
+</ul>
+</section>
+<section id="estimated-variance" class="level2">
+<h2 class="anchored" data-anchor-id="estimated-variance">Estimated variance</h2>
+<p>However, these formulas aren’t especially practical since they involve an unknown quantity: <span class="math inline">\sigma</span>.</p>
+<ul>
+<li><p><span style="color: dodgerblue;">Solution</span>: use <span class="math inline">s</span>, the residual sample standard deviation estimator for <span class="math inline">\sigma = \sigma_\varepsilon</span>. <span class="math display">
+s_{b_1} = \sqrt{\frac{s^2}{(n-1)s_x^2}} ~~~
+s_{b_0} = \sqrt{s^2 \left(\frac{1}{n} + \frac{\bar{X}^2}{(n-1)s^2_x}\right)}
+</span></p></li>
+<li><p><span class="math inline">s_{b_1} = \hat{\sigma~}_{b_1}</span> and <span class="math inline">s_{b_0} = \hat{\sigma~}_{b_0}</span> are estimated coefficient sd’s.</p></li>
+</ul>
+<hr>
+<p><strong><span style="color: ForestGreen;">Interpretation</span>:</strong></p>
+<p><br></p>
+<p>We now have a notion of standard error for the LS estimates of the slope and intercept.</p>
+<p><br></p>
+<ul>
+<li><span style="color: red;">Small <span class="math inline">s_b</span> values mean high info/precision/accuracy</span>.</li>
+</ul>
+</section>
+<section id="normal-and-student-t" class="level2">
+<h2 class="anchored" data-anchor-id="normal-and-student-t">Normal and Student-<span class="math inline">t</span></h2>
+<p>Again, recall what <em>Student</em> discovered:</p>
+<p>If <span class="math inline">\theta \sim \mathcal{N}(\mu,\sigma^2)</span>, but you estimate <span class="math inline">\sigma^2 \approx s^2</span> based on <span class="math inline">n-p</span> degrees of freedom, then <span class="math inline">\theta \sim t_{n-p}(\mu, s^2)</span>.</p>
+<p><br></p>
+<p>For SLR, for example:</p>
+<ul>
+<li><p><span class="math inline">\bar{Y} \sim t_{n-1}(\mu, s_y^2/n)</span>.</p></li>
+<li><p><span class="math inline">b_0 \sim t_{n-2}\left(\beta_0, s^2_{b_0}\right)</span> and <span class="math inline">b_1 \sim t_{n-2}\left(\beta_1, s^2_{b_1}\right)</span></p></li>
+</ul>
+<hr>
+<p>We can use these distributions for drawing conclusions about the parameters via:</p>
+<ul>
+<li><p>Confidence intervals</p></li>
+<li><p>Hypothesis tests</p></li>
+</ul>
+</section>
+</section>
+<section id="forecasting" class="level1">
+<h1>Forecasting</h1>
+<p><span style="color: dodgerblue;">The conditional forecasting problem</span>:</p>
+<ul>
+<li>Given covariate(s) <span class="math inline">X_f</span> and sample data <span class="math inline">\{X_i, Y_i\}_{i=1}^n</span>, predict the “future” observation <span class="math inline">Y_f</span>.</li>
+</ul>
+<p><span style="color: red;">The solution is to use our LS fitted value</span>: <span class="math inline">\hat{Y~}_f = b_0 + b_1X_f</span>.</p>
+<ul>
+<li>That’s the easy bit.</li>
+</ul>
+<p>The hard (<span style="color: dodgerblue;">and very important!</span>) part of forecasting is assessing uncertainty about our predictions.</p>
+<hr>
+<p>If we use <span class="math inline">\hat{Y~}_f</span>, our prediction error is</p>
+<p><span class="math display">e_f = Y_f - \hat{Y~}_f = Y_f - b_0 - b_1X_f</span></p>
+<center>
+<img src="graphics/prederror_new.png" style="height:3in">
+</center>
+<hr>
+<p>We can decompose <span class="math inline">e_f</span> into two sources of error</p>
+<ul>
+<li><p>Inherent idiosyncratic randomness (due to <span class="math inline">\varepsilon</span>).</p></li>
+<li><p>Estimation error in the intercept and slope<br>
+(i.e., discrepancy between our line and “the truth”).</p></li>
+</ul>
+<p><span class="math display">\begin{eqnarray*}
+e_f &amp;=&amp; Y_f - \hat{Y~}_f = (Y_f - \mathbb{E}[Y_f | X_f]) + \mathbb{E}[Y_f | X_f]-\hat{Y~}_f \\
+&amp;=&amp; \varepsilon_f + (\mathbb{E}[Y_f | X_f] -\hat{Y~}_f )\\
+&amp;=&amp; \varepsilon_f + (\beta_0 - b_0) +   (\beta_1 - b_1)X_f.
+\end{eqnarray*}</span></p>
+<hr>
+<p>The variance of our prediction error is thus <span class="math display">
+\text{var}(e_f) = \text{var}(\varepsilon_f) + \text{var}(\mathbb{E}[Y_f | X_f] -\hat{Y~}_f )
+= \sigma^2 + \text{var}(\hat{Y~}_f)
+</span> We know <span class="math inline">\text{var}(\varepsilon_f) = \sigma^2 \approx s^2</span>, but what about the fit error?</p>
+<center>
+<img src="graphics/estimerror_new.png" style="height:3in">
+</center>
+<hr>
+<p>From the sampling distributions derived earlier, <span class="math inline">\text{var}(\hat{Y~}_f)</span> is <span class="math display">\begin{eqnarray*}
+\text{var}(b_0 + b_1 X_f) &amp;=&amp; \text{var}(b_0) + X_f^2 \text{var}(b_1) + 2X_f\mathrm{cov}(b_0,b_1) \\
+&amp;=&amp; {\sigma^2 \left[\frac{1}{n} + \frac{(X_f - \bar{X})^2}{(n-1)
+    s_x^2} \right]}.
+\end{eqnarray*}</span></p>
+<p>Replacing <span class="math inline">\sigma^2</span> with <span class="math inline">s^2</span> gives the standard error for <span class="math inline">\hat{Y}_f</span>.</p>
+<p>And hence the variance of our predictive error is <span class="math display">
+\text{var}(e_f) = s^2 \left[ 1 + \frac{1}{n} +
+\frac{(X_f-\bar{X})^2}{(n-1) s_x^2} \right].
+</span></p>
+<hr>
+<p>Putting it all together, we have that <span class="math display">
+Y_f \sim \mathcal{N}\left(\hat{Y}_f, \sigma^2 \left[  1  +  
+\frac{1}{n} + \frac{(X_f - \bar{X})^2}{(n-1)
+    s_x^2} \right] \right)
+</span> (sums of normals are normal) or, with estimated variance, <span class="math display">
+Y_f \sim t_{n-p}\left(\hat{Y}_f, {\color{blue}s^2} \left[  1  +  
+\frac{1}{n} + \frac{(X_f - \bar{X})^2}{(n-1)
+    s_x^2} \right] \right).
+</span></p>
+<p><span class="math display">
+b_0 + b_1 X_f \pm t_{n-2,\alpha/2} \left(s~ \sqrt{1+ \frac{1}{n} + \frac{(X_f -
+    \bar{X})^2}{(n-1) s_x^2}}\right).
+</span></p>
+<hr>
+<p>Looking closer at what we’ll call</p>
+<p><span class="math display">
+\color{blue} s_{pred} = s~ \sqrt{1+ \frac{1}{n} + \frac{(X_f -
+    \bar{X})^2}{(n-1) s_x^2}} = \sqrt{s^2 + s_{\mathrm{fit}}^2}.
+</span></p>
+<p>A large predictive error variance (high uncertainty) comes from</p>
+<ul>
+<li><p>Large <span class="math inline">s</span> (i.e., large <span class="math inline">\varepsilon</span>’s).</p></li>
+<li><p>Small <span class="math inline">n</span> (not enough data).</p></li>
+<li><p>Small <span class="math inline">s_x</span> (not enough observed spread in covariates).</p></li>
+<li><p>Large <span class="math inline">(X_f - \bar{X})</span>.</p></li>
+</ul>
+<p>The first three are familiar... what about the last one?</p>
+<hr>
+<p>For <span class="math inline">X_f</span> far from our <span class="math inline">\bar{X}</span>, the space between lines is magnified ...</p>
+<p><br></p>
+<center>
+<img src="graphics/spred_new.png" style="height:3in">
+</center>
+<hr>
+<p><span class="math inline">\Rightarrow</span> The prediction (conf.) interval needs to widen away from <span class="math inline">\bar{X}</span></p>
+<p><br></p>
+<center>
+<img src="graphics/fitted.png" style="height:4in">
+</center>
+<hr>
+<p><strong><span style="color: ForestGreen;">NOTE</span></strong>: For SLR (and MLR) we can write down equations to describe these predictive intervals, sampling distributions.</p>
+<p><br></p>
+<p>However, for more complex problems this is not the case.</p>
+<p><br></p>
+<p>Sometimes we can do analytic/asymptotic approximations. The rest of the time we use simulation.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

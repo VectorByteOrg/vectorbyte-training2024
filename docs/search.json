@@ -1,0 +1,310 @@
+[
+  {
+    "objectID": "VB_IntroTimeDepData.html#learning-objectives",
+    "href": "VB_IntroTimeDepData.html#learning-objectives",
+    "title": "VectorByte Methods Training",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nUnderstand basic concepts in how we understand and model time-dependent population data in VBD applications\nReview basic idea of forecasting\nOverview of course"
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#population-dynamics-of-disease",
+    "href": "VB_IntroTimeDepData.html#population-dynamics-of-disease",
+    "title": "VectorByte Methods Training",
+    "section": "Population dynamics of disease",
+    "text": "Population dynamics of disease\nThe number of hosts, vectors, pathogens, and infected individuals change over time\nWe use models to understand and to forecast/predict"
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#what-types-of-models",
+    "href": "VB_IntroTimeDepData.html#what-types-of-models",
+    "title": "VectorByte Methods Training",
+    "section": "What types of models?",
+    "text": "What types of models?\ntactical to strategic\nWe’ll focus on the tactical end of things here (i.e., no dif eqs)"
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#simple-example-a-first-deterministic-model",
+    "href": "VB_IntroTimeDepData.html#simple-example-a-first-deterministic-model",
+    "title": "VectorByte Methods Training",
+    "section": "Simple example: A first (deterministic) model",
+    "text": "Simple example: A first (deterministic) model\n\n\nSuppose we model a population in discrete time as \\[\\begin{align*}\nN(t+1) = s N(t) + b(t).\n\\end{align*}\\]\nHere \\(s\\) is the fraction of individuals surviving each time step and \\(b(t)\\) is the number of new births."
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#a-first-stochastic-model",
+    "href": "VB_IntroTimeDepData.html#a-first-stochastic-model",
+    "title": "VectorByte Methods Training",
+    "section": "A first (stochastic) model",
+    "text": "A first (stochastic) model\nIn that simplest model the population can’t go extinct!\n\nWhat if the number of births vary? \\[\\begin{align*}\nN(t+1) = s N(t) + b(t) +W(t)\n\\end{align*}\\]\nHere \\(W(t)\\) is process uncertainty/stochasticity: we assume it is drawn from a particular distribution, and each year/time we observe a particular value \\(w(t)\\). E.g., \\(W(t) \\stackrel{\\mathrm{iid}}{\\sim} \\mathcal{N}(0, \\sigma^2)\\).\n\nWhat might we see? When would the population go extinct?"
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#observation-models",
+    "href": "VB_IntroTimeDepData.html#observation-models",
+    "title": "VectorByte Methods Training",
+    "section": "Observation Models",
+    "text": "Observation Models\nWe also have to go out into the field and take some observations of the populations. Let’s say that we observe \\(N_{\\mathrm{obs}}(t)\\) individuals at time \\(t\\). How does this relate to the true population size? One possibility is: \\[\\begin{align*}\nN_{\\mathrm{obs}}(t) = N(t) + V(t)\n\\end{align*}\\] where \\(V(t)\\) is our “observation uncertainty”, and all together this equation describes our observation model."
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#observation-process-matters",
+    "href": "VB_IntroTimeDepData.html#observation-process-matters",
+    "title": "VectorByte Methods Training",
+    "section": "Observation process matters",
+    "text": "Observation process matters\nAnalysis approach depends on the sampling – evenly or unevenly spaced, goal of the modeling exercise (understanding vs forecasting/prediction)."
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#forecasting-process",
+    "href": "VB_IntroTimeDepData.html#forecasting-process",
+    "title": "VectorByte Methods Training",
+    "section": "Forecasting process",
+    "text": "Forecasting process\nsomething about forecasting"
+  },
+  {
+    "objectID": "VB_IntroTimeDepData.html#outline-of-course",
+    "href": "VB_IntroTimeDepData.html#outline-of-course",
+    "title": "VectorByte Methods Training",
+    "section": "Outline of Course",
+    "text": "Outline of Course\n\nAbundance data from VecDyn and NEON\nRegression refresher for time dep data – basics plus time dependent predictors, transformations, simple AR\nAnalysis of evenly-spaced data: basic time-series methods\nAdvanced modeling with Gaussian Process Models"
+  },
+  {
+    "objectID": "Stats_review_soln.html",
+    "href": "Stats_review_soln.html",
+    "title": "VectorByte Methods Training 2024",
+    "section": "",
+    "text": "Main materials\nBack to stats review\n\nQuestion 1: For the six-sided fair die, what is f_k if k=7? k=1.5?\n\nAnswer: both of these are zero, because the die cannot take these values.\n    \n\n\nQuestion 2: For the fair 6-sided die, what is F(3)? F(7)? F(1.5)?\nAnswer: The CDF total probability of having a value less than or equal to its argument. Thus F(3)= 1/2, F(7)=1, and F(1.5)=1/6\n    \n\n\nQuestion 3: For a normal distribution with mean 0, what is F(0)?\n\nAnswer: The normal distribution is symmetric around its mean, with half of its probability on each side. Thus, F(0)=1/2\n    \n\n\nQuestion 4: Summation Notation Practice\n\n\n\ni\n1\n2\n3\n4\n\n\n\n\nZ_i\n2.0\n-2.0\n3.0\n-3.0\n\n\n\n\nCompute \\sum_{i=1}^{4}{z_i} = 0 \nCompute \\sum_{i=1}^4{(z_i - \\bar{z})^2} = 26 \nWhat is the sample variance? Assume that the z_i are i.i.d.. Note that i.i.d.~stands for “independent and identically distributed”. \n\nSolution: \ns^2= \\frac{\\sum_{i=1}^N(Y_i - \\bar{Y})^2}{N-1} = \\frac{26}{3}\n= 8\\times \\frac{2}{3}\n \n\nFor a general set of N numbers, \\{X_1, X_2, \\dots, X_N \\} and \\{Y_1, Y_2, \\dots, Y_N \\} show that \n\\sum_{i=1}^N{(X_i - \\bar{X})(Y_i - \\bar{Y})} = \\sum_{i=1}^N{(X_i-\\bar{X})Y_i}\n\n\n Solution: First, we multiply through and distribute: \n\\sum_{i=1}^N(X_i-\\bar{X})(Y_i-\\bar{Y}) = \\sum_{i=1}^N(X_i-\\bar{X})Y_i\n- \\sum_{i=1}^N(X_i-\\bar{X})\\bar{Y}\n Next note that \\bar{Y} (the mean of the Y_is) doesn’t depend on i so we can pull it out of the summation: \n\\sum_{i=1}^N(X_i-\\bar{X})(Y_i-\\bar{Y}) = \\sum_{i=1}^N(X_i-\\bar{X})Y_i\n- \\bar{Y} \\sum_{i=1}^N(X_i-\\bar{X}).\n Finally, the last sum must be zero because \n\\sum_{i=1}^N(X_i-\\bar{X}) = \\sum_{i=1}^N X_i- \\sum_{i=1}^N \\bar{X} = N\\bar{X} - N\\bar{X}=0.\n Thus \\begin{align*}\n\\sum_{i=1}^N(X_i-\\bar{X})(Y_i-\\bar{Y}) &= \\sum_{i=1}^N(X_i-\\bar{X})Y_i - \\bar{Y}\\times 0\\\\\n& = \\sum_{i=1}^N(X_i-\\bar{X})Y_i.\n\\end{align*}\n    \n\n\nQuestion 5: Properites of Expected Values\nUsing the definition of an expected value above and with X and Y having the same probability distribution, show that:\n\\begin{align*}\n\\text{E}[X+Y]  & = \\text{E}[X] + \\text{E}[Y]\\\\  \n& \\text{and} \\\\\n\\text{E}[cX]  & = c\\text{E}[X]. \\\\\n\\end{align*}\nGiven these, and the fact that \\mu=\\text{E}[X], show that:\n\\begin{align*}\n\\text{E}[(X-\\mu)^2]  = \\text{E}[X^2] - (\\text{E}[X])^2\n\\end{align*}\nThis gives a formula for calculating variances (since \\text{Var}(X)= \\text{E}[(X-\\mu)^2]).\nSolution: Assuming X and Y are both i.i.d. with distribution f(x). The expectation of X+Y is defined as \\begin{align*}\n\\text{E}[X+Y]  & =  \\int (X+Y) f(x)dx \\\\\n              & =  \\int (X f(x) +Y f(x))dx  \\\\\n              & =  \\int X f(x)dx  +\\int Y f(x)dx  \\\\\n               & = \\text{E}[X] + \\text{E}[Y]  \n\\end{align*} Similarly \\begin{align*}\n\\text{E}[cX]   & =  \\int cXf(x)dx \\\\\n              & =  c \\int Xf(x) dx  \\\\\n              & = c\\text{E}[X]. \\\\\n\\end{align*} Thus we can re-write: \\begin{align*}\n\\text{E}[(X-\\mu)^2]  & = \\text{E}[ X^2 - 2X\\mu + \\mu^2] \\\\\n                        & = \\text{E}[X^2] - 2\\mu\\text{E}[X] + \\mu^2 \\\\\n                        & = \\text{E}[X^2] -2\\mu^2 + \\mu^2 \\\\\n                        & = \\text{E}[X^2] - \\mu^2 \\\\\n& = \\text{E}[X^2] - (\\text{E}[X])^2.\n\\end{align*}\n   \n\n\nQuestion 6: Functions of Random Variables\nSuppose that \\mathrm{E}[X]=\\mathrm{E}[Y]=0, \\mathrm{var}(X)=\\mathrm{var}(Y)=1, and \\mathrm{corr}(X,Y)=0.5.\n\nCompute \\mathrm{E}[3X-2Y]; and\n\\mathrm{var}(3X-2Y).\nCompute \\mathrm{E}[X^2].\n\nSolution:\n\nUsing the properties of expectations, we can re-write this as: \\begin{align*}\n\\mathrm{E}[3X-2Y] & = \\mathrm{E}[3X] + \\mathrm{E}[-2Y]\\\\\n& = 3 \\mathrm{E}[X] -2 \\mathrm{E}[Y]\\\\\n& = 3 \\times 0 -2 \\times 0\\\\\n&=0\n\\end{align*}\n\n\nUsing the properties of variances, we can re-write this as: \\begin{align*}\n\\mathrm{var}(3X-2Y) & = 3^2\\text{Var}(X) + (-2)^2\\text{Var}(Y) + 2(3)(-2)\\text{Cov}(XY)\\\\\n& =  9 \\times 1 + 4 \\times 1 -12 \\text{Corr}(XY)\\sqrt{\\text{Var}(X)\\text{Var}(Y)}\\\\\n& = 9+4 -12 \\times 0.5\\times1\\\\\n&=7\n\\end{align*}\n\n\nRecalling from Question 5 that the variance is \\mathrm{var}(X) = \\text{E}[X^2] - (\\text{E}[X])^2, we can re-arrange to obtain: \\begin{align*}\n\\mathrm{E}[X^2] & = \\mathrm{var}(X) + (\\mathrm{E}[X])^2\\\\\n& = 1+(0)^2 \\\\\n& =1\n\\end{align*}\n\n\n\nThe Sampling Distribution\nSuppose we have a random sample \\{Y_i, i=1,\\dots,N \\}, where Y_i \\stackrel{\\mathrm{i.i.d.}}{\\sim}N(\\mu,4) for i=1,\\ldots,N.\n\nWhat is the variance of the sample mean?\n\n\\displaystyle \\mathrm{Var}(\\bar{Y}) =\n\\mathrm{Var}\\left(\\frac{1}{N}\\sum_{i=1}^N Y_i\\right) =\n\\frac{N}{N^2}\\mathrm{Var}(Y) =\\frac{4}{N}.\nThis is the derivation for the variance of the sampling distribution.\n \n\nWhat is the expectation of the sample mean?\n\n\\displaystyle\\mathrm{E}[\\bar{Y}] = \\frac{N}{N}\\mathrm{E}(Y) = \\mu. This is the mean of the sampling distribution.\n\n\nWhat is the variance for another i.i.d. realization Y_{ N+1}?\n\n\\displaystyle \\mathrm{Var}(Y) = 4, because this is a sample directly from the population distribution.\n \n\nWhat is the standard error of \\bar{Y}?\n\nHere, again, we are looking at the distribution of the sample mean, so we must consider the sampling distribution, and the standard error (aka the standard distribution) is just the square root of the variance from part i.\n\\displaystyle \\mathrm{se}(\\bar{Y}) = \\sqrt{\\mathrm{Var}(\\bar{Y})} =\\frac{2}{\\sqrt{N}}.\n\n\nHypothesis Testing and Confidence Intervals\nSuppose we sample some data \\{Y_i, i=1,\\dots,n \\}, where Y_i \\stackrel{\\mathrm{i.i.d.}}{\\sim}N(\\mu,\\sigma^2) for i=1,\\ldots,n, and that you want to test the null hypothesis H_0: ~\\mu=12 vs. the alternative H_a: \\mu \\neq ` r m`, at the 0.05 significance level.\n\nWhat test statistic would you use? How do you estimate \\sigma?\nWhat is the distribution for this test statistic if the null is true?\nWhat is the distribution for the test statistic if the null is true and n \\rightarrow \\infty?\nDefine the test rejection region. (I.e., for what values of the test statistic would you reject the null?)\nHow would compute the p-value associated with a particular sample?\nWhat is the 95% confidence interval for \\mu? How should one interpret this interval?\nIf \\bar{Y} = 11, s_y = 1, and n=9, what is the test result? What is the 95% CI for \\mu?\n\n  \nThis question is asking you think about the hypothesis that the mean of your distribution is equal to 12. I give you the distribution of the data themselves (i.e., that they’re normal). To test the hypothesis, you work with the sampling distribution (i.e., the distribution of the sample mean) which is: \\bar{Y}\\sim N\\left(\\mu, \\frac{\\sigma^2}{n}\\right).\n\nIf we knew \\sigma, we could use as our test statistic z=\\displaystyle \\frac{\\bar{y} - 12}{\\sigma/\\sqrt{n}}. However, here we need to estimate \\sigma so we use z=\\displaystyle \\frac{\\bar{y} - 12}{s_y/\\sqrt{n}} where \\displaystyle s_{y} = \\sqrt{\\frac{\\sum_{i=1}^n(y_i - \\bar{y})^2}{n-1}}.\n\n\nIf the null is true, the z \\sim t_{n-1}(0,1). Since we estimate the mean frm the data, the degrees of freedom is n-1.\n\n\nAs n approaches infinity, t_{n-1}(0,1) \\rightarrow N(0,1).\n\n\nYou reject the null for \\{z: |z| &gt; t_{n-1,\\alpha/2}\\}.\n\n\nThe p-value is 2\\Pr(Z_{n-1} &gt;|z|). \n\n\nThe 95% CI is \\bar{Y} \\pm \\frac{s_{y}}{\\sqrt{n}} t_{n-1,\\alpha/2}.\n\nFor 19 out of 20 different samples, an interval constructed in this way will include the true value of the mean, \\mu. \n\nz = (11-12)/(1/3) = -3 and 2\\Pr(Z_{8} &gt;|z|) = .017, so we do reject the null.  The 95% CI for \\mu is 11 \\pm \\frac{1}{3}2.3 = (10.23, 11.77)."
+  },
+  {
+    "objectID": "materials.html",
+    "href": "materials.html",
+    "title": "VectorByte Training Materials 2024",
+    "section": "",
+    "text": "We will be using R for all data manipulation and analyses/model fitting. Any operating system (Windows, Mac, Linux) will do, as long as you have R (version 3.6 or higher) installed.\nYou may use any IDE/ GUI for R (VScode, RStudio, Emacs, etc). For most people, RStudio is a good option. Whichever one you decide to use, please make sure it is installed and test it before the workshop.\nWe will also be using Slack for additional support during the training. Please have these installed in advance. We will have a channel on Slack dedicated to software/hardware issues and troubleshooting.\n\n\n\nWe are assuming familiarity with R basics as well as at least introductory statistics, including up through simple linear regression. If you would like materials to review, we recommend that you do the following:\nReview of R\n\nGo to The Multilingual Quantitative Biologist, and read+work through the Biological Computing in R Chapter.\nIn addition / alternatively to pre-work element (1), here are some resources for brushing up on R at the end of the Intro R Chapter you can try. There are many more resources online (e.g., this and this ) – pick something that suits your learning style.\n\nReview of statistics\n\nReview background on introductory probability and statistics (solutions to exercises). You can also use the resources on The Multilingual Quantitative Biologist - Basic Data Analyses and Statistics through into linear models.\nReview the conceptual basics of Simple Linear Regression. We’ll refresh fitting linear models in R as well as transformations and diagnostic plots during the workshop."
+  },
+  {
+    "objectID": "materials.html#hardware-and-software",
+    "href": "materials.html#hardware-and-software",
+    "title": "VectorByte Training Materials 2024",
+    "section": "",
+    "text": "We will be using R for all data manipulation and analyses/model fitting. Any operating system (Windows, Mac, Linux) will do, as long as you have R (version 3.6 or higher) installed.\nYou may use any IDE/ GUI for R (VScode, RStudio, Emacs, etc). For most people, RStudio is a good option. Whichever one you decide to use, please make sure it is installed and test it before the workshop.\nWe will also be using Slack for additional support during the training. Please have these installed in advance. We will have a channel on Slack dedicated to software/hardware issues and troubleshooting."
+  },
+  {
+    "objectID": "materials.html#pre-requisites",
+    "href": "materials.html#pre-requisites",
+    "title": "VectorByte Training Materials 2024",
+    "section": "",
+    "text": "We are assuming familiarity with R basics as well as at least introductory statistics, including up through simple linear regression. If you would like materials to review, we recommend that you do the following:\nReview of R\n\nGo to The Multilingual Quantitative Biologist, and read+work through the Biological Computing in R Chapter.\nIn addition / alternatively to pre-work element (1), here are some resources for brushing up on R at the end of the Intro R Chapter you can try. There are many more resources online (e.g., this and this ) – pick something that suits your learning style.\n\nReview of statistics\n\nReview background on introductory probability and statistics (solutions to exercises). You can also use the resources on The Multilingual Quantitative Biologist - Basic Data Analyses and Statistics through into linear models.\nReview the conceptual basics of Simple Linear Regression. We’ll refresh fitting linear models in R as well as transformations and diagnostic plots during the workshop."
+  },
+  {
+    "objectID": "materials.html#introduction-to-time-dependent-abundance-data",
+    "href": "materials.html#introduction-to-time-dependent-abundance-data",
+    "title": "VectorByte Training Materials 2024",
+    "section": "Introduction to Time Dependent Abundance Data",
+    "text": "Introduction to Time Dependent Abundance Data"
+  },
+  {
+    "objectID": "materials.html#introduction-to-the-vecdyn-database1",
+    "href": "materials.html#introduction-to-the-vecdyn-database1",
+    "title": "VectorByte Training Materials 2024",
+    "section": "Introduction to the VecDyn database1",
+    "text": "Introduction to the VecDyn database1\n\nThis component will be delivered live & synchronously. The VecDyn website can be found here. It might be an idea to explore this prior to the workshop."
+  },
+  {
+    "objectID": "materials.html#regression-in-r-refresher",
+    "href": "materials.html#regression-in-r-refresher",
+    "title": "VectorByte Training Materials 2024",
+    "section": "Regression in R Refresher",
+    "text": "Regression in R Refresher"
+  },
+  {
+    "objectID": "materials.html#time-dependent-regression-analysis",
+    "href": "materials.html#time-dependent-regression-analysis",
+    "title": "VectorByte Training Materials 2024",
+    "section": "Time dependent regression analysis",
+    "text": "Time dependent regression analysis"
+  },
+  {
+    "objectID": "materials.html#basics-of-time-series-using-r",
+    "href": "materials.html#basics-of-time-series-using-r",
+    "title": "VectorByte Training Materials 2024",
+    "section": "Basics of Time Series using R",
+    "text": "Basics of Time Series using R"
+  },
+  {
+    "objectID": "materials.html#gaussian-process-models-gps-for-time-dependent-data",
+    "href": "materials.html#gaussian-process-models-gps-for-time-dependent-data",
+    "title": "VectorByte Training Materials 2024",
+    "section": "Gaussian Process models (GPs) for Time Dependent Data",
+    "text": "Gaussian Process models (GPs) for Time Dependent Data"
+  },
+  {
+    "objectID": "materials.html#footnotes",
+    "href": "materials.html#footnotes",
+    "title": "VectorByte Training Materials 2024",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nWhat is the difference between VectorBiTE and VectorByte? We are glad you asked! VectorBiTE was an RCN or a research coordination network funded by a 5 year grant from the BBSRC. VectorByte is hosting this training which is a newly funded NSF grant to establish a global open access data platform to study disease vectors. All the databases have transitioned to VectorByte but the legacy options will still be available on the VectorBiTE website.↩︎"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to the 2024 VectorByte Training Workshop!",
+    "section": "",
+    "text": "Welcome to the 2024 VectorByte Training Workshop!\n\nCheck out our about and schedule: coming soon! pages to continue.\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page."
+  },
+  {
+    "objectID": "schedule2024.html",
+    "href": "schedule2024.html",
+    "title": "2024 Training Schedule",
+    "section": "",
+    "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n22 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nArrival\n\n\n\n\n  \n\n\n23 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n12:00\nLunch\n\n\n\n\n  \n\n\n24 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n\n\n12:00\nLunch\n\n\n\n\n\n\n\n\n\n\n\n25 July 2024 (08:30 - 17:00)\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n26 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nTravel\n\n\n\n\n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About the VectorByte Training Materials 2024",
+    "section": "",
+    "text": "As the VectorByte team has developed these materials, we’ve aimed to provide resources for both guided (during the workshop) and self-led learning. We assume basic familiarity with:\n\nThe R Programming Language\nBasic calculus (especially the mathematical idea of functions)\nBasic probability and statistics (e.g., what is a probability distribution, normal and binomial distributions, means, variances)\nBasics of regression\n\nWe’ve divided the materials into subject matter modules or units. Each module is designed to build on the previous one, and expects at least knowledge of all of the preceding modules in the sequence in addition to the background material.\nEach module consists of four kinds of materials:\n\nslides with presentation of materials\nlabs/hands-on materials to allow you to practice material in a practical way\nsolutions to exercises, when necessary\n\nWe also include links to additional resources/materials/references.\nFor more information about the goals and approach of VectorByte are available at vectorbyte.org."
+  },
+  {
+    "objectID": "VB_RegRev.html",
+    "href": "VB_RegRev.html",
+    "title": "VectorByte Methods Training",
+    "section": "",
+    "text": "Main materials"
+  },
+  {
+    "objectID": "VB_RegRev.html#mc-simulation-of-simple-system",
+    "href": "VB_RegRev.html#mc-simulation-of-simple-system",
+    "title": "VectorByte Methods Training",
+    "section": "MC simulation of simple system",
+    "text": "MC simulation of simple system"
+  },
+  {
+    "objectID": "VB_RegRev.html#changes-in-population-size",
+    "href": "VB_RegRev.html#changes-in-population-size",
+    "title": "VectorByte Methods Training",
+    "section": "Changes in population size",
+    "text": "Changes in population size"
+  },
+  {
+    "objectID": "VB_RegRev.html#sequential-observations",
+    "href": "VB_RegRev.html#sequential-observations",
+    "title": "VectorByte Methods Training",
+    "section": "Sequential observations",
+    "text": "Sequential observations\n\n\n\n\n\n\n\n\n\n\n\n\n\nIf we had just observed these data, how might we try to estimate parameters?"
+  },
+  {
+    "objectID": "VB_RegRev.html#sampling-distribution-of-ls-line",
+    "href": "VB_RegRev.html#sampling-distribution-of-ls-line",
+    "title": "VectorByte Methods Training",
+    "section": "Sampling distribution of LS line",
+    "text": "Sampling distribution of LS line\nWhat did we just do?\n\nWe “imagined” through simulation the sampling distribution of a LS line.\n\nIn real life we get just one data set, and we don’t know the true generating model. But we can still imagine.\n\nWe first find the sampling distribution of our LS coefficients, b_0 and b_1...\n... which requires some review.\n\nIn the online reading and review materials you should have come across some useful probability/stats facts, including:\n\n\\mathbb{E}(X_1+X_2)  = \\mathbb{E}(X_1)+ \\mathbb{E}(X_2)\n\\mathbb{E}(cX_1)  = c \\mathbb{E}(X_1)\n\\text{var}(c X_1) = c^2\\text{var}(X_1)\n\\text{var}(X_1+X_2) = \\text{var}(X_1)+\\text{var}(X_2) + 2\\text{cov}(X_1 X_2).\n\n\nRecall: distribution of the sample mean\n\nStep back for a moment and consider the mean for an iid sample of n observations of a random variable \\{X_1,\\ldots,X_n\\}.\n\nSuppose that \\mathbb{E}(X_i)  = \\mu and \\text{var}(X_i) = \\sigma^2, then\n\n\\mathbb{E}(\\bar{X}) = \\frac{1}{n} \\sum\\mathbb{E}(X_i) = \\mu\n\\text{var}(\\bar{X}) = \\text{var}\\left( \\frac{1}{n} \\sum X_i \\right) =  \\frac{1}{n^2} \\sum \\text{var}\\left(  X_i \\right) = \\displaystyle \\frac{\\sigma^2}{n}."
+  },
+  {
+    "objectID": "VB_RegRev.html#central-limit-theorem",
+    "href": "VB_RegRev.html#central-limit-theorem",
+    "title": "VectorByte Methods Training",
+    "section": "Central Limit Theorem",
+    "text": "Central Limit Theorem\nThe CLT states that for iid random variables, X, with mean \\mu and variance \\sigma^2, the distribution of the sample mean becomes normal as the number of observations, n, gets large.\n\nThat is, \\displaystyle \\bar{X} \\rightarrow_{n} \\mathcal{N}(\\mu, \\sigma^2/n) , and sample averages tend to be normally distributed in large samples.\n\nWe are now ready to describe the sampling distribution of the least squares line ...\n... in terms of its effect on the sampling distributions of the coefficients\n\nb_1 = \\hat{\\beta~}_1, the slope of the line\nb_0 = \\hat{\\beta~}_0, the intercept,\nand how they covary together,\n\ngiven a particular (fixed) set of X-values."
+  },
+  {
+    "objectID": "VB_RegRev.html#sampling-distribution-of-b_1",
+    "href": "VB_RegRev.html#sampling-distribution-of-b_1",
+    "title": "VectorByte Methods Training",
+    "section": "Sampling distribution of b_1",
+    "text": "Sampling distribution of b_1\nIt turns out that b_1 is normally distributed: b_1 \\sim \\mathcal{N}(\\beta_1, \\sigma^2_{b_1}).\n\nb_1 is unbiased: \\mathbb{E}[b_1] = \\beta_1.\nThe sampling sd \\sigma_{b_1} determines precision of b_1: \n\\sigma_{b_1}^2\n= \\text{var}(b_1) = \\frac{\\sigma^2}{\\sum (X_i - \\bar{X})^2} = \\frac{\\sigma^2}{(n-1)s_x^2}.\n It depends on three factors: 1) sample size (n); 2) error variance (\\sigma^2 = \\sigma_\\varepsilon^2); and 3)X-spread (s_x)."
+  },
+  {
+    "objectID": "VB_RegRev.html#sampling-distribution-of-b_0",
+    "href": "VB_RegRev.html#sampling-distribution-of-b_0",
+    "title": "VectorByte Methods Training",
+    "section": "Sampling Distribution of b_0",
+    "text": "Sampling Distribution of b_0\nThe intercept is also normal and unbiased: b_0 \\sim \\mathcal{N}(\\beta_0, \\sigma^2_{b_0}), where \n\\sigma^2_{b_0} = \\text{var}(b_0)  = \\sigma^2 \\left(\\frac{1}{n} + \\frac{\\bar{X}^2}{(n-1)\n    s_x^2} \\right).\n\nWhat is the intuition here? \n\\text{var}(\\bar{Y} - \\bar{X} b_1)\n= \\text{var}(\\bar{Y}) + \\bar{X}^2\\text{var}(b_1) {~-~ 2\\mathrm{cov}(\\bar{Y},b_1) }\n\n\n\\bar{Y} and b_1 are uncorrelated because the slope (b_1) is invariant if you shift the data up or down (\\bar{Y}).\n\n\nOptional Practice Exercise\n\nShow that:\n\n\\mathbb{E}[b_1] = \\beta_1\n\\mathbb{E}[b_0] = \\beta_0\n\\text{var}(b_0)  = \\sigma^2 \\left(\\frac{1}{n} + \\frac{\\bar{X}^2}{(n-1)\n    s_x^2} \\right)\n\nWhy is it that b_0 and b_1 are normally distributed?"
+  },
+  {
+    "objectID": "VB_RegRev.html#joint-distribution-of-b_0-and-b_1",
+    "href": "VB_RegRev.html#joint-distribution-of-b_0-and-b_1",
+    "title": "VectorByte Methods Training",
+    "section": "Joint Distribution of b_0 and b_1",
+    "text": "Joint Distribution of b_0 and b_1\nWe know that b_0 and b_1 can be dependent, i.e., \n\\mathbb{E}[(b_0 -\\beta_0)(b_1 - \\beta_1)] \\ne 0.\n This means that estimation error in the slope is correlated with the estimation error in the intercept. \n\\mathrm{cov}(b_0,b_1) = -\\sigma^2 \\left(\\frac{\\bar{X}}{(n-1)s_x^2}\\right).\n\n\nInterpretation:\n\nUsually, if the slope estimate is too high, the intercept estimate is too low (negative correlation).\nThe correlation decreases with more X spread (s^2_x)."
+  },
+  {
+    "objectID": "VB_RegRev.html#estimated-variance",
+    "href": "VB_RegRev.html#estimated-variance",
+    "title": "VectorByte Methods Training",
+    "section": "Estimated variance",
+    "text": "Estimated variance\nHowever, these formulas aren’t especially practical since they involve an unknown quantity: \\sigma.\n\nSolution: use s, the residual sample standard deviation estimator for \\sigma = \\sigma_\\varepsilon. \ns_{b_1} = \\sqrt{\\frac{s^2}{(n-1)s_x^2}} ~~~\ns_{b_0} = \\sqrt{s^2 \\left(\\frac{1}{n} + \\frac{\\bar{X}^2}{(n-1)s^2_x}\\right)}\n\ns_{b_1} = \\hat{\\sigma~}_{b_1} and s_{b_0} = \\hat{\\sigma~}_{b_0} are estimated coefficient sd’s.\n\n\nInterpretation:\n\nWe now have a notion of standard error for the LS estimates of the slope and intercept.\n\n\nSmall s_b values mean high info/precision/accuracy."
+  },
+  {
+    "objectID": "VB_RegRev.html#normal-and-student-t",
+    "href": "VB_RegRev.html#normal-and-student-t",
+    "title": "VectorByte Methods Training",
+    "section": "Normal and Student-t",
+    "text": "Normal and Student-t\nAgain, recall what Student discovered:\nIf \\theta \\sim \\mathcal{N}(\\mu,\\sigma^2), but you estimate \\sigma^2 \\approx s^2 based on n-p degrees of freedom, then \\theta \\sim t_{n-p}(\\mu, s^2).\n\nFor SLR, for example:\n\n\\bar{Y} \\sim t_{n-1}(\\mu, s_y^2/n).\nb_0 \\sim t_{n-2}\\left(\\beta_0, s^2_{b_0}\\right) and b_1 \\sim t_{n-2}\\left(\\beta_1, s^2_{b_1}\\right)\n\n\nWe can use these distributions for drawing conclusions about the parameters via:\n\nConfidence intervals\nHypothesis tests"
+  },
+  {
+    "objectID": "Stats_review.html",
+    "href": "Stats_review.html",
+    "title": "VectorByte Methods Training",
+    "section": "",
+    "text": "Main materials\nSolutions to exercises"
+  },
+  {
+    "objectID": "Stats_review.html#some-probability-notation",
+    "href": "Stats_review.html#some-probability-notation",
+    "title": "VectorByte Methods Training",
+    "section": "Some probability notation",
+    "text": "Some probability notation\nWe have a set, S of all possible events. Let \\text{Pr}(A) (or alternatively \\text{Prob}(A)) be the probability of event A. Then:\n\nA^c is the complement to A (all events that are not A).\nA \\cup B is the union of events A and B (“A or B”).\nA \\cap B is the intersection of events A and B (“A and B”).\n\\text{Pr}(A|B) is the conditional probability of A given that B occurs."
+  },
+  {
+    "objectID": "Stats_review.html#axioms-of-probability",
+    "href": "Stats_review.html#axioms-of-probability",
+    "title": "VectorByte Methods Training",
+    "section": "Axioms of Probability",
+    "text": "Axioms of Probability\nThese are the basic definitions that we use when we talk about probabilities. You’ve probably seen these before, but maybe not in mathematical notation. If the notation is new to you, I suggest that you use the notation above to translate these statements into words and confirm that you understand what they mean. I give you an example for the first statement.\n\n\\sum_{i \\in S} \\text{Pr}(A_i)=1, where 0 \\leq \\text{Pr}(A_i) \\leq 1 (the probabilities of all the events that can happen must sum to one, and all of the individual probabilities must be less than one)\n\\text{Pr}(A)=1-\\text{Pr}(A^c)\n\\text{Pr}(A \\cup B) = \\text{Pr}(A) + \\text{Pr}(B) -\\text{Pr}(A \\cap B)\n\\text{Pr}(A \\cap B) = \\text{Pr}(A|B)\\text{Pr}(B)\nIf A and B are independent, then \\text{Pr}(A|B) = \\text{Pr}(A)"
+  },
+  {
+    "objectID": "Stats_review.html#bayes-theorem",
+    "href": "Stats_review.html#bayes-theorem",
+    "title": "VectorByte Methods Training",
+    "section": "Bayes Theorem",
+    "text": "Bayes Theorem\nBayes Theorem allows us to related the conditional probabilities of two events A and B:\n\\begin{align*}\n\\text{Pr}(A|B) & = \\frac{\\text{Pr}(B|A)\\text{Pr}(A)}{\\text{Pr}(B)}\\\\\n&\\\\\n& =  \\frac{\\text{Pr}(B|A)\\text{Pr}(A)}{\\text{Pr}(B|A)\\text{Pr}(A) + \\text{Pr}(B|A^c)\\text{Pr}(A^c)}\n\\end{align*}"
+  },
+  {
+    "objectID": "Stats_review.html#discrete-rvs-and-their-probability-distributions",
+    "href": "Stats_review.html#discrete-rvs-and-their-probability-distributions",
+    "title": "VectorByte Methods Training",
+    "section": "Discrete RVs and their Probability Distributions",
+    "text": "Discrete RVs and their Probability Distributions\nMany things that we observe are naturally discrete. For instance, whole numbers of chairs or win/loss outcomes for games. Discrete probability distributions are used to describe these kinds of events.\nFor discrete RVs, the distribution of probabilities is described by the probability mass function (pmf), f_k such that:\n\\begin{align*}\nf_k  \\equiv \\text{Pr}(X & = k) \\\\\n\\text{where } 0\\leq f_k \\leq 1 & \\text{ and } \\sum_k f_k = 1\n\\end{align*}\nFor example, for a fair 6-sided die:\nf_k = 1/6 for k= \\{1,2,3,4,5,6\\}.\n\\star Question 1: For the six-sided fair die, what is f_k if k=7? k=1.5?\nRelated to the pmf is the cumulative distribution function (cdf), F(x). F(x) \\equiv \\text{Pr}(X \\leq x)\nFor the 6-sided die F(x)= \\displaystyle\\sum_{k=1}^{x} f_k\nwhere x \\in 1\\dots 6.\n\\star Question 2: For the fair 6-sided die, what is F(3)? F(7)? F(1.5)?\n\nVisualizing distributions of discrete RVs in R\nExample: Imagine a RV can take values 1 through 10, each with probability 0.1:\n \n\nvals&lt;-seq(1,10, by=1)\npmf&lt;-rep(0.1, 10)\ncdf&lt;-pmf[1]\nfor(i in 2:10) cdf&lt;-c(cdf, cdf[i-1]+pmf[i])\npar(mfrow=c(1,2), bty=\"n\")\nbarplot(height=pmf, names.arg=vals, ylim=c(0, 1), main=\"pmf\", col=\"blue\")\nbarplot(height=cdf, names.arg=vals, ylim=c(0, 1), main=\"cdf\", col=\"red\")"
+  },
+  {
+    "objectID": "Stats_review.html#continuous-rvs-and-their-probability-distributions",
+    "href": "Stats_review.html#continuous-rvs-and-their-probability-distributions",
+    "title": "VectorByte Methods Training",
+    "section": "Continuous RVs and their Probability Distributions",
+    "text": "Continuous RVs and their Probability Distributions\nThings are just a little different for continuous RVs. Instead we use the probability density function (pdf) of the RV, and denote it by f(x). It still describes how relatively likely are alternative values of an RV – that is, if the pdf his higher around one value than around another, then the first is more likely to happen. However, the pdf does not return a probability, it is a function that describes the probability density.\nAn analogy:\nProbabilities are like weights of objects. The PMF tells you how much weight each possible value or outcome contributes to a whole. The PDF tells you how dense it is around a value. To calculate the weight of a real object, you need to also know the size of the area that you’re interested in and the density there The probability that your RV takes exactly any value is zero, just like the probability that any atom in a very thin wire is lined up at exactly that position is zero (and to the amount of mass at that location is zero). However, you can take a very thin slice around that location to see how much material is there.\nRelated to the pdf is the cumulative distribution function (cdf), F(x). \nF(x) \\equiv \\text{Pr}(X \\leq x)\n For a continuous distribution: \nF(x)= \\int_{-\\infty}^x f(x')dx'\n\n \n For a normal distribution with mean 0, what is F(0)?\n \n\nVisualizing distributions of continuous RVs in R\nExample: exponential RV, where f(x) = re^{-rx}:\n\n\nvals&lt;-seq(0,10, length=1000)\nr&lt;-0.5\npar(mfrow=c(1,2), bty=\"n\")\nplot(vals, dexp(vals, rate=r), main=\"pdf\", col=\"blue\", type=\"l\", lwd=3, ylab=\"\", xlab=\"\")\nplot(vals, pexp(vals, rate=r), main=\"cdf\", ylim=c(0,1), col=\"red\",\n     type=\"l\", lwd=3, ylab=\"\", xlab=\"\")"
+  },
+  {
+    "objectID": "Stats_review.html#confidence-intervals",
+    "href": "Stats_review.html#confidence-intervals",
+    "title": "VectorByte Methods Training",
+    "section": "Confidence Intervals",
+    "text": "Confidence Intervals\nSuppose Z_{n-p} \\sim t_{n-p}(0,1). A centered interval is on this t distribution can be written as: \\text{Pr}(-t_{n-p,\\alpha/2} \\&lt; Z\\_{n-p} \\&lt; t_{n-p,\\alpha/2}) = 1-\\alpha. That is, between these values of the t distribution (1-\\alpha)\\times 100 percent of the probability is contained in that symmetric interval. We can visually indicate these location on a plot of the t distribution (here with df=5 and \\alpha=0.05):\n\nx&lt;-seq(-4.5, 4.5, length=1000)\nalpha=0.05\n\n## draw a line showing the normal pdf on the histogram\nplot(x, dt(x, df=5), col=\"black\", lwd=2, type=\"l\", xlab=\"x\", ylab=\"\")\nabline(v=qt(alpha/2, df=5), col=3, lty=2, lwd=2)\nabline(v=qt(1-alpha/2, df=5), col=2, lty=2, lwd=2)\n\nlegend(\"topright\", \n       legend=c(\"t, df=5\", \"lower a/2\", \"upper a/2\"),\n       col=c(1,3,2), lwd=2, lty=c(1, 2,2))\n\n\n\n\n\n\n\n\nIn the R code here, {\\tt qt} is the Student-t “quantile function”. The function {\\tt qt(alpha, df)} returns a value z such that \\alpha = P(Z_{\\mathrm{df}} &lt; z), i.e., t_{\\mathrm{df},\\alpha}.\nHow can we use this to determine the confidence interval for \\theta? Since \\theta \\sim t_{n-p}(\\mu, s^2), we can replace the Z_{n-p} in the interval above with the definition in terms of \\theta, \\mu and s and rearrange: \\begin{align*}\n1-\\alpha& = \\text{Pr}\\left(-t_{n-p,\\alpha/2} &lt; \\frac{\\mu - \\bar{\\theta}}{s} &lt;\nt_{n-p,\\alpha/2}\\right) \\\\\n&=\n\\text{Pr}(\\bar{\\theta}-t_{n-p,\\alpha/2}s &lt; \\mu &lt;\n\\bar{\\theta} + t_{n-p,\\alpha/2}s)\n\\end{align*}\nThus (1-\\alpha)*100% of the time, \\mu is within the confidence interval (written in two equivalent ways):\n\\bar{\\theta} \\pm t_{n-p,\\alpha/2} \\times s \\;\\;\\; \\Leftrightarrow \\;\\;\\; \\bar{\\theta}-t_{n-p,\\alpha/2} \\times s, \\bar{\\theta} + t_{n-p,\\alpha/2}\\times s\nWhy should we care about confidence intervals?\n\nThe confidence interval captures the amount of information in the data about the parameter.\nThe center of the interval tells you what your estimate is.\nThe length of the interval tells you how sure you are about your estimate."
+  },
+  {
+    "objectID": "Stats_review.html#p-values",
+    "href": "Stats_review.html#p-values",
+    "title": "VectorByte Methods Training",
+    "section": "p-Values",
+    "text": "p-Values\nWhat is a p-value? The American Statistical Association issued a statement where they defined it in the following way:\n“Informally, a p-value is the probability under a specified statistical model that a statistical summary of the data (e.g., the sample mean difference between two compared groups) would be equal to or more extreme than its observed value.” (ASA Statement on Statistical Significance and P-Values.)\nMore formally, we formulate a p-value in terms of a null hypothesis/model and test whether or not our observed data are more extreme than we would expect under that specific null model. In your previous courses you’ve probably seen very specific null models, corresponding to, for instance the null hypothesis that the mean of your data is normally distributed with mean m (often m=0). We often denote the null model as H_0 and the alternative as H_a or H_1. For instance, for our example above with \\theta we might want to test the following:\nH_0: \\bar{\\theta}=0 \\;\\;\\; \\text{vs.} \\;\\;\\; H_a: \\bar{\\theta}\\neq 0\nTo perform the hypothesis test we would FIRST choose our rejection level, \\alpha. Although convention is to use \\alpha =0.05 corresponding to a 95% confidence region, one could choose based on how sure one needs to be for a particular application. Next we build our test statistic. There are two cases, first if we know \\sigma and second if we don’t.\nIf we knew the variance \\sigma^2, our test statistic would be Z=\\frac{\\bar{\\theta}-0}{\\sigma}, and we expect that this should have a standard normal distribution, i.e., Z\\sim\\mathcal{N}(0,1). If we don’t know \\sigma and instead estimate is as s (which is most of the time), our test statistic would be Z_{df}=\\frac{\\bar{\\theta}-0}{s} (i.e., it would have a t-distribution).\nWe calculate the value of the appropriate statistic (either Z or Z_{df}) for our data, and then we compare it to the values of the standard distribution (normal or t, respectively) corresponding to the \\alpha level that we chose, i.e., we see if the number that we got for our statistic is inside the horizontal lines that we drew on the standard distribution above. If it is, then the data are consistent with the null hypothesis and we cannot reject the null. If the statistic is outside the region the data are NOT consistent with the null, and instead we reject the null and use the alternative as our new working hypothesis.\nNotice that this process is focused on the null hypothesis. We cannot tell if the alternative hypothesis is true, or, really, if it’s actually better than the null. We can only say that the null is not consistent with our data (i.e., we can falsify the null) at a given level of certainty.\nAlso, the hypothesis testing process is the same as building a confidence interval, as above, and then seeing if the null hypothesis is within your confidence interval. If the null is outside of your confidence interval then you can reject your null at the level of certainty corresponding to the \\alpha that you used to build your CI. If the value for the null is within your CI, you cannot reject at that level."
+  },
+  {
+    "objectID": "Stats_review.html#the-sampling-distribution-1",
+    "href": "Stats_review.html#the-sampling-distribution-1",
+    "title": "VectorByte Methods Training",
+    "section": "The Sampling Distribution",
+    "text": "The Sampling Distribution\nSuppose we have a random sample \\{Y_i, i=1,\\dots,N \\}, where Y_i \\stackrel{\\mathrm{i.i.d.}}{\\sim}N(\\mu,9) for i=1,\\ldots,N.\n\nWhat is the variance of the sample mean?\nWhat is the expectation of the sample mean?\nWhat is the variance for another i.i.d. realization Y_{ N+1}?\nWhat is the standard error of \\bar{Y}?"
+  },
+  {
+    "objectID": "Stats_review.html#hypothesis-testing-and-confidence-intervals",
+    "href": "Stats_review.html#hypothesis-testing-and-confidence-intervals",
+    "title": "VectorByte Methods Training",
+    "section": "Hypothesis Testing and Confidence Intervals",
+    "text": "Hypothesis Testing and Confidence Intervals\nSuppose we sample some data \\{Y_i, i=1,\\dots,n \\}, where Y_i \\stackrel{\\mathrm{i.i.d.}}{\\sim}N(\\mu,\\sigma^2) for i=1,\\ldots,n, and that you want to test the null hypothesis H_0: ~\\mu=12 vs. the alternative H_a: \\mu \\neq 12, at the 0.05 significance level.\n\nWhat test statistic would you use? How do you estimate \\sigma?\nWhat is the distribution for this test statistic if the null is true?\nWhat is the distribution for the test statistic if the null is true and n \\rightarrow \\infty?\nDefine the test rejection region. (I.e., for what values of the test statistic would you reject the null?)\nHow would compute the p-value associated with a particular sample?\nWhat is the 95% confidence interval for \\mu? How should one interpret this interval?\nIf \\bar{Y} = 11, s_y = 1, and n=9, what is the test result? What is the 95% CI for \\mu?"
+  }
+]
