@@ -1,5 +1,5 @@
 ---
-title: VectorByte Methods Training 2024
+title: VectorByte Methods Training
 subtitle: Probability and Statistics Fundamentals
 author: The VectorByte Team (Leah R. Johnson, Virginia Tech)
 format:

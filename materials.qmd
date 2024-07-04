@@ -8,33 +8,38 @@ format:
     css: styles.css
 ---
 
-# Overview
 
-## Pre-work and set-up
+# Pre-work and set-up
 
-### Hardware and Software
+## Hardware and Software
 
 We will be using [`R`](https://cran.r-project.org/) for all data manipulation and analyses/model fitting. Any operating system (Windows, Mac, Linux) will do, as long as you have `R` (version 3.6 or higher) installed.
 
-You may use any IDE/ GUI for `R` (VScode, RStudio, Emacs, etc). For most people, [`RStudio`](https://www.rstudio.com/) is a good option. Whichever one you decide to use, please make sure it is installed and test it before the workshop. We will have a channel on Slack dedicated to software/hardware issues and troubleshooting.
+You may use any IDE/ GUI for `R` (VScode, RStudio, Emacs, etc). For most people, [`RStudio`](https://www.rstudio.com/) is a good option. Whichever one you decide to use, please make sure it is installed and test it before the workshop. 
 
-We will also be using Slack for additional support during the training. Please have these installed in advance.
+We will also be using Slack for additional support during the training. Please have these installed in advance. We will have a channel on Slack dedicated to software/hardware issues and troubleshooting.
 
-### Pre-requisites
+## Pre-requisites
 
+We are assuming familiarity with R basics as well as at least introductory statistics, including up through simple linear regression. If you would like materials to review, we recommend that you do the following:
 
-We are assuming familiarity with R basics as well as at least introductory statistics, including up through linear models. If you would like materials to review, we recommend that you do the following:
+***Review of R***
 
 1.  Go to [The Multilingual Quantitative Biologist](https://mhasoba.github.io/TheMulQuaBio/intro.html), and read+work through the [Biological Computing in R Chapter](https://mhasoba.github.io/TheMulQuaBio/notebooks/07-R.html).
 
 2.  In addition / alternatively to pre-work element (1), here are some resources for brushing up on R [at the end of the Intro R Chapter you can try](https://mhasoba.github.io/TheMulQuaBio/notebooks/07-R.html#readings-and-resources). There are many more resources online (e.g., [this](https://www.codecademy.com/learn/learn-r) and [this](https://www.dataquest.io/blog/learn-r-for-data-science/) ) -- pick something that suits your learning style.
 
-3.  Review background on [introductory probability and statistics](Stats_review.qmd) ([solutions to exercises](Stats_review_soln.qmd)). You can also use the resources on [The Multilingual Quantitative Biologist - Basic Data Analyses and Statistics](https://mhasoba.github.io/TheMulQuaBio/Stats-Intro.html) through into linear models. 
+***Review of statistics***
+
+1.  Review background on [introductory probability and statistics](Stats_review.qmd) ([solutions to exercises](Stats_review_soln.qmd)). You can also use the resources on [The Multilingual Quantitative Biologist - Basic Data Analyses and Statistics](https://mhasoba.github.io/TheMulQuaBio/Stats-Intro.html) through into linear models.
+
+2.  Review the conceptual basics of [Simple Linear Regression](VB_RegRev.qmd). We'll refresh fitting linear models in R as well as transformations and diagnostic plots during the workshop. 
 
 <br> <br>
 
-## Introduction to Time Dependent Abundance Data
+# Live Workshop Materials
 
+## Introduction to Time Dependent Abundance Data
 
 <br> <br>
 
@@ -46,21 +51,17 @@ We are assuming familiarity with R basics as well as at least introductory stati
 
 <br> <br>
 
-## Regression Refresher
+## Regression in R Refresher
 
 <br> <br>
 
-
-
-## Time dependent regression analysis 
+## Time dependent regression analysis
 
 <br> <br>
-
 
 ## Basics of Time Series using R
 
 <br> <br>
-
 
 ## Gaussian Process models (GPs) for Time Dependent Data
 

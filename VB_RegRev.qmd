@@ -6,7 +6,12 @@ title-slide-attributes:
   data-background-image: VectorByte-logo_lg.png
   data-background-size: contain
   data-background-opacity: "0.2"
-format: revealjs
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
 ---
 
 ```{r setup, include = FALSE}
@@ -50,13 +55,17 @@ insert_html_math <- make_latex_decorator("", "$$")
 ## classoption: aspectratio=169
 ```
 
-## Learning Objectives
+
+[Main materials](materials.qmd)
+
+
+# Learning Objectives
 
 1.  Review the idea behind regression
 2.  Review how to make predictions from a regression model
 3.  Practice simple regression procedures in `R` including diagnostic plots
 
-## Recall: simple population simulation
+# A simple population simulation
 
 \begin{align*}
 N(t) & = s N(t-1) + b +W(t) \\
@@ -158,7 +167,7 @@ If we had just observed these data, how might we try to estimate parameters?
 :::
 :::
 
-## Estimating parameters
+# Estimating parameters
 
 Our model (assuming no observational stochasticity for now) can be written as
 
@@ -186,13 +195,13 @@ abline(5, 0.9, col=3, lwd=3)
 <center>The line shown was fit by the "eyeball" method.</center>
 
 
-## Review: What is a good line?
+# Review: What is a good line?
 
 `r sk1()`
 
 <center>`r mygrn("Can we do better than the eyeball method?")`</center>
 
-We desire a strategy for estimating the slope and intercept parameters in the model $\hat{Y} = b_0 + b_1 X$.
+We desire a strategy for estimating the slope and intercept parameters in the model $\hat{Y~} = b_0 + b_1 X$.
 
 `r sk1()` 
 This involves
@@ -216,24 +225,24 @@ Most reasonable `r myred("criteria")` involve measuring the amount by which the 
 
 -------------------------------------------
 
-<center>![](graphics/fittedval.png){height="4.5in"}</center>
+<center>![](graphics/fittedval.png){height="3in"}</center>
 
 The dots are the `r myred("observed values")` and the line represents our `r myblue("fitted values")` given by 
 $$
- \hat{Y}_i = b_0 + b_1 X_i.
+ \hat{Y~}_i = b_0 + b_1 X_i.
 $$
 
 
 ---------------------------
 
-<center>![](graphics/residual.png){height="4.5in"}</center>
+<center>![](graphics/residual.png){height="3in"}</center>
 
-The `r mygrn("residual")` $e_i$ is the discrepancy between the `r myblue("fitted")` $\hat{Y}_i$ and `r myred("observed")` $Y_i$ values.
+The `r mygrn("residual")` $e_i$ is the discrepancy between the `r myblue("fitted")` $\hat{Y~}_i$ and `r myred("observed")` $Y_i$ values.
 
 - Note that we can write
-$Y_i = \hat{Y}_i + (Y_i -\hat{Y}_i) = \hat{Y}_i + e_i$.
+$Y_i = \hat{Y~}_i + (Y_i -\hat{Y~}_i) = \hat{Y~}_i + e_i$.
 
-## Least Squares
+# Least Squares
 
 A reasonable goal is to minimize the size of *all* residuals:
 
@@ -250,10 +259,10 @@ Since some residuals are positive and some are negative, we need one more ingred
 
 ***`r myblue("Least squares")`*** chooses $b_0$ and $b_1$ to minimize 
 $$
-SSE = \sum_{i=1}^n e^2_i = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2= \sum_{i=1}^n (Y_i - [b_0 + b_1 X_i])^2.
+SSE = \sum_{i=1}^n e^2_i = \sum_{i=1}^n (Y_i - \hat{Y~}_i)^2= \sum_{i=1}^n (Y_i - [b_0 + b_1 X_i])^2.
 $$
 
-<center>![](graphics/negpos.png){height="4in"}</center>
+<center>![](graphics/negpos.png){height="3in"}</center>
 
 -----------------------------------------
 
@@ -271,7 +280,7 @@ where $\bar{X}$ denotes the arithmetic mean of $X$.
 
 Hint: You will take (partial) derivatives of $SSE$ w.r.t.~$b_0$ and $b_1$, set these equal to 0 and solve.
 
-## Estimating parameters
+# Estimating parameters
 
 We can use these formulas to estimate our parameters and draw a new line $\Rightarrow$  `r mygrn("make a prediction")`
 
@@ -279,8 +288,8 @@ We can use these formulas to estimate our parameters and draw a new line $\Right
 
 ::: {.column width="50%"}
 \begin{align*}
- \hat{b} & = b_0 = 14.55 \\
-\hat{s} & = b_1 = 0.63
+ \hat{b~} & = b_0 = 14.55 \\
+\hat{s~} & = b_1 = 0.63
 \end{align*}
 
 - The least squares line is different than our eyeballed line;
@@ -310,7 +319,7 @@ legend("bottomright", legend=c("eyeball", "LS", "true"), col=c(3,2,4), lwd=3)
 :::
 :::
 
-## Estimation of error variance
+# Estimation of error variance
 
 We also want to estimate $\sigma$. If we think about the definition of the variance in our system in terms of the residuals:
 
@@ -322,14 +331,14 @@ $$
 
 This *seems* to indicate that a sensible strategy would be to estimate the average for squared errors with the sample average squared residuals:
 $$
-\hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^n e_i^2
+\hat{\sigma~}^2 = \frac{1}{n} \sum_{i=1}^n e_i^2
 $$
 
 --------------------------------------------
 
 However, this is ***not*** an `r myred("unbiased")` estimator of $\sigma^2$. 
 
-- This means that $\mathbb{E}[\hat{\sigma}^2] \ne \sigma^2$.
+- This means that $\mathbb{E}[\hat{\sigma~}^2] \ne \sigma^2$.
 
 For that, we have to alter the
 denominator slightly:
@@ -345,7 +354,7 @@ Note:
 - We have $n-p$ degrees of freedom because $p$ ($=2$) have been "used up" in the estimation of $b_0$ and $b_1$.
 - It is often convenient to report $s = \sqrt{SSE/(n-p)}$, which is in the same units as $Y$.
 
-## Estimating parameters
+# Estimating parameters
 
 Now we can get (point) estimates of all of the parameters for our system.
 
@@ -356,9 +365,9 @@ Now we can get (point) estimates of all of the parameters for our system.
 `r sk1()`
 
 \begin{align*}
- \hat{b} & = 14.55\mathrm{,}~~ b_{\mathrm{true}}=10\\
-\hat{s} & = 0.63\mathrm{,}~~ s_{\mathrm{true}}=0.75\\
-\hat{\sigma} & = 4.88\mathrm{,}~~ \sigma_{\mathrm{true}}=5
+ \hat{b~} & = 14.55\mathrm{,}~~ b_{\mathrm{true}}=10\\
+\hat{s~} & = 0.63\mathrm{,}~~ s_{\mathrm{true}}=0.75\\
+\hat{\sigma~} & = 4.88\mathrm{,}~~ \sigma_{\mathrm{true}}=5
 \end{align*}
 :::
 
@@ -384,17 +393,17 @@ legend("bottomright", legend=c("eyeball", "LS", "true"), col=c(3,2,4), lwd=3)
 :::
 :::
 
-## Prediction and the modeling goal
+# Prediction and the modeling goal
 
-A prediction rule is any function where you input $X$ and it outputs $\hat{Y}$ as a predicted  response at $X$.
+A prediction rule is any function where you input $X$ and it outputs $\hat{Y~}$ as a predicted response at $X$.
 
 `r sk1()` 
 The least squares line is a prediction rule:
 $$
-\hat{Y} = f(X) = b_0 + b_1 X
+\hat{Y~} = f(X) = b_0 + b_1 X
 $$
 
-This rule tells us what to do when a **new $X$** comes along \dots just run it through the formula above and obtain a guess $\hat{Y}$!
+This rule tells us what to do when a **new $X$** comes along \dots just run it through the formula above and obtain a guess $\hat{Y~}$!
 
 However, **`r mygrn("it is not going to be a perfect prediction")`**.
 
@@ -436,7 +445,7 @@ We must also acknowledge that the "fitted" line may be fooled by particular real
 
 Luckily for us, the case of a `r myred("line with normally distributed noise")` around it is well studied theoretically, and you've probably seen it before\dots
 
-## Simple linear regression (SLR) model
+# Simple linear regression (SLR) model
 
 $$
 Y = \beta_0 + \beta_1 X + \varepsilon, \;\;\;\;\;
@@ -459,9 +468,9 @@ The error $\varepsilon$ is independent, additive, "idosyncratic noise".
 - and the influence of factors other than $X$, $\varepsilon \sim \mathcal{N}(0, \sigma^2)$
 independently of $X$.
 
-<center>![](graphics/adderror_new.png){height="4in"}</center>
+<center>![](graphics/adderror_new.png){height="3in"}</center>
 
-## Context from the population example
+# Context from the population example
 
 Think of $\mathbb{E}[Y|X]$ as the average size of the population at time $t+1$ if the population had size $X$ at time $t$, and $\sigma^2$ is the spread around that average. When we specify the SLR `r myred("model")` we say that 
 
@@ -480,9 +489,9 @@ $$
 $\Rightarrow$ $\sigma^2$ controls the `r myred(" dispersion")` of $Y$ around $\beta_0 + \beta_1 X$
 
 
-<center>![](graphics/cnd_new.png){height="4in"}</center>
+<center>![](graphics/cnd_new.png){height="3in"}</center>
 
-## Prediction intervals in the ***true model***
+# Prediction intervals in the ***true model***
 
 You are told (without looking at the data) that
 $\beta_0 = 13$ ; $\beta_1= 0.9$ ; and $\sigma = 3$. You are asked to predict the population next year if the current population has 90 individuals.   What do you know about $Y$ from the model?
@@ -520,7 +529,7 @@ We also must incorporate another
 source of risk: `r myblue("uncertainty in the parameters")` $\beta_0$ and $\beta_1$
 
 
-## Sampling distribution of LS estimates
+# Sampling distribution of LS estimates
 
 How much do our estimates depend on the particular random sample that we happen to observe?
 
@@ -535,11 +544,11 @@ If the estimates do vary a lot, then it matters which sample you happen to obser
 
 ----------------------------------------
 
-<center>![](graphics/sampling1_new.png)</center>
+<center>![](graphics/sampling1_new.png){height="4in"}</center>
 
 -------------------------------------
 
-<center>![](graphics/sampling2_new.png)</center>
+<center>![](graphics/sampling2_new.png){height="4in"}</center>
 
 
 ---------------------------
@@ -561,7 +570,7 @@ Also notice that the LS lines are, more often than not,
 
 \[See a Monte Carlo demonstration in `linear.R`\]
 
-<center>![](graphics/linear.png){height="5.5in"}</center>
+<center>![](graphics/linear.png){height="3.5in"}</center>
 
 
 ## Sampling distribution of LS line
@@ -621,9 +630,9 @@ We are now ready to describe the sampling distribution of the least squares line
 \... in terms of its effect on the sampling distributions of the
 coefficients
 
--   $b_1 = \hat{\beta}_1$, the slope of the line
+-   $b_1 = \hat{\beta~}_1$, the slope of the line
 
--   $b_0 = \hat{\beta}_0$, the intercept,
+-   $b_0 = \hat{\beta~}_0$, the intercept,
 
 -   and how they covary together,
 
@@ -745,13 +754,13 @@ parameters via:
 -   Hypothesis tests
 
 
-## Forecasting
+# Forecasting
 
 `r myblue("The conditional forecasting problem")`:
 
 -   Given covariate(s) $X_f$ and sample data $\{X_i, Y_i\}_{i=1}^n$, predict the "future" observation $Y_f$.
 
-`r myred("The solution is to use our LS fitted value")`: $\hat{Y}_f = b_0 + b_1X_f$.
+`r myred("The solution is to use our LS fitted value")`: $\hat{Y~}_f = b_0 + b_1X_f$.
 
 -   That's the easy bit.
 
@@ -762,9 +771,9 @@ The hard (`r myblue("and very important!")`) part of forecasting is assessing un
 
 If we use $\hat{Y~}_f$, our prediction error is
 
-$$e_f = Y_f - \hat{Y}_f = Y_f - b_0 - b_1X_f$$
+$$e_f = Y_f - \hat{Y~}_f = Y_f - b_0 - b_1X_f$$
 
-<center>![](graphics/prederror_new.png){height="4.5in"}</center>
+<center>![](graphics/prederror_new.png){height="3in"}</center>
 
 ---------------------------------
 
@@ -792,7 +801,7 @@ $$
 We know
 $\text{var}(\varepsilon_f) = \sigma^2 \approx s^2$, but what about the fit error?
 
-<center>![](graphics/estimerror_new.png){height="4in"}</center>
+<center>![](graphics/estimerror_new.png){height="3in"}</center>
 
 
 --------------------------------------
@@ -863,7 +872,7 @@ For $X_f$ far from our $\bar{X}$, the space between lines is magnified
 
 `r sk1()`
 
-<center>![](graphics/spred_new.png){height="4.5in"}</center>
+<center>![](graphics/spred_new.png){height="3in"}</center>
 
 ---------------------------
 
@@ -871,7 +880,7 @@ $\Rightarrow$ The prediction (conf.) interval needs to widen away from $\bar{X}$
 
 `r sk1()`
 
-<center>![](graphics/fitted.png){height="5in"}</center>
+<center>![](graphics/fitted.png){height="4in"}</center>
 
 ---------------------------
 

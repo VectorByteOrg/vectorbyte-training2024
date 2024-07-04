@@ -12,8 +12,15 @@ format:
 
 # Welcome to the 2024 VectorByte  Training Workshop!
 
-#### Check out our [about](about.qmd) and [schedule: coming soon!]() pages to continue.
+<br> 
 
-<br> <br> <br>
+***Check out our [about](about.qmd) and [schedule: coming soon!]() pages to continue.***
+
+Information about pre-workshop preparation -- including software installation, expectations for what you should already be familiar with, and review materials -- is available in the [pre-work portion of the materials page](materials.html#pre-work-and-set-up).
+
+
+
+<br> 
+<br> <br>
 
 <center>![](graphics/VectorByte-logo_lg.png){width="4in"}</center>
