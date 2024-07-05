@@ -253,10 +253,10 @@ window.Quarto = {
 </section>
 <section id="a-simple-population-simulation" class="level1">
 <h1>A simple population simulation</h1>
-<p><span class="math display">\begin{align*}
+<span class="math display">\begin{align*}
 N(t) &amp; = s N(t-1) + b +W(t) \\
 N_{\mathrm{obs}}(t) &amp; =  N(t) + V(t)
-\end{align*}</span></p>
+\end{align*}</span>
 <p>Let’s specify a few values/distributions:</p>
 <ul>
 <li><span class="math inline">s=0.75</span>, <span class="math inline">b=10</span>, <span class="math inline">N_0=10</span>, <span class="math inline">T_{\mathrm{max}}=100</span></li>
@@ -311,10 +311,10 @@ N_{\mathrm{obs}}(t) &amp; =  N(t) + V(t)
 <section id="estimating-parameters" class="level1">
 <h1>Estimating parameters</h1>
 <p>Our model (assuming no observational stochasticity for now) can be written as</p>
-<p><span class="math display">\begin{align*}
+<span class="math display">\begin{align*}
 N(t) &amp; = s N(t-1) + b + \varepsilon(t) \\
 \varepsilon(t) &amp; \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, \sigma^2) \\
-\end{align*}</span></p>
+\end{align*}</span>
 <p>We want to know <span class="math inline">s</span>, <span class="math inline">b</span>, and <span class="math inline">\sigma</span>. Notice that without the error, the process just looks like <span class="math display">\begin{align*}
 N(t) = s N(t-1) + b \rightarrow y = b_1 x + b_0
 \end{align*}</span> This is just a line!</p>
@@ -405,10 +405,10 @@ b_0 = \bar{Y} - b_1 \bar{X}~~~\mathrm{and}~~~b_1 = \frac{ \sum_{i=1}(X_i Y_i) - 
 <p>We can use these formulas to estimate our parameters and draw a new line <span class="math inline">\Rightarrow</span> <span style="color: ForestGreen;">make a prediction</span></p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><span class="math display">\begin{align*}
+<span class="math display">\begin{align*}
 \hat{b~} &amp; = b_0 = 14.55 \\
 \hat{s~} &amp; = b_1 = 0.63
-\end{align*}</span></p>
+\end{align*}</span>
 <ul>
 <li>The least squares line is different than our eyeballed line;</li>
 <li>and we know its the <span style="color: red;">best line</span> in a certain sense.</li>
@@ -458,11 +458,11 @@ s^2 = \frac{1}{n-p} \sum_{i=1}^n e_i^2 = \frac{SSE}{n-2}
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><br></p>
-<p><span class="math display">\begin{align*}
+<span class="math display">\begin{align*}
 \hat{b~} &amp; = 14.55\mathrm{,}~~ b_{\mathrm{true}}=10\\
 \hat{s~} &amp; = 0.63\mathrm{,}~~ s_{\mathrm{true}}=0.75\\
 \hat{\sigma~} &amp; = 4.88\mathrm{,}~~ \sigma_{\mathrm{true}}=5
-\end{align*}</span></p>
+\end{align*}</span>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -482,7 +482,7 @@ s^2 = \frac{1}{n-p} \sum_{i=1}^n e_i^2 = \frac{SSE}{n-2}
 <p><br> The least squares line is a prediction rule: <span class="math display">
 \hat{Y~} = f(X) = b_0 + b_1 X
 </span></p>
-<p>This rule tells us what to do when a <strong>new <span class="math inline">X</span></strong> comes along just run it through the formula above and obtain a guess <span class="math inline">\hat{Y~}</span>!</p>
+<p>This rule tells us what to do when a <strong>new</strong> <span class="math inline">X</span> comes along just run it through the formula above and obtain a guess <span class="math inline">\hat{Y~}</span>!</p>
 <p>However, <strong><span style="color: ForestGreen;">it is not going to be a perfect prediction</span></strong>.</p>
 <hr>
 <p>We need to devise a notion of <span style="color: ForestGreen;">forecast accuracy</span>.</p>
@@ -613,13 +613,13 @@ Y \sim \mathcal{N}(94, 3^2).
 </ul>
 <p>In real life we get just one data set, and <span style="color: red;">we don’t know the true generating model</span>. But we can still imagine.</p>
 <p><br></p>
-<p>We first find the sampling distribution of our LS coefficients, <span class="math inline">b_0</span> and <span class="math inline">b_1</span>...<br>
-... which requires some review.</p>
+<p>We first find the sampling distribution of our LS coefficients, <span class="math inline">b_0</span> and <span class="math inline">b_1</span>…<br>
+… which requires some review.</p>
 <hr>
 <p>In the online reading and review materials you should have come across some useful probability/stats facts, including:</p>
 <ul>
-<li><p><span class="math inline">\mathbb{E}(X_1+X_2)  = \mathbb{E}(X_1)+ \mathbb{E}(X_2)</span></p></li>
-<li><p><span class="math inline">\mathbb{E}(cX_1)  = c \mathbb{E}(X_1)</span></p></li>
+<li><p><span class="math inline">\mathbb{E}(X_1+X_2) = \mathbb{E}(X_1)+ \mathbb{E}(X_2)</span></p></li>
+<li><p><span class="math inline">\mathbb{E}(cX_1) = c \mathbb{E}(X_1)</span></p></li>
 <li><p><span class="math inline">\text{var}(c X_1) = c^2\text{var}(X_1)</span></p></li>
 <li><p><span class="math inline">\text{var}(X_1+X_2) = \text{var}(X_1)+\text{var}(X_2) + 2\text{cov}(X_1 X_2)</span>.</p></li>
 </ul>
@@ -628,10 +628,10 @@ Y \sim \mathcal{N}(94, 3^2).
 <p><br></p>
 <p>Step back for a moment and consider the mean for an <span class="math inline">iid</span> sample of <span class="math inline">n</span> observations of a random variable <span class="math inline">\{X_1,\ldots,X_n\}</span>.</p>
 <p><br></p>
-<p>Suppose that <span class="math inline">\mathbb{E}(X_i)  = \mu</span> and <span class="math inline">\text{var}(X_i) = \sigma^2</span>, then</p>
+<p>Suppose that <span class="math inline">\mathbb{E}(X_i) = \mu</span> and <span class="math inline">\text{var}(X_i) = \sigma^2</span>, then</p>
 <ul>
 <li><span class="math inline">\mathbb{E}(\bar{X}) = \frac{1}{n} \sum\mathbb{E}(X_i) = \mu</span></li>
-<li><span class="math inline">\text{var}(\bar{X}) = \text{var}\left( \frac{1}{n} \sum X_i \right) =  \frac{1}{n^2} \sum \text{var}\left(  X_i \right) = \displaystyle \frac{\sigma^2}{n}</span>.</li>
+<li><span class="math inline">\text{var}(\bar{X}) = \text{var}\left( \frac{1}{n} \sum X_i \right) = \frac{1}{n^2} \sum \text{var}\left( X_i \right) = \displaystyle \frac{\sigma^2}{n}</span>.</li>
 </ul>
 </section>
 <section id="central-limit-theorem" class="level2">
@@ -640,8 +640,8 @@ Y \sim \mathcal{N}(94, 3^2).
 <p><br></p>
 <p>That is, <span class="math inline">\displaystyle \bar{X} \rightarrow_{n} \mathcal{N}(\mu, \sigma^2/n)</span> , and sample averages tend to be normally distributed in large samples.</p>
 <hr>
-<p>We are now ready to describe the sampling distribution of the least squares line ...</p>
-<p>... in terms of its effect on the sampling distributions of the coefficients</p>
+<p>We are now ready to describe the sampling distribution of the least squares line …</p>
+<p>… in terms of its effect on the sampling distributions of the coefficients</p>
 <ul>
 <li><p><span class="math inline">b_1 = \hat{\beta~}_1</span>, the slope of the line</p></li>
 <li><p><span class="math inline">b_0 = \hat{\beta~}_0</span>, the intercept,</p></li>
@@ -680,8 +680,7 @@ Y \sim \mathcal{N}(94, 3^2).
 <ol type="1">
 <li><p><span class="math inline">\mathbb{E}[b_1] = \beta_1</span></p></li>
 <li><p><span class="math inline">\mathbb{E}[b_0] = \beta_0</span></p></li>
-<li><p><span class="math inline">\text{var}(b_0)  = \sigma^2 \left(\frac{1}{n} + \frac{\bar{X}^2}{(n-1)
-    s_x^2} \right)</span></p></li>
+<li><p><span class="math inline">\text{var}(b_0) = \sigma^2 \left(\frac{1}{n} + \frac{\bar{X}^2}{(n-1)  s_x^2} \right)</span></p></li>
 </ol></li>
 <li><p>Why is it that <span class="math inline">b_0</span> and <span class="math inline">b_1</span> are normally distributed?</p></li>
 </ol>
@@ -761,11 +760,11 @@ s_{b_0} = \sqrt{s^2 \left(\frac{1}{n} + \frac{\bar{X}^2}{(n-1)s^2_x}\right)}
 <li><p>Estimation error in the intercept and slope<br>
 (i.e., discrepancy between our line and “the truth”).</p></li>
 </ul>
-<p><span class="math display">\begin{align*}
+<span class="math display">\begin{align*}
 e_f &amp;=&amp; Y_f - \hat{Y~}_f = (Y_f - \mathbb{E}[Y_f | X_f]) + \mathbb{E}[Y_f | X_f]-\hat{Y~}_f \\
 &amp;=&amp; \varepsilon_f + (\mathbb{E}[Y_f | X_f] -\hat{Y~}_f )\\
 &amp;=&amp; \varepsilon_f + (\beta_0 - b_0) +   (\beta_1 - b_1)X_f.
-\end{align*}</span></p>
+\end{align*}</span>
 <hr>
 <p>The variance of our prediction error is thus <span class="math display">
 \text{var}(e_f) = \text{var}(\varepsilon_f) + \text{var}(\mathbb{E}[Y_f | X_f] -\hat{Y~}_f )
@@ -812,9 +811,9 @@ b_0 + b_1 X_f \pm t_{n-2,\alpha/2} \left(s~ \sqrt{1+ \frac{1}{n} + \frac{(X_f -
 <li><p>Small <span class="math inline">s_x</span> (not enough observed spread in covariates).</p></li>
 <li><p>Large <span class="math inline">(X_f - \bar{X})</span>.</p></li>
 </ul>
-<p>The first three are familiar... what about the last one?</p>
+<p>The first three are familiar… what about the last one?</p>
 <hr>
-<p>For <span class="math inline">X_f</span> far from our <span class="math inline">\bar{X}</span>, the space between lines is magnified ...</p>
+<p>For <span class="math inline">X_f</span> far from our <span class="math inline">\bar{X}</span>, the space between lines is magnified …</p>
 <p><br></p>
 <center>
 <img src="graphics/spred_new.png" style="height:3in">

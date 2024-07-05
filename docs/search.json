@@ -147,13 +147,6 @@
     "text": "Welcome to the 2024 VectorByte Training Workshop!\n\nCheck out our about and schedule: coming soon! pages to continue.\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page."
   },
   {
-    "objectID": "schedule2024.html",
-    "href": "schedule2024.html",
-    "title": "2024 Training Schedule",
-    "section": "",
-    "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n22 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nArrival\n\n\n\n\n  \n\n\n23 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n12:00\nLunch\n\n\n\n\n  \n\n\n24 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n\n\n12:00\nLunch\n\n\n\n\n\n\n\n\n\n\n\n25 July 2024 (08:30 - 17:00)\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n26 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nTravel\n\n\n\n\n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
-  },
-  {
     "objectID": "VB_RegDiagTrans.html#learning-objectives",
     "href": "VB_RegDiagTrans.html#learning-objectives",
     "title": "VectorByte Methods Training",
@@ -336,6 +329,90 @@
     "text": "Practical\nNext we’ll do a short practical to practice:\n\nFitting linear models in R\nChecking diagnostics\nChoosing transformations\nPlotting predictions"
   },
   {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
+    "href": "VB_RegDiagTrans_practical_soln.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
+    "title": "VectorByte Methods Training",
+    "section": "1. Fit the linear regression model. Plot the data and fitted line.",
+    "text": "1. Fit the linear regression model. Plot the data and fitted line.\n\n## fit models\nattach(D &lt;- read.csv(\"data/transforms.csv\"))\nlm1 &lt;- lm(Y1 ~ X1)\nlm2 &lt;- lm(Y2 ~ X2)\nlm3 &lt;- lm(Y3 ~ X3)\nlm4 &lt;- lm(Y4 ~ X4)\n\n## plot points and lines\npar(mfrow=c(2,2), mar=c(3,2,2,1))\nplot(X1, Y1, col=1, main=\"I\"); abline(lm1, col=1)\nplot(X2, Y2, col=2, main=\"II\"); abline(lm2, col=2)\nplot(X3, Y3, col=3, main=\"III\"); abline(lm3, col=3)\nplot(X4, Y4, col=4, main=\"IV\"); abline(lm4, col=4)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
+    "href": "VB_RegDiagTrans_practical_soln.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
+    "title": "VectorByte Methods Training",
+    "section": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.",
+    "text": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.\n\npar(mfrow=c(3,4), mar=c(4,4,2,0.5))   # you might have to make \n                                      # the plot window big to \n                                      # fit everything\nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\nplot(lm2$fitted, rstudent(lm2), col=2,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"II\")\nplot(lm3$fitted, rstudent(lm3), col=3,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"III\")\nplot(lm4$fitted, rstudent(lm4), col=4,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"IV\")\n\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2)\n\nhist(rstudent(lm1), col=1, xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\nhist(rstudent(lm2), col=2, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm3), col=3, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm4), col=4, xlab=\"Studentized Residuals\", main=\"\")"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
+    "href": "VB_RegDiagTrans_practical_soln.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
+    "title": "VectorByte Methods Training",
+    "section": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.",
+    "text": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.\nSet 1: Xs are clumpy AND the variance seems non-constant. It looks a lot like the GDP data from class. Since both Xs and Ys are strictly positive, we can try a log-log transform.\nSet 2: Data have non-constant variance – should probably log transform the Ys\nSet 3: Data have an underlying non-linear pattern. Add in an x^2 and x^3 term in this case.\nSet 4: X values are very clumpy and all positive. Try log transform of the Xs"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
+    "href": "VB_RegDiagTrans_practical_soln.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
+    "title": "VectorByte Methods Training",
+    "section": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.",
+    "text": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.\n\n### the fixes are as follows:\nlogX1&lt;- log(X1)\nlogY1 &lt;- log(Y1)\nlogY2 &lt;- log(Y2)\nX3sq &lt;- X3^2\nX3cube&lt;-X3^3\nlogX4 &lt;- log(X4)\n\n\n### re-run the regressions and residual plots to show this worked\nlm1 &lt;- lm(logY1 ~ logX1)\nlm2 &lt;- lm(logY2 ~ X2)\nlm3 &lt;- lm(Y3 ~ X3+ X3sq + X3cube)\nlm4 &lt;- lm(Y4 ~ logX4)\n\n## plot points and lines\npar(mfrow=c(2,2), mar=c(3,2,2,1))\nplot(logX1, logY1, col=1, main=\"I\"); abline(lm1, col=1)\nplot(X2, logY2, col=2, main=\"II\"); abline(lm2, col=2)\nplot(X3, Y3, col=3, main=\"III\")\nxx3 &lt;- seq(min(X3), max(X3), length=1000)\nlines(xx3, lm3$coef[1] + lm3$coef[2]*xx3 + \n        lm3$coef[3]*xx3^2+lm3$coef[3]*xx3^3, col=3)\nplot(logX4, Y4, col=4, main=\"IV\"); abline(lm4, col=4)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
+    "href": "VB_RegDiagTrans_practical_soln.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
+    "title": "VectorByte Methods Training",
+    "section": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.",
+    "text": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.\n\npar(mfrow=c(3,4), mar=c(4,4,2,0.5))  \nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\nplot(lm2$fitted, rstudent(lm2), col=2,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"II\")\nplot(lm3$fitted, rstudent(lm3), col=3,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"III\")\nplot(lm4$fitted, rstudent(lm4), col=4,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"IV\")\n\n## Q-Q plots\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2)\n\n## histograms of studentized residuals\nhist(rstudent(lm1), col=1, xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\nhist(rstudent(lm2), col=2, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm3), col=3, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm4), col=4, xlab=\"Studentized Residuals\", main=\"\")"
+  },
+  {
+    "objectID": "schedule2024.html",
+    "href": "schedule2024.html",
+    "title": "2024 Training Schedule",
+    "section": "",
+    "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n22 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nArrival\n\n\n\n\n  \n\n\n23 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n12:00\nLunch\n\n\n\n\n  \n\n\n24 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n\n\n12:00\nLunch\n\n\n\n\n\n\n\n\n\n\n\n25 July 2024 (08:30 - 17:00)\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n26 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nTravel\n\n\n\n\n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
+    "href": "VB_RegDiagTrans_practical.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
+    "title": "VectorByte Methods Training",
+    "section": "1. Fit the linear regression model. Plot the data and fitted line.",
+    "text": "1. Fit the linear regression model. Plot the data and fitted line.\n\n## fit models\nlm1 &lt;- lm(Y1 ~ X1)\n\n## plot points and fitted lines\nplot(X1, Y1, col=1, main=\"I\"); abline(lm1, col=2)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
+    "href": "VB_RegDiagTrans_practical.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
+    "title": "VectorByte Methods Training",
+    "section": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.",
+    "text": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(lm1), col=1, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
+    "href": "VB_RegDiagTrans_practical.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
+    "title": "VectorByte Methods Training",
+    "section": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.",
+    "text": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.\nXs are clumpy AND the variance seems non-constant. It looks a lot like the GDP data from class. Since both Xs and Ys are strictly positive, we can try a log-log transform."
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
+    "href": "VB_RegDiagTrans_practical.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
+    "title": "VectorByte Methods Training",
+    "section": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.",
+    "text": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.\n\n### the fix is as follows:\nlogX1&lt;- log(X1)\nlogY1 &lt;- log(Y1)\n\n### re-run the regressions and residual plots to show this worked\nlm1 &lt;- lm(logY1 ~ logX1)\n\n## plot points and lines\nplot(logX1, logY1, col=1, main=\"I\"); abline(lm1, col=2)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
+    "href": "VB_RegDiagTrans_practical.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
+    "title": "VectorByte Methods Training",
+    "section": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.",
+    "text": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.\n\n## studentized residuals vs fitted\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))  \nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\n\n## Q-Q plots\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histograms of studentized residuals\nhist(rstudent(lm1), col=1, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nThis is much better! The histogram still maybe looks a little funny, but given that the qq-plot looks pretty good, I think we’ve made a good transformation."
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical.html#your-turn",
+    "href": "VB_RegDiagTrans_practical.html#your-turn",
+    "title": "VectorByte Methods Training",
+    "section": "Your Turn!",
+    "text": "Your Turn!\nRepeat this process with the other 3 datasets, and see if you can figure out a appropriate transformations for each dataset."
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About the VectorByte Training Materials 2024",
@@ -375,14 +452,14 @@
     "href": "VB_RegRev.html#sampling-distribution-of-ls-line",
     "title": "VectorByte Methods Training",
     "section": "Sampling distribution of LS line",
-    "text": "Sampling distribution of LS line\nWhat did we just do?\n\nWe “imagined” through simulation the sampling distribution of a LS line.\n\nIn real life we get just one data set, and we don’t know the true generating model. But we can still imagine.\n\nWe first find the sampling distribution of our LS coefficients, b_0 and b_1...\n... which requires some review.\n\nIn the online reading and review materials you should have come across some useful probability/stats facts, including:\n\n\\mathbb{E}(X_1+X_2)  = \\mathbb{E}(X_1)+ \\mathbb{E}(X_2)\n\\mathbb{E}(cX_1)  = c \\mathbb{E}(X_1)\n\\text{var}(c X_1) = c^2\\text{var}(X_1)\n\\text{var}(X_1+X_2) = \\text{var}(X_1)+\\text{var}(X_2) + 2\\text{cov}(X_1 X_2).\n\n\nRecall: distribution of the sample mean\n\nStep back for a moment and consider the mean for an iid sample of n observations of a random variable \\{X_1,\\ldots,X_n\\}.\n\nSuppose that \\mathbb{E}(X_i)  = \\mu and \\text{var}(X_i) = \\sigma^2, then\n\n\\mathbb{E}(\\bar{X}) = \\frac{1}{n} \\sum\\mathbb{E}(X_i) = \\mu\n\\text{var}(\\bar{X}) = \\text{var}\\left( \\frac{1}{n} \\sum X_i \\right) =  \\frac{1}{n^2} \\sum \\text{var}\\left(  X_i \\right) = \\displaystyle \\frac{\\sigma^2}{n}."
+    "text": "Sampling distribution of LS line\nWhat did we just do?\n\nWe “imagined” through simulation the sampling distribution of a LS line.\n\nIn real life we get just one data set, and we don’t know the true generating model. But we can still imagine.\n\nWe first find the sampling distribution of our LS coefficients, b_0 and b_1…\n… which requires some review.\n\nIn the online reading and review materials you should have come across some useful probability/stats facts, including:\n\n\\mathbb{E}(X_1+X_2) = \\mathbb{E}(X_1)+ \\mathbb{E}(X_2)\n\\mathbb{E}(cX_1) = c \\mathbb{E}(X_1)\n\\text{var}(c X_1) = c^2\\text{var}(X_1)\n\\text{var}(X_1+X_2) = \\text{var}(X_1)+\\text{var}(X_2) + 2\\text{cov}(X_1 X_2).\n\n\nRecall: distribution of the sample mean\n\nStep back for a moment and consider the mean for an iid sample of n observations of a random variable \\{X_1,\\ldots,X_n\\}.\n\nSuppose that \\mathbb{E}(X_i) = \\mu and \\text{var}(X_i) = \\sigma^2, then\n\n\\mathbb{E}(\\bar{X}) = \\frac{1}{n} \\sum\\mathbb{E}(X_i) = \\mu\n\\text{var}(\\bar{X}) = \\text{var}\\left( \\frac{1}{n} \\sum X_i \\right) = \\frac{1}{n^2} \\sum \\text{var}\\left( X_i \\right) = \\displaystyle \\frac{\\sigma^2}{n}."
   },
   {
     "objectID": "VB_RegRev.html#central-limit-theorem",
     "href": "VB_RegRev.html#central-limit-theorem",
     "title": "VectorByte Methods Training",
     "section": "Central Limit Theorem",
-    "text": "Central Limit Theorem\nThe CLT states that for iid random variables, X, with mean \\mu and variance \\sigma^2, the distribution of the sample mean becomes normal as the number of observations, n, gets large.\n\nThat is, \\displaystyle \\bar{X} \\rightarrow_{n} \\mathcal{N}(\\mu, \\sigma^2/n) , and sample averages tend to be normally distributed in large samples.\n\nWe are now ready to describe the sampling distribution of the least squares line ...\n... in terms of its effect on the sampling distributions of the coefficients\n\nb_1 = \\hat{\\beta~}_1, the slope of the line\nb_0 = \\hat{\\beta~}_0, the intercept,\nand how they covary together,\n\ngiven a particular (fixed) set of X-values."
+    "text": "Central Limit Theorem\nThe CLT states that for iid random variables, X, with mean \\mu and variance \\sigma^2, the distribution of the sample mean becomes normal as the number of observations, n, gets large.\n\nThat is, \\displaystyle \\bar{X} \\rightarrow_{n} \\mathcal{N}(\\mu, \\sigma^2/n) , and sample averages tend to be normally distributed in large samples.\n\nWe are now ready to describe the sampling distribution of the least squares line …\n… in terms of its effect on the sampling distributions of the coefficients\n\nb_1 = \\hat{\\beta~}_1, the slope of the line\nb_0 = \\hat{\\beta~}_0, the intercept,\nand how they covary together,\n\ngiven a particular (fixed) set of X-values."
   },
   {
     "objectID": "VB_RegRev.html#sampling-distribution-of-b_1",
@@ -396,7 +473,7 @@
     "href": "VB_RegRev.html#sampling-distribution-of-b_0",
     "title": "VectorByte Methods Training",
     "section": "Sampling Distribution of b_0",
-    "text": "Sampling Distribution of b_0\nThe intercept is also normal and unbiased: b_0 \\sim \\mathcal{N}(\\beta_0, \\sigma^2_{b_0}), where \n\\sigma^2_{b_0} = \\text{var}(b_0)  = \\sigma^2 \\left(\\frac{1}{n} + \\frac{\\bar{X}^2}{(n-1)\n    s_x^2} \\right).\n\nWhat is the intuition here? \n\\text{var}(\\bar{Y} - \\bar{X} b_1)\n= \\text{var}(\\bar{Y}) + \\bar{X}^2\\text{var}(b_1) {~-~ 2\\mathrm{cov}(\\bar{Y},b_1) }\n\n\n\\bar{Y} and b_1 are uncorrelated because the slope (b_1) is invariant if you shift the data up or down (\\bar{Y}).\n\n\nOptional Practice Exercise\n\nShow that:\n\n\\mathbb{E}[b_1] = \\beta_1\n\\mathbb{E}[b_0] = \\beta_0\n\\text{var}(b_0)  = \\sigma^2 \\left(\\frac{1}{n} + \\frac{\\bar{X}^2}{(n-1)\n    s_x^2} \\right)\n\nWhy is it that b_0 and b_1 are normally distributed?"
+    "text": "Sampling Distribution of b_0\nThe intercept is also normal and unbiased: b_0 \\sim \\mathcal{N}(\\beta_0, \\sigma^2_{b_0}), where \n\\sigma^2_{b_0} = \\text{var}(b_0)  = \\sigma^2 \\left(\\frac{1}{n} + \\frac{\\bar{X}^2}{(n-1)\n    s_x^2} \\right).\n\nWhat is the intuition here? \n\\text{var}(\\bar{Y} - \\bar{X} b_1)\n= \\text{var}(\\bar{Y}) + \\bar{X}^2\\text{var}(b_1) {~-~ 2\\mathrm{cov}(\\bar{Y},b_1) }\n\n\n\\bar{Y} and b_1 are uncorrelated because the slope (b_1) is invariant if you shift the data up or down (\\bar{Y}).\n\n\nOptional Practice Exercise\n\nShow that:\n\n\\mathbb{E}[b_1] = \\beta_1\n\\mathbb{E}[b_0] = \\beta_0\n\\text{var}(b_0) = \\sigma^2 \\left(\\frac{1}{n} + \\frac{\\bar{X}^2}{(n-1)  s_x^2} \\right)\n\nWhy is it that b_0 and b_1 are normally distributed?"
   },
   {
     "objectID": "VB_RegRev.html#joint-distribution-of-b_0-and-b_1",
