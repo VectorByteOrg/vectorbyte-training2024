@@ -1,0 +1,902 @@
+---
+title: "VectorByte Methods Training"
+subtitle: "Review of Diagnostics and Transformations for Regression Models"
+author: "The VectorByte Team (Leah R. Johnson, Virginia Tech)"
+title-slide-attributes:
+  data-background-image: VectorByte-logo_lg.png
+  data-background-size: contain
+  data-background-opacity: "0.2"
+format: revealjs
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE,
+                      #fig.height=6, 
+                      #fig.width = 1.777777*6,
+                      tidy = FALSE, 
+                      comment = NA, 
+                      highlight = TRUE, 
+                      prompt = FALSE, 
+                      crop = TRUE,
+                      comment = "#>",
+                      collapse = TRUE)
+library(knitr)
+library(kableExtra)
+library(xtable)
+library(viridis)
+
+options(stringsAsFactors=FALSE)
+knit_hooks$set(no.main = function(before, options, envir) {
+    if (before) par(mar = c(4.1, 4.1, 1.1, 1.1))  # smaller margin on top
+})
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(width = 60)
+source("my_knitter.R")
+#library(tidyverse)
+#library(reshape2)
+#theme_set(theme_light(base_size = 16))
+make_latex_decorator <- function(output, otherwise) {
+  function() {
+      if (knitr:::is_latex_output()) output else otherwise
+  }
+}
+insert_pause <- make_latex_decorator(". . .", "\n")
+insert_slide_break <- make_latex_decorator("----", "\n")
+insert_inc_bullet <- make_latex_decorator("> *", "*")
+insert_html_math <- make_latex_decorator("", "$$")
+## classoption: aspectratio=169
+```
+
+## Learning Objectives
+
+1.  Review assumptions of SLR/MLR models
+2.  Review using diagnostic plots to assess whether assumptions are met
+3.  Review the idea of basic transformations to use when assumptions aren't met
+
+##  SLR model assumptions 
+
+$$
+Y_i |X_i \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)
+$$
+
+Recall the key assumptions of the Simple Linear Regression model:
+
+1.  The conditional mean of $Y$ is linear in $X$.
+
+2.  The additive errors (deviations from line)
+
+    -   are normally distributed
+
+    -   independent from each other
+
+    -   identically distributed (i.e., they have constant variance)
+ 
+--------------------------------------
+
+`r myred("Inference and prediction relies on this model being true!")`
+
+If the model assumptions do not hold, then all bets are off:
+
+-   prediction can be systematically biased
+
+-   standard errors, intervals, and $t$-tests are wrong
+
+We will focus on using graphical methods `r myblue("(plots!)")` to detect violations
+of the model assumptions.
+
+You'll see that
+
+-   It is more of an art than a science,
+
+-   but it is grounded in mathematics.
+ 
+
+--------------------------------------
+
+<center>
+![from xkcd: `xkcd.com/1725/`](graphics/linear_regression_2x.png)
+</center>
+
+
+ 
+
+ 
+##  Example model violations 
+
+`r myred("Anscombe's quartet")` comprises four datasets that have similar statistical properties \...
+
+```{r}
+attach(anscombe <- read.csv("data/anscombe.csv"))
+```
+
+        Xmean   Ymean     Xsd     Ysd   XYcor
+  --- ------- ------- ------- ------- -------
+    1   9.000   7.501   3.317   2.032   0.816
+    2   9.000   7.501   3.317   2.032   0.816
+    3   9.000   7.500   3.317   2.030   0.816
+    4   9.000   7.501   3.317   2.031   0.817
+ 
+--------------------------------------
+
+ 
+\...but vary considerably when graphed:
+
+```{r, fig.align='center', fig.height=5, fig.width=7}
+par(mfrow=c(2,2), mai=c(.7,.7,.1,.1))
+plot(x1,y1, col=1, pch=20, cex=1.5)
+plot(x2,y2, col=2, pch=20, cex=1.5)
+plot(x3,y3, col=3, pch=20, cex=1.5)
+plot(x4,y4, col=4, pch=20, cex=1.5)
+```
+
+ 
+--------------------------------------
+
+ 
+Similarly, let's consider linear regression for each dataset.
+
+```{r, echo=TRUE}
+ansreg <- list(reg1=lm(y1~x1), reg2=lm(y2~x2),
+               reg3=lm(y3~x3), reg4=lm(y4~x4))
+```
+
+```{r}
+attach(ansreg) # attach the names of each regression
+coeffs<-cbind(reg1$coef, reg2$coef, reg3$coef, reg4$coef)
+## apply the function summary to each element of the list
+smry <- lapply(ansreg, summary) 
+R2<-c(smry$reg1$r.sq, smry$reg2$r.sq,
+         smry$reg3$r.sq, smry$reg4$r.sq)
+
+## Making a table instead:
+mat2<-data.frame(b0 = coeffs[1,], b1= coeffs[2,], R2=R2)
+```
+
+```{r, fig.align='center', fig.height=5, fig.width=7}
+par(mfrow=c(2,2), mai=c(.7,.7,.1,.1))
+plot(x1,y1, col=1, pch=20, cex=1.5)
+abline(reg1, col=1)
+plot(x2,y2, col=2, pch=20, cex=1.5)
+abline(reg2, col=2)
+plot(x3,y3, col=3, pch=20, cex=1.5)
+abline(reg3, col=3)
+plot(x4,y4, col=4, pch=20, cex=1.5)
+abline(reg4, col=4)
+```
+ 
+ 
+--------------------------------------
+
+ 
+The regression lines and $R^2$ values are the same\...\
+
+           b0      b1      R2
+  --- ------- ------- -------
+    1   3.000   0.500   0.667
+    2   3.001   0.500   0.666
+    3   3.002   0.500   0.666
+    4   3.002   0.500   0.667
+ 
+--------------------------------------
+
+ 
+\...but the residuals, $e$, ***(plotted vs. $\hat{Y~}$)*** look totally different.
+
+```{r, fig.align='center', fig.height=5, fig.width=7}
+par(mfrow=c(2,2), mai=c(.7,.7,.1,.1))
+plot(reg1$fitted,reg1$residuals, col=1, pch=20, cex=1.5)
+plot(reg2$fitted,reg2$residuals, col=2, pch=20, cex=1.5)
+plot(reg3$fitted,reg3$residuals, col=3, pch=20, cex=1.5)
+plot(reg4$fitted,reg4$residuals, col=4, pch=20, cex=1.5)
+```
+  
+ 
+--------------------------------------
+
+ 
+`r myred("Plotting residuals vs fitted values")` ($e$ vs $\hat{Y~}$)  `r myred("is your #1 tool for finding fit problems.")`
+
+`r sk1()`
+
+`r myblue("Why?")`
+
+-   Because it gives a quick visual indicator of whether or not the SLR assumptions are true.
+
+`r sk1()`
+
+
+What should we expect to see if they are true?
+ 
+
+ 
+##  Residuals and the model assumptions 
+
+Recall that the linear regression model assumes
+$$
+Y_i =\beta_0 + \beta_1 X_i + \varepsilon_i,~~\mbox{where}~~
+\varepsilon_i \stackrel{iid}{\sim} \mathcal{N}(0,\sigma^2).
+$$
+
+Our goal is to determine if the "true" residuals are iid normal and unrelated to $X$. If the SLR model assumptions are true, then the residuals must be just "white noise":
+
+1.  Each $\varepsilon_i$ has the same variance ($\sigma^2$).
+
+2.  Each $\varepsilon_i$ has the same mean (0).
+
+3.  All of the $\varepsilon_i$ have the same normal distribution.
+ 
+--------------------------------------
+
+ 
+`r myblue("How do we check these?")`
+
+`r sk1()`
+
+Well, the true $\varepsilon_i$ residuals are unknown, so must look instead at the least squares *estimated* residuals.
+
+-   We estimate $Y_i = b_0 + b_1 X_i + e_i$, such that the sample least squares regression residuals are $e_i = Y_i -\hat{Y~}_i$
+
+`r sk1()`
+
+What should the $e_i$ residuals look like if the SLR model is true?
+ 
+
+--------------------------------------
+
+**`r mygrn("Visually")`** -- first we check the residuals vs the predictor/fitted:
+
+```{r, fig.align='center', fig.height=4.5, fig.width=8}
+n<-300
+sig<-2
+X<-rnorm(n, 0, 5)
+Y<-1 + 2*X+ rnorm(n, 0, sig)
+r1<-lm(Y~X)
+par(mfrow=c(1,2))
+plot(X, Y, main="data")
+plot(X, r1$resid, ylab="residuals", main="e vs X")
+abline(h=0)
+abline(h=2.5*sig, col="green", lty=2, lwd=2)
+abline(h=-2.5*sig, col="green", lty=2, lwd=2)
+```
+  
+<center>
+`r myblue("Centered at zero")`, $\pm \sim 2.5 \times \sigma$ (here $\sigma = 2$)\
+$\rightarrow$ `r mygrn("homoskedastic")`
+</center>
+ 
+--------------------------------------
+
+ 
+**`r mygrn("Mathematically")`** -- If the SLR model is true, it turns out that:
+$$
+\color{red}{e_i \sim \mathcal{N}(0, \sigma^2 [1-h_i])},~~\color{red}{h_i = \frac{1}{n} + \frac{(X_i - \bar{X})^2}
+{\sum_{j=1}^n (X_j - \bar{X})^2}}.
+$$
+
+The $h_i$ term is referred to as the $i^{th}$ observation's *`r myblue("leverage")`*:
+
+-   It is that point's share of the data ($1/n$) plus its proportional contribution to variability in $X$.
+
+Notice that as $n \rightarrow \infty$, $h_i \rightarrow 0$ and residuals $e_i$ "obtain" the same distribution as the unknown errors $\varepsilon_i$, i.e., $e_i \sim N(0, \sigma^2)$.
+ 
+
+ 
+##  Understanding Leverage 
+
+The $h_i$ leverage term measures sensitivity of the estimated least squares regression line to changes in $Y_i$.
+
+The term "`r myblue("leverage")`" provides a mechanical intuition:
+
+-   The farther you are from a pivot joint, the more torque you have pulling on a lever.
+
+Here is a nice online (interactive) illustration of leverage:
+
+<center>
+[https://omaymas.shinyapps.io/Influence_Analysis/](https://omaymas.shinyapps.io/Influence_Analysis/)
+</center>
+
+`r sk1()`
+
+`r myred("Outliers do more damage if they have high leverage!")`
+ 
+
+ 
+##  Standardized residuals 
+
+Since $e_i \sim N(0, \sigma^2 [1-h_i])$, we know that
+$$
+\color{red}{\frac{e_i}{\sigma \sqrt{1-h_i} }\sim N(0, 1)}.
+$$
+
+These transformed $e_i$'s are called the `r myblue("standardized residuals")`.
+
+-   They all have the same distribution ***`r myred("if")`*** the SLR model assumptions are true.
+
+-   They are almost (close enough) independent
+    ($\stackrel{iid}{\sim}N(0,1)$).
+
+-   Estimate $\sigma^2 \approx s^2 = \frac{1}{n-p}\sum_{j=1}^n e_j^2$. ($p=2$ for SLR)
+ 
+--------------------------------------
+
+ 
+About estimating $s$ under sketchy SLR assumptions \...
+
+We want to see whether any particular $e_i$ is "too big", but we don't want a single outlier to make $s$ artificially large.
+
+`r sk1()`
+
+::: columns
+::: {.column width="50%"}
+
+```{r, echo=TRUE, fig.align='center', fig.height=4, fig.width=4.5}
+plot(x3,y3, col=3,pch=20, cex=1.5)
+abline(reg3, col=3)
+```
+
+:::
+
+::: {.column width="50%"}
+
+`r sk2()`
+
+$\Rightarrow$ One big outlier can make $s$ over-estimate $\sigma$.
+ 
+:::
+:::
+
+
+ 
+##  Studentized residuals 
+
+We thus define a standard `r myblue("Studentized residual")` as
+$$
+r_i = \frac{e_i}{s_{-i} \sqrt{1-h_i} }\sim t_{n-p-1}(0, 1)
+$$
+where $s_{-i}^2 = \frac{1}{n-p-1}\sum_{j \neq i} e_j^2$ is $\hat{\sigma~}^2$ calculated ***`r myblue("without")`*** $e_i$.
+
+`r sk1()`
+
+These are easy to get in R with the `rstudent()` function:
+
+```{r, echo=TRUE}
+as.numeric(rstudent(reg3))
+```
+ 
+##  Outliers and Studentized residuals 
+
+Since the studentized residuals are distributed $t_{n-p-1}(0,1)$, we should be concerned about any $r_i$ outside of about $[-2.5, 2.5]$.
+
+```{r, fig.align='center', fig.height=4.5, fig.width=8}
+par(mfrow=c(1,2))
+plot(reg3$fitted,reg3$residuals, col=3, pch=20, cex=1.5)
+plot(reg3$fitted,rstudent(reg3), col=3, pch=20, cex=1.5)
+```
+
+<small>
+`r myred("(Note: As $n$ gets much bigger, we will expect to see some very rare events (big $\varepsilon_i$) and not get worried unless $|r_i| > 3$ or $4$.)")`
+</small> 
+
+ 
+##  How to deal with outliers 
+
+<center>
+![from Research Wahlberg](graphics/wahlberg_outliers.jpg){height="5in"}
+</center>
+
+
+ 
+
+ 
+##  How to deal with outliers 
+
+When should you delete outliers?
+
+-   `r myred("Only when you have a really good reason!")`
+
+There is nothing wrong with running a regression with and without potential outliers to see whether results are significantly impacted.
+
+`r myblue("Any time outliers are dropped, the reasons for doing so should be clearly noted.")`
+
+-   I maintain that *both* a statistical *and* a non-statistical reason are required.
+ 
+
+ 
+##  Outliers, leverage, and residuals 
+
+`r myred("Warning:")` `r myblue("Unfortunately, outliers with high leverage are hard to catch through")` $\color{dodgerblue}{r_i}$ `r myblue("(since the line is pulled towards them)")`.
+
+Means get distracted by outliers\...\
+
+<center>
+![](graphics/distracted_mean_meme.jpg){height="4in"}
+</center>
+ 
+ 
+
+ 
+##  Outliers, leverage, and residuals 
+
+`r myred("Warning:")` `r myblue("Unfortunately, outliers with high leverage are hard to catch through")` $\color{dodgerblue}{r_i}$ `r myblue("(since the line is pulled towards them)")`.
+
+Consider data on house `Rent`s vs `SqFt`:
+
+```{r, fig.align='center', fig.height=3.75, fig.width=8.5}
+attach(rent <- read.csv("data/rent.csv", stringsAsFactors = TRUE))
+par(mfrow=c(1,2))
+rentreg <- lm(Rent ~ SqFt)
+## pdf("rentleverage.pdf", width=8, height=4)
+plot(SqFt, Rent, pch=20, col=8, main="data")
+abline(rentreg)
+plot(SqFt, rstudent(rentreg), pch=20, col=8, ylim=c(-4,4), main="St Resids")
+abline(h=2.5, lty=2)
+abline(h=-2.5, lty=2)
+```
+
+Plots of $r_i$ or $e_i$ against $\hat{Y~}_i$ or $X_i$ are still your best diagnostic!
+ 
+
+ 
+##  Normality and studentized residuals 
+
+A more subtle issue is the normality of the distribution on
+$\varepsilon$.
+
+`r sk1()`
+
+We can look at the residuals to judge normality if $n$ is big enough (say $>20~~ \rightarrow$ less than that makes it too hard to call).
+
+`r sk1()`
+
+In particular, `r myred("if we have decent size")` $\color{red}{n}$, `r myred('we want the shape of the studentized residual distribution to "look" like')` $\color{red}{N(0,1)}$.
+
+`r sk1()`
+The most obvious tactic is to look at a histogram of $r_i$.
+ 
+--------------------------------------
+
+ 
+For example, consider the residuals from a regression of `Rent` on `SqFt` which ignores houses with $\geq 2000$ sqft.
+```{r, echo=TRUE, fig.align='center'}
+rentreg <- lm(Rent[SqFt<20] ~ SqFt[SqFt<20])
+par(mfrow=c(1,2))
+plot(SqFt[SqFt<20], Rent[SqFt<20], pch=20, col=7,
+     main="Regression for <2000 sqft Rent")
+abline(rentreg)
+hist(rstudent(rentreg), col=7)
+```
+
+ 
+##  Assessing normality via Q-Q plots 
+
+Higher fidelity diagnostics are provided by normal quantile-quantile (Q-Q) plots that:
+
+-   plot the `r myred("sample quantiles")` (e.g. $10^{th}$ percentile, etc.)
+
+-   against `r myred("true percentiles")` from a $N(0,1)$ distribution (e.g. $-1.96$ is the true 2.5% quantile).
+
+If $r_i \sim N(0,1)$ these quantiles should be equal
+
+-   lie on a line through 0 with slope 1
+ 
+--------------------------------------
+
+ 
+R has a function for normal Q-Q plots:
+
+```{r, echo=TRUE, fig.align='center', fig.width=6}
+qqnorm(rstudent(rentreg), col=4)
+abline(a=0, b=1)
+```
+
+It's good to add the line $Y = X$ to see where points should be.
+ 
+ 
+--------------------------------------
+
+ 
+Example Q-Q plots: normal, exponential, and $t_3$ data
+
+```{r, echo=TRUE, fig.align='center', fig.width=6}
+znorm <- rnorm(1000); zexp <- rexp(1000); zt <- rt(1000, df=3)
+```
+
+```{r, fig.align='center'}
+par(mfrow=c(2,3), mai=c(.6,.6,.2,.1))
+hist(znorm, col=3)
+hist(zexp, col=4)
+hist(zt, col=6)
+qqnorm(znorm, main="Normal Q-Q plot for znorm", col=3, pch=20)
+abline(a=0,b=1)
+qqnorm(zexp, main="Normal Q-Q plot for zexp", col=4, pch=20)
+abline(a=0,b=1)
+qqnorm(zt, main="Normal Q-Q plot for zt", col=6, pch=20)
+abline(a=0,b=1)
+```
+
+--------------------------------------
+
+ 
+Example: data on `price` of used pickup trucks vs age in  `years`:
+
+```{r, echo=TRUE}
+attach(pickup <- read.csv("data/pickup.csv"))
+truckreg <- lm(price ~ year)
+r <- rstudent(truckreg)
+```
+
+`r sk1()`
+
+Code to produce our go-to suite of three diagnostic plots:
+
+```{r, echo=TRUE, eval=FALSE}
+par(mfrow=c(1,3))
+plot(truckreg$fitted,r,
+     xlab="y.hat", ylab = "r",
+     main="studentized resids vs fitted", pch=20)
+abline(h=0, col=2, lty=2)
+hist(r, col=8)
+qqnorm(r, main="Normal Q-Q plot for r")
+abline(a=0, b=1, col=4, lty=2)
+```
+ 
+--------------------------------------
+
+```{r, fig.align='center', fig.width=9, fig.height=3}
+par(mfrow=c(1,3))
+plot(truckreg$fitted,r,
+     xlab="y.hat", ylab = "r",
+     main="studentized resids vs fitted", pch=20)
+abline(h=0, col=2, lty=2)
+hist(r, col=8)
+qqnorm(r, main="Normal Q-Q plot for r")
+abline(a=0, b=1, col=4, lty=2)
+```
+
+The plots tell us that:
+
+-   Data are more curved than straight (i.e. line doesn't fit).
+
+-   Residuals are skewed to the right.
+
+-   There is a huge positive $e_i$ for an old "classic" truck.
+ 
+
+ 
+##  3 Go-To Diagnostic Plots 
+
+`r sk1()`
+
+```{r, fig.align='center', fig.width=9, fig.height=4}
+par(mfrow=c(1,3))
+plot(X, rstudent(r1), main="studentized resids vs X")
+abline(h=0, col=2)
+hist(rstudent(r1), main="300 points")
+qqnorm(rstudent(r1), col=4)
+abline(a=0, b=1)
+```
+
+------------------------------------------------
+
+`r myblue('I suggest you make these diagnostic plots instead of relying on the "default" plots in R.')`
+
+**`r myred("Why?")`**
+
+-   The default plots in R use the standardized instead of studentized residuals -- I think the latter are much more useful for diagnosing problems.
+
+-   Looking at the marginal distribution of the residuals as a histogram can help you see outliers.
+
+-   The default plots have a bunch of extra stuff in them that I think is not particularly useful.
+
+
+  
+## Violations of SLR Model Assumptions
+
+$$\color{dodgerblue}{Y_i |X_i \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)}$$
+
+1.  The conditional mean of $Y$ is linear in $X$.
+
+2.  The additive errors (deviations from line)
+
+    -   are normally distributed
+
+    -   independent from each other
+
+    -   identically distributed (i.e., they have constant variance)
+
+All of these can be violated! Let's see what violations look like and how we can deal with them within the SLR framework.
+   
+
+  
+## Violation 1: Non-constant variance
+
+If you get a `r myblue("trumpet shape")` (bunching of the $Y$s), you have `r myred("nonconstant variance")`.
+
+```{r, fig.align='center', fig.width=8, fig.height=4}
+x <- seq(0,1,length=100)
+y <- 1 + 4*x + rnorm(length(x), 0, x)
+## pdf("horns.pdf", width=8, height=4)
+par(mfrow=c(1,2))
+plot(x, y, main="scatter plot")
+fit <- lm(y ~ x)
+plot(fit$fitted, fit$residual, main="residual plot")
+```
+
+This violates our assumption that all $\varepsilon_i$ have the same $\sigma^2$.
+   
+
+  
+## Solution 1: Variance stabilizing transformations
+
+This is one of the most common model violations; luckily, it is usually fixable by transforming the response ($Y$) variable.
+
+$\color{dodgerblue}{\log(Y)}$ is the most common variance stabilizing transform.
+
+-   If $Y$ has only positive values (e.g. sales) or is a count (e.g. \# of customers), take $\log(Y)$ (`r myred("always natural log")`).
+
+$\color{dodgerblue}{\sqrt{Y}}$ is sometimes used, especially if the data have zeros.
+
+`r sk1()`
+
+`r myred("In general, think what you expect to be linear for your data.")`
+   
+-------------------------------------------------------
+
+Reconsider the regression of truck `price` onto `year`, after removing trucks older than 15 years (`truck[year>1992,]`).
+
+```{r, fig.align='center', fig.width=8, fig.height=6}
+attach(pickup <- read.csv("data/pickup.csv", stringsAsFactors = TRUE))
+##truckreg <- lm(price ~ year)
+truckreg <- lm(price[year>1992] ~ year[year>1992])
+logtruckreg <- lm(log(price[year>1992]) ~ year[year>1992])
+## plotting
+## pdf("logprice.pdf", width=7, height=5)
+par(mfrow=c(2,2), mai=c(.7,.7,.4,.1))
+plot(year[year>1992], price[year>1992], pch=20)
+abline(truckreg, col=2)
+plot(year[year>1992], log(price[year>1992]), pch=20)
+abline(logtruckreg, col=4)
+plot(truckreg$fitted, truckreg$residuals, main="price ~ year",
+     xlab="fitted", ylab = "residuals", pch=20)
+abline(h=0, col=2, lty=2)
+plot(logtruckreg$fitted, logtruckreg$residuals,
+     main="log(price) ~ year", xlab="fitted", 
+     ylab = "residuals", pch=20)
+abline(h=0, col=4, lty=2)
+
+```
+
+-----------------------------------------------------
+
+**`r myred("Warning:")`** be careful when interpreting transformed models.
+
+If $\mathbb{E}[\log(Y)] = b_0 + b_1 X$, then
+$\mathbb{E}[Y] \approx e^{b_0} e^{b_1 X}$.
+
+::: {style="text-align: right"}
+`r myblue("We have a multiplicative model now!")`
+:::
+
+`r sk1()`
+
+Note: **you `r myred("CANNOT")` compare $R^2$ values for regressions corresponding to different transformations of the response.**
+
+-   $Y$ and $f(Y)$ may not be on the same scale,
+
+-   therefore $\text{var}(Y)$ and $\text{var}(f(Y))$ may not be either.
+
+Instead, `r mygrn("look at residuals to see which model is better")`.
+   
+
+  
+## Violation 2: Nonlinear residual patterns
+
+Consider regression residuals for the 2nd Anscombe dataset:
+
+```{r, fig.align='center', fig.width=9.5, fig.height=4}
+par(mfrow=c(1,2))
+plot(x2, y2, col=2, pch=20, main="data")
+abline(reg2)
+plot(x2, rstudent(reg2), pch=20, col=2, main="studentized resids")
+abline(h=0, lty=2)
+```
+
+Things are not good! It appears that we `r myred("do not")` have a linear mean function; that is $\color{dodgerblue}{\mathbb{E}[Y] \neq \beta_0 + \beta_1 X}$.
+   
+
+## Solution 2: Polynomial regression
+
+Even though we are limited to a linear mean, it is possible to get nonlinear regression by transforming the $X$ variable.
+
+`r sk1()`
+
+In general, we can add `r myblue("powers of")` $\color{dodgerblue}X$ to get polynomial regression: $\color{red}{\mathbb{E}[Y] = \beta_0 + \beta_1X + \beta_2 X^2 + \cdots + \beta_m X^m}$
+
+`r sk1()`
+
+You can fit any mean function if $m$ is big enough.
+
+-   `r myblue("Usually stick to *m=2* unless you have a good reason.")`
+
+
+------------------------------------------------------
+  
+Try $\mathbb{E}[Y] = \beta_0 + \beta_1 X + \beta_2 X^2$ for Anscombe's 2nd dataset:
+```{r, echo=TRUE, fig.align='center', fig.width=5.5, fig.height=4}
+x2squared <- x2^2
+nlr <- lm(y2 ~ x2 + x2squared)
+plot(x2, y2, col=2, pch=20)
+xgrid <- seq(4,14,length=100)
+ygrid <- nlr$coef[1] + nlr$coef[2]*xgrid + nlr$coef[3]*xgrid^2
+lines(xgrid, ygrid)
+```
+
+   
+
+  
+## Testing for nonlinearity
+
+To see if you need more nonlinearity, try the regression which includes the next polynomial term, and see if it is significant.
+
+For example, to see if you need a `r myblue("quadratic term")`,
+
+-   fit the model then run the regression $\mathbb{E}[Y] = \beta_0 + \beta_1 X +  \beta_2 X^2$.
+
+-   `r myred("If your test implies")` $\color{dodgerblue}{\beta_2 \neq 0}$, `r myred("you need")` $\color{dodgerblue}{X^2}$ in your model.
+
+Note: $p$-values are calculated "given the other $\beta$'s are nonzero"; i.e., conditional on $X$ being in the model.
+   
+
+  
+## Closing comments on polynomials
+
+- We can always add higher powers (cubic, etc.) if necessary.
+
+  -   If you add a higher order term, the lower order term is kept in the model regardless of its individual $t$-stat.
+
+- Be very careful about predicting outside the data range as the curve may do unintended things beyond the data.
+
+- `r myred("Watch out for over-fitting.")`
+
+  - You can get a "perfect" fit with enough polynomial terms,
+
+  - but that doesn't mean it will be any good for prediction or
+    understanding.
+   
+
+  
+## Other problems
+
+Sometimes we have other strange things going on in our data sets
+
+-   data are "clumped" up in $X$ -- high leverage points
+
+-   residuals still aren't normally distributed after taking transforms
+    from earlier
+
+-   responses take discrete values instead of continuous
+
+`r sk1()`
+
+The latter 2 we can deal with using MLR and GLMs. What about the first?
+   
+
+  
+## The log-log model
+
+The other common covariate transform is $\log(X)$.
+
+-   When $X$-values are bunched up, $\log(X)$ helps spread them out and reduces the leverage of extreme values.
+
+-   Recall that both reduce $s_{b_1}$.
+
+In practice, this is often used in conjunction with a $\log(Y)$ response transformation. The log-log model is
+    $$
+    \color{red}{\log(Y) = \beta_0 + \beta_1 \log(X) + \varepsilon}.
+    $$
+
+It is super useful, and has some special properties \...
+   
+----------------------------------------
+  
+Consider the multiplicative model $\color{red}{\mathbb{E}[Y|X] = AX^B}$.
+
+`r sk1()`
+
+Take logs of both sides to get 
+$$
+\color{red}{
+\begin{aligned}
+\log(\mathbb{E}[Y|X]) =  \log(A) + \log(X^B) &= \log(A) + B\log(X) \\
+&\equiv \beta_0 + \beta_1 \log(X).
+\end{aligned}
+}
+$$
+`r sk1()`
+
+The log-log model is appropriate whenever things are linearly related on a multiplicative, or `r myblue("percentage")`, scale.
+   
+------------------------------------------------
+  
+Consider a country's `GDP` as a function of `IMPORTS`:
+
+-   `r myblue("Since trade multiplies, we might expect to see")` %`GDP` `r myblue("increase with")`  %`IMPORTS`.
+
+```{r, fig.align='center'}
+par(mfrow=c(1,2))
+attach(trade <- read.csv("data/imports.csv", stringsAsFactors = TRUE))
+plot(IMPORTS, GDP, col=0, xlim=c(0,1300))
+text(IMPORTS, GDP, labels=Country)
+plot(log(IMPORTS), log(GDP), col=0, xlim=c(-2.5, 9))
+text(log(IMPORTS), log(GDP), labels=Country)
+```
+
+  
+## Elasticity and the log-log model
+
+In a log-log model, the slope $\beta_1$ is sometimes called elasticity.
+
+The elasticity is (roughly) % change in $Y$ per 1% change in $X$.
+$$\color{dodgerblue}{
+\beta_1 \approx \frac{d\%Y}{d\%X}}$$ For example, economists often assume that GDP has import elasticity of 1. Indeed:
+
+```{r, echo=TRUE}
+GDPlm<-lm(log(GDP) ~ log(IMPORTS))
+coef(GDPlm)
+```
+
+::: {style="text-align: right"}
+`r myred("(Can we test for 1%?)")`
+:::   
+
+------------------------------------------------
+
+YES! However, this time, R's output $t$/$p$ values are not what we want (why?).
+
+    > summary(GDPlm) ## output abbreviated
+                 Estimate  Std. Error  t value  Pr(>|t|)    
+    (Intercept)   1.89152    0.34265    5.52    1.30e-05 ***
+    log(IMPORTS)  0.96934    0.08807   11.01    1.21e-10 ***
+
+
+`r sk1()`
+
+But we can get the appropriate values easily:
+
+```{r, echo=TRUE}
+zb1 <- (0.96934 - 1)/0.08807
+2*pt(-abs(zb1), df=23)
+```
+
+-   We do not reject the null at $\alpha = .05$, concluding that there is not evidence that $\beta_1$ is different from 1.
+   
+------------------------------------------------
+  
+***Summary: `r myred("Plots of residuals v.s.")` $\color{red}X$ `r myred("or")` $\color{red}{\hat{Y~}}$ `r myred("are most important for diagnosing problems")`.***
+
+- Log transform is your top tool (log($X$), log($Y$), or both).
+
+- Add polynomial terms (e.g. $X^2$) to get nonlinear mean patterns.
+
+  -   Use statistical tests to back up your choices.
+
+  -   Be careful with extrapolation.
+
+- Be careful about interpretation after transforming.
+
+  - You can't use $R^2$ to compare models under different
+    transformations of $Y$.
+   
+## Practical
+
+Next we'll do a short practical to practice:
+
+- Fitting linear models in R
+- Checking diagnostics
+- Choosing transformations
+- Plotting predictions
+
+
