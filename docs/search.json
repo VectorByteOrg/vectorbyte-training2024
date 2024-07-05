@@ -154,6 +154,188 @@
     "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n22 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nArrival\n\n\n\n\n  \n\n\n23 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n12:00\nLunch\n\n\n\n\n  \n\n\n24 July 2024 (08:30 - 17:00)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n\n\n12:00\nLunch\n\n\n\n\n\n\n\n\n\n\n\n25 July 2024 (08:30 - 17:00)\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nComing Soon!\n\n\n\n\n\n\n26 July 2024\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n\nTravel\n\n\n\n\n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
   },
   {
+    "objectID": "VB_RegDiagTrans.html#learning-objectives",
+    "href": "VB_RegDiagTrans.html#learning-objectives",
+    "title": "VectorByte Methods Training",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nReview assumptions of SLR/MLR models\nReview using diagnostic plots to assess whether assumptions are met\nReview the idea of basic transformations to use when assumptions aren’t met"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#slr-model-assumptions",
+    "href": "VB_RegDiagTrans.html#slr-model-assumptions",
+    "title": "VectorByte Methods Training",
+    "section": "SLR model assumptions",
+    "text": "SLR model assumptions\n\\[\nY_i |X_i \\stackrel{ind}{\\sim} \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)\n\\]\nRecall the key assumptions of the Simple Linear Regression model:\n\nThe conditional mean of \\(Y\\) is linear in \\(X\\).\nThe additive errors (deviations from line)\n\nare normally distributed\nindependent from each other\nidentically distributed (i.e., they have constant variance)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#example-model-violations",
+    "href": "VB_RegDiagTrans.html#example-model-violations",
+    "title": "VectorByte Methods Training",
+    "section": "Example model violations",
+    "text": "Example model violations\nAnscombe’s quartet comprises four datasets that have similar statistical properties ...\n\n\n\n\nXmean\nYmean\nXsd\nYsd\nXYcor\n\n\n\n\n1\n9.000\n7.501\n3.317\n2.032\n0.816\n\n\n2\n9.000\n7.501\n3.317\n2.032\n0.816\n\n\n3\n9.000\n7.500\n3.317\n2.030\n0.816\n\n\n4\n9.000\n7.501\n3.317\n2.031\n0.817"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#residuals-and-the-model-assumptions",
+    "href": "VB_RegDiagTrans.html#residuals-and-the-model-assumptions",
+    "title": "VectorByte Methods Training",
+    "section": "Residuals and the model assumptions",
+    "text": "Residuals and the model assumptions\nRecall that the linear regression model assumes \\[\nY_i =\\beta_0 + \\beta_1 X_i + \\varepsilon_i,~~\\mbox{where}~~\n\\varepsilon_i \\stackrel{iid}{\\sim} \\mathcal{N}(0,\\sigma^2).\n\\]\nOur goal is to determine if the “true” residuals are iid normal and unrelated to \\(X\\). If the SLR model assumptions are true, then the residuals must be just “white noise”:\n\nEach \\(\\varepsilon_i\\) has the same variance (\\(\\sigma^2\\)).\nEach \\(\\varepsilon_i\\) has the same mean (0).\nAll of the \\(\\varepsilon_i\\) have the same normal distribution."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#understanding-leverage",
+    "href": "VB_RegDiagTrans.html#understanding-leverage",
+    "title": "VectorByte Methods Training",
+    "section": "Understanding Leverage",
+    "text": "Understanding Leverage\nThe \\(h_i\\) leverage term measures sensitivity of the estimated least squares regression line to changes in \\(Y_i\\).\nThe term “leverage” provides a mechanical intuition:\n\nThe farther you are from a pivot joint, the more torque you have pulling on a lever.\n\nHere is a nice online (interactive) illustration of leverage:\n\nhttps://omaymas.shinyapps.io/Influence_Analysis/\n\n\nOutliers do more damage if they have high leverage!"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#standardized-residuals",
+    "href": "VB_RegDiagTrans.html#standardized-residuals",
+    "title": "VectorByte Methods Training",
+    "section": "Standardized residuals",
+    "text": "Standardized residuals\nSince \\(e_i \\sim N(0, \\sigma^2 [1-h_i])\\), we know that \\[\n\\color{red}{\\frac{e_i}{\\sigma \\sqrt{1-h_i} }\\sim N(0, 1)}.\n\\]\nThese transformed \\(e_i\\)’s are called the standardized residuals.\n\nThey all have the same distribution if the SLR model assumptions are true.\nThey are almost (close enough) independent (\\(\\stackrel{iid}{\\sim}N(0,1)\\)).\nEstimate \\(\\sigma^2 \\approx s^2 = \\frac{1}{n-p}\\sum_{j=1}^n e_j^2\\). (\\(p=2\\) for SLR)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#studentized-residuals",
+    "href": "VB_RegDiagTrans.html#studentized-residuals",
+    "title": "VectorByte Methods Training",
+    "section": "Studentized residuals",
+    "text": "Studentized residuals\nWe thus define a standard Studentized residual as \\[\nr_i = \\frac{e_i}{s_{-i} \\sqrt{1-h_i} }\\sim t_{n-p-1}(0, 1)\n\\] where \\(s_{-i}^2 = \\frac{1}{n-p-1}\\sum_{j \\neq i} e_j^2\\) is \\(\\hat{\\sigma~}^2\\) calculated without \\(e_i\\).\n\nThese are easy to get in R with the rstudent() function:\n\nas.numeric(rstudent(reg3))\n#&gt;  [1]   -0.43905545   -0.18550224 1203.53946383   -0.31384418   -0.57429485\n#&gt;  [6]   -1.15598185    0.06640743    0.36185145   -0.73567703   -0.06576806\n#&gt; [11]    0.20026336"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#outliers-and-studentized-residuals",
+    "href": "VB_RegDiagTrans.html#outliers-and-studentized-residuals",
+    "title": "VectorByte Methods Training",
+    "section": "Outliers and Studentized residuals",
+    "text": "Outliers and Studentized residuals\nSince the studentized residuals are distributed \\(t_{n-p-1}(0,1)\\), we should be concerned about any \\(r_i\\) outside of about \\([-2.5, 2.5]\\).\n\n (Note: As \\(n\\) gets much bigger, we will expect to see some very rare events (big $\u000barepsilon_i$) and not get worried unless \\(|r_i| &gt; 3\\) or \\(4\\).)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#how-to-deal-with-outliers",
+    "href": "VB_RegDiagTrans.html#how-to-deal-with-outliers",
+    "title": "VectorByte Methods Training",
+    "section": "How to deal with outliers",
+    "text": "How to deal with outliers\n\n\n\n\nfrom Research Wahlberg"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#how-to-deal-with-outliers-1",
+    "href": "VB_RegDiagTrans.html#how-to-deal-with-outliers-1",
+    "title": "VectorByte Methods Training",
+    "section": "How to deal with outliers",
+    "text": "How to deal with outliers\nWhen should you delete outliers?\n\nOnly when you have a really good reason!\n\nThere is nothing wrong with running a regression with and without potential outliers to see whether results are significantly impacted.\nAny time outliers are dropped, the reasons for doing so should be clearly noted.\n\nI maintain that both a statistical and a non-statistical reason are required."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#outliers-leverage-and-residuals",
+    "href": "VB_RegDiagTrans.html#outliers-leverage-and-residuals",
+    "title": "VectorByte Methods Training",
+    "section": "Outliers, leverage, and residuals",
+    "text": "Outliers, leverage, and residuals\nWarning: Unfortunately, outliers with high leverage are hard to catch through \\(\\color{dodgerblue}{r_i}\\) (since the line is pulled towards them).\nMeans get distracted by outliers..."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#outliers-leverage-and-residuals-1",
+    "href": "VB_RegDiagTrans.html#outliers-leverage-and-residuals-1",
+    "title": "VectorByte Methods Training",
+    "section": "Outliers, leverage, and residuals",
+    "text": "Outliers, leverage, and residuals\nWarning: Unfortunately, outliers with high leverage are hard to catch through \\(\\color{dodgerblue}{r_i}\\) (since the line is pulled towards them).\nConsider data on house Rents vs SqFt:\n\nPlots of \\(r_i\\) or \\(e_i\\) against \\(\\hat{Y~}_i\\) or \\(X_i\\) are still your best diagnostic!"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#normality-and-studentized-residuals",
+    "href": "VB_RegDiagTrans.html#normality-and-studentized-residuals",
+    "title": "VectorByte Methods Training",
+    "section": "Normality and studentized residuals",
+    "text": "Normality and studentized residuals\nA more subtle issue is the normality of the distribution on \\(\\varepsilon\\).\n\nWe can look at the residuals to judge normality if \\(n\\) is big enough (say \\(&gt;20~~ \\rightarrow\\) less than that makes it too hard to call).\n\nIn particular, if we have decent size \\(\\color{red}{n}\\), we want the shape of the studentized residual distribution to “look” like \\(\\color{red}{N(0,1)}\\).\n The most obvious tactic is to look at a histogram of \\(r_i\\)."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#assessing-normality-via-q-q-plots",
+    "href": "VB_RegDiagTrans.html#assessing-normality-via-q-q-plots",
+    "title": "VectorByte Methods Training",
+    "section": "Assessing normality via Q-Q plots",
+    "text": "Assessing normality via Q-Q plots\nHigher fidelity diagnostics are provided by normal quantile-quantile (Q-Q) plots that:\n\nplot the sample quantiles (e.g. \\(10^{th}\\) percentile, etc.)\nagainst true percentiles from a \\(N(0,1)\\) distribution (e.g. \\(-1.96\\) is the true 2.5% quantile).\n\nIf \\(r_i \\sim N(0,1)\\) these quantiles should be equal\n\nlie on a line through 0 with slope 1"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#go-to-diagnostic-plots",
+    "href": "VB_RegDiagTrans.html#go-to-diagnostic-plots",
+    "title": "VectorByte Methods Training",
+    "section": "3 Go-To Diagnostic Plots",
+    "text": "3 Go-To Diagnostic Plots"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#violations-of-slr-model-assumptions",
+    "href": "VB_RegDiagTrans.html#violations-of-slr-model-assumptions",
+    "title": "VectorByte Methods Training",
+    "section": "Violations of SLR Model Assumptions",
+    "text": "Violations of SLR Model Assumptions\n\\[\\color{dodgerblue}{Y_i |X_i \\stackrel{ind}{\\sim} \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)}\\]\n\nThe conditional mean of \\(Y\\) is linear in \\(X\\).\nThe additive errors (deviations from line)\n\nare normally distributed\nindependent from each other\nidentically distributed (i.e., they have constant variance)\n\n\nAll of these can be violated! Let’s see what violations look like and how we can deal with them within the SLR framework."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#violation-1-non-constant-variance",
+    "href": "VB_RegDiagTrans.html#violation-1-non-constant-variance",
+    "title": "VectorByte Methods Training",
+    "section": "Violation 1: Non-constant variance",
+    "text": "Violation 1: Non-constant variance\nIf you get a trumpet shape (bunching of the \\(Y\\)s), you have nonconstant variance.\n\nThis violates our assumption that all \\(\\varepsilon_i\\) have the same \\(\\sigma^2\\)."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#solution-1-variance-stabilizing-transformations",
+    "href": "VB_RegDiagTrans.html#solution-1-variance-stabilizing-transformations",
+    "title": "VectorByte Methods Training",
+    "section": "Solution 1: Variance stabilizing transformations",
+    "text": "Solution 1: Variance stabilizing transformations\nThis is one of the most common model violations; luckily, it is usually fixable by transforming the response (\\(Y\\)) variable.\n\\(\\color{dodgerblue}{\\log(Y)}\\) is the most common variance stabilizing transform.\n\nIf \\(Y\\) has only positive values (e.g. sales) or is a count (e.g. # of customers), take \\(\\log(Y)\\) (always natural log).\n\n\\(\\color{dodgerblue}{\\sqrt{Y}}\\) is sometimes used, especially if the data have zeros.\n\nIn general, think what you expect to be linear for your data."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#violation-2-nonlinear-residual-patterns",
+    "href": "VB_RegDiagTrans.html#violation-2-nonlinear-residual-patterns",
+    "title": "VectorByte Methods Training",
+    "section": "Violation 2: Nonlinear residual patterns",
+    "text": "Violation 2: Nonlinear residual patterns\nConsider regression residuals for the 2nd Anscombe dataset:\n\nThings are not good! It appears that we do not have a linear mean function; that is \\(\\color{dodgerblue}{\\mathbb{E}[Y] \\neq \\beta_0 + \\beta_1 X}\\)."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#solution-2-polynomial-regression",
+    "href": "VB_RegDiagTrans.html#solution-2-polynomial-regression",
+    "title": "VectorByte Methods Training",
+    "section": "Solution 2: Polynomial regression",
+    "text": "Solution 2: Polynomial regression\nEven though we are limited to a linear mean, it is possible to get nonlinear regression by transforming the \\(X\\) variable.\n\nIn general, we can add powers of \\(\\color{dodgerblue}X\\) to get polynomial regression: \\(\\color{red}{\\mathbb{E}[Y] = \\beta_0 + \\beta_1X + \\beta_2 X^2 + \\cdots + \\beta_m X^m}\\)\n\nYou can fit any mean function if \\(m\\) is big enough.\n\nUsually stick to m=2 unless you have a good reason."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#testing-for-nonlinearity",
+    "href": "VB_RegDiagTrans.html#testing-for-nonlinearity",
+    "title": "VectorByte Methods Training",
+    "section": "Testing for nonlinearity",
+    "text": "Testing for nonlinearity\nTo see if you need more nonlinearity, try the regression which includes the next polynomial term, and see if it is significant.\nFor example, to see if you need a quadratic term,\n\nfit the model then run the regression \\(\\mathbb{E}[Y] = \\beta_0 + \\beta_1 X +  \\beta_2 X^2\\).\nIf your test implies \\(\\color{dodgerblue}{\\beta_2 \\neq 0}\\), you need \\(\\color{dodgerblue}{X^2}\\) in your model.\n\nNote: \\(p\\)-values are calculated “given the other \\(\\beta\\)’s are nonzero”; i.e., conditional on \\(X\\) being in the model."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#closing-comments-on-polynomials",
+    "href": "VB_RegDiagTrans.html#closing-comments-on-polynomials",
+    "title": "VectorByte Methods Training",
+    "section": "Closing comments on polynomials",
+    "text": "Closing comments on polynomials\n\nWe can always add higher powers (cubic, etc.) if necessary.\n\nIf you add a higher order term, the lower order term is kept in the model regardless of its individual \\(t\\)-stat.\n\nBe very careful about predicting outside the data range as the curve may do unintended things beyond the data.\nWatch out for over-fitting.\n\nYou can get a “perfect” fit with enough polynomial terms,\nbut that doesn’t mean it will be any good for prediction or understanding."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#other-problems",
+    "href": "VB_RegDiagTrans.html#other-problems",
+    "title": "VectorByte Methods Training",
+    "section": "Other problems",
+    "text": "Other problems\nSometimes we have other strange things going on in our data sets\n\ndata are “clumped” up in \\(X\\) – high leverage points\nresiduals still aren’t normally distributed after taking transforms from earlier\nresponses take discrete values instead of continuous\n\n\nThe latter 2 we can deal with using MLR and GLMs. What about the first?"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#the-log-log-model",
+    "href": "VB_RegDiagTrans.html#the-log-log-model",
+    "title": "VectorByte Methods Training",
+    "section": "The log-log model",
+    "text": "The log-log model\nThe other common covariate transform is \\(\\log(X)\\).\n\nWhen \\(X\\)-values are bunched up, \\(\\log(X)\\) helps spread them out and reduces the leverage of extreme values.\nRecall that both reduce \\(s_{b_1}\\).\n\nIn practice, this is often used in conjunction with a \\(\\log(Y)\\) response transformation. The log-log model is \\[\n    \\color{red}{\\log(Y) = \\beta_0 + \\beta_1 \\log(X) + \\varepsilon}.\n    \\]\nIt is super useful, and has some special properties ..."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#elasticity-and-the-log-log-model",
+    "href": "VB_RegDiagTrans.html#elasticity-and-the-log-log-model",
+    "title": "VectorByte Methods Training",
+    "section": "Elasticity and the log-log model",
+    "text": "Elasticity and the log-log model\nIn a log-log model, the slope \\(\\beta_1\\) is sometimes called elasticity.\nThe elasticity is (roughly) % change in \\(Y\\) per 1% change in \\(X\\). \\[\\color{dodgerblue}{\n\\beta_1 \\approx \\frac{d\\%Y}{d\\%X}}\\] For example, economists often assume that GDP has import elasticity of 1. Indeed:\n\nGDPlm&lt;-lm(log(GDP) ~ log(IMPORTS))\ncoef(GDPlm)\n#&gt;  (Intercept) log(IMPORTS) \n#&gt;     1.891516     0.969337\n\n\n(Can we test for 1%?)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#practical",
+    "href": "VB_RegDiagTrans.html#practical",
+    "title": "VectorByte Methods Training",
+    "section": "Practical",
+    "text": "Practical\nNext we’ll do a short practical to practice:\n\nFitting linear models in R\nChecking diagnostics\nChoosing transformations\nPlotting predictions"
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About the VectorByte Training Materials 2024",
