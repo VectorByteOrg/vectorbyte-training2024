@@ -1,0 +1,198 @@
+---
+title: "VectorByte Methods Training"
+subtitle: "Practical: Diagnostics and Transformations (SOLUTION)"
+author: "The VectorByte Team (Leah R. Johnson, Virginia Tech)"
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(123)
+```
+
+<br>
+
+# Overview and Instructions
+
+The goals of this practical are to:
+
+1.  Practice building residual diagnostic plots for determining violations of SLR assumptions.
+2.  Practice matching violations with remedies/transformations evaluating resulting residuals for models fit to transformed data.
+
+<br>
+
+# Practicing diagnostics and transformations
+
+The file **transforms.csv** on the course website contains 4 pairs of $X$s and $Y$s. The ${\sf R}$ code from lecture 5B will also be very helpful.
+
+***For each pair:***
+
+1.  Fit the linear regression model $Y = \beta_0 + \beta_1 X + \varepsilon$, $\varepsilon \sim \mathrm{N}(0,\sigma^2)$. Plot the data and fitted line.
+
+2.  Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.
+
+3.  Using the residual scatterplots, state how the SLR model assumptions are violated.
+
+4.  Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.
+
+5.  Provide plots to show that your transformations have (mostly) fixed the model violations.
+
+<br>
+<br>
+
+# Solution
+
+## 1. Fit the linear regression model. Plot the data and fitted line.
+
+```{r, fig.align='center'}
+## fit models
+attach(D <- read.csv("data/transforms.csv"))
+lm1 <- lm(Y1 ~ X1)
+lm2 <- lm(Y2 ~ X2)
+lm3 <- lm(Y3 ~ X3)
+lm4 <- lm(Y4 ~ X4)
+
+## plot points and lines
+par(mfrow=c(2,2), mar=c(3,2,2,1))
+plot(X1, Y1, col=1, main="I"); abline(lm1, col=1)
+plot(X2, Y2, col=2, main="II"); abline(lm2, col=2)
+plot(X3, Y3, col=3, main="III"); abline(lm3, col=3)
+plot(X4, Y4, col=4, main="IV"); abline(lm4, col=4)
+```
+
+<br>
+
+## 2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.
+
+```{r, fig.height=6.25}
+par(mfrow=c(3,4), mar=c(4,4,2,0.5))   # you might have to make 
+                                      # the plot window big to 
+                                      # fit everything
+plot(lm1$fitted, rstudent(lm1), col=1,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="I")
+plot(lm2$fitted, rstudent(lm2), col=2,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="II")
+plot(lm3$fitted, rstudent(lm3), col=3,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="III")
+plot(lm4$fitted, rstudent(lm4), col=4,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="IV")
+
+qqnorm(rstudent(lm1), pch=20, col=1, main="" )
+abline(a=0,b=1,lty=2)
+qqnorm(rstudent(lm2), pch=20, col=2, main="" )
+abline(a=0,b=1,lty=2)
+qqnorm(rstudent(lm3), pch=20, col=3, main="" )
+abline(a=0,b=1,lty=2)
+qqnorm(rstudent(lm4), pch=20, col=4, main="" )
+abline(a=0,b=1,lty=2)
+
+hist(rstudent(lm1), col=1, xlab="Studentized Residuals", 
+     main="", border=8)
+hist(rstudent(lm2), col=2, xlab="Studentized Residuals", main="")
+hist(rstudent(lm3), col=3, xlab="Studentized Residuals", main="")
+hist(rstudent(lm4), col=4, xlab="Studentized Residuals", main="")
+```
+
+<br> <br>
+
+## 3. Using the residual scatterplots, state how the SLR model assumptions are violated.
+
+Set 1: $X$s are clumpy AND the variance seems non-constant. It looks a lot like the GDP data from class. Since both $X$s and $Y$s are strictly positive, we can try a log-log transform.
+
+Set 2: Data have non-constant variance -- should probably log transform the $Y$s
+
+Set 3: Data have an underlying non-linear pattern. Add in an $x^2$ and $x^3$ term in this case.
+
+Set 4: $X$ values are very clumpy and all positive. Try log transform of the $X$s
+
+<br>
+
+## 4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.
+
+```{r}
+### the fixes are as follows:
+logX1<- log(X1)
+logY1 <- log(Y1)
+logY2 <- log(Y2)
+X3sq <- X3^2
+X3cube<-X3^3
+logX4 <- log(X4)
+
+
+### re-run the regressions and residual plots to show this worked
+lm1 <- lm(logY1 ~ logX1)
+lm2 <- lm(logY2 ~ X2)
+lm3 <- lm(Y3 ~ X3+ X3sq + X3cube)
+lm4 <- lm(Y4 ~ logX4)
+
+## plot points and lines
+par(mfrow=c(2,2), mar=c(3,2,2,1))
+plot(logX1, logY1, col=1, main="I"); abline(lm1, col=1)
+plot(X2, logY2, col=2, main="II"); abline(lm2, col=2)
+plot(X3, Y3, col=3, main="III")
+xx3 <- seq(min(X3), max(X3), length=1000)
+lines(xx3, lm3$coef[1] + lm3$coef[2]*xx3 + 
+        lm3$coef[3]*xx3^2+lm3$coef[3]*xx3^3, col=3)
+plot(logX4, Y4, col=4, main="IV"); abline(lm4, col=4)
+```
+
+<br>
+
+## 5. Provide plots to show that your transformations have (mostly) fixed the model violations.
+
+```{r, fig.height=6.25}
+
+par(mfrow=c(3,4), mar=c(4,4,2,0.5))  
+plot(lm1$fitted, rstudent(lm1), col=1,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="I")
+plot(lm2$fitted, rstudent(lm2), col=2,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="II")
+plot(lm3$fitted, rstudent(lm3), col=3,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="III")
+plot(lm4$fitted, rstudent(lm4), col=4,
+     xlab="Fitted Values", ylab="Studentized Residuals", 
+     pch=20, main="IV")
+
+## Q-Q plots
+qqnorm(rstudent(lm1), pch=20, col=1, main="" )
+abline(a=0,b=1,lty=2)
+qqnorm(rstudent(lm2), pch=20, col=2, main="" )
+abline(a=0,b=1,lty=2)
+qqnorm(rstudent(lm3), pch=20, col=3, main="" )
+abline(a=0,b=1,lty=2)
+qqnorm(rstudent(lm4), pch=20, col=4, main="" )
+abline(a=0,b=1,lty=2)
+
+## histograms of studentized residuals
+hist(rstudent(lm1), col=1, xlab="Studentized Residuals", 
+     main="", border=8)
+hist(rstudent(lm2), col=2, xlab="Studentized Residuals", main="")
+hist(rstudent(lm3), col=3, xlab="Studentized Residuals", main="")
+hist(rstudent(lm4), col=4, xlab="Studentized Residuals", main="")
+```
+
+<br> <br>
+
+# Data Generation
+
+Here is how the data in transforms.csv were generated:
+
+- X1 \<- exp(rnorm(mean=0, 200)); Y1 \<- 2*X1\^{2}*exp(rnorm(200))
+
+- X2 \<- runif(200); Y2 \<- exp(-3\*X2 + rnorm(200, sd=.5))
+
+- X3\<-seq(-3,2.5, length=200); Y3\<-3-3.5\*X3+X3\^2 +X3\^3+rnorm(length(X3), sd=1.5)
+
+- X4 \<- exp(rnorm(200, mean=0)); Y4 \<- 6 - 5\*log(X4) + rnorm(200)
