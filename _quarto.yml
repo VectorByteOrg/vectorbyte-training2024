@@ -6,11 +6,8 @@ website:
   navbar:
     background:	"primary"
     foreground: "light"
-    logo: "graphics/vblogoedit.pdf"
-    logo-href: https://www.vectorbyte.org
+    logo: "graphics/vblogoedit.png"
     left:
-      - href: index.qmd
-        text: Home
       - href: about.qmd
         text: About
       - href: schedule2024.qmd
@@ -22,6 +19,7 @@ website:
         href: https://github.com/VectorByteOrg/vectorbyte-training2024
       - icon: twitter
         href: https://twitter.com/vectorbite_rcn
+    search: TRUE
         
 format:
   html:
