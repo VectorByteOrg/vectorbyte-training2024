@@ -455,7 +455,7 @@ Y_i |X_i \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)
 </section>
 <section id="example-model-violations" class="slide level2">
 <h2>Example model violations</h2>
-<p><span style="color: red;">Anscombe’s quartet</span> comprises four datasets that have similar statistical properties ...</p>
+<p><span style="color: red;">Anscombe’s quartet</span> comprises four datasets that have similar statistical properties …</p>
 <table>
 <thead>
 <tr class="header">
@@ -505,7 +505,7 @@ Y_i |X_i \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)
 </section>
 <section class="slide level2">
 
-<p>...but vary considerably when graphed:</p>
+<p>…but vary considerably when graphed:</p>
 
 <img data-src="VB_RegDiagTrans_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section class="slide level2">
@@ -519,7 +519,7 @@ Y_i |X_i \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)
 <img data-src="VB_RegDiagTrans_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section class="slide level2">
 
-<p>The regression lines and <span class="math inline">\(R^2\)</span> values are the same...<br>
+<p>The regression lines and <span class="math inline">\(R^2\)</span> values are the same…<br>
 </p>
 <table>
 <thead>
@@ -560,7 +560,7 @@ Y_i |X_i \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)
 </section>
 <section class="slide level2">
 
-<p>...but the residuals, <span class="math inline">\(e\)</span>, <strong><em>(plotted vs.&nbsp;<span class="math inline">\(\hat{Y~}\)</span>)</em></strong> look totally different.</p>
+<p>…but the residuals, <span class="math inline">\(e\)</span>, <strong><em>(plotted vs.</em></strong> <span class="math inline">\(\hat{Y~}\)</span>) look totally different.</p>
 
 <img data-src="VB_RegDiagTrans_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section class="slide level2">
@@ -628,7 +628,7 @@ Y_i =\beta_0 + \beta_1 X_i + \varepsilon_i,~~\mbox{where}~~
 </ul>
 <p>Here is a nice online (interactive) illustration of leverage:</p>
 <center>
-<a href="https://omaymas.shinyapps.io/Influence_Analysis/">https://omaymas.shinyapps.io/Influence_Analysis/</a>
+<a href="https://omaymas.shinyapps.io/Influence_Analysis/" class="uri">https://omaymas.shinyapps.io/Influence_Analysis/</a>
 </center>
 <p><br></p>
 <p><span style="color: red;">Outliers do more damage if they have high leverage!</span></p>
@@ -647,7 +647,7 @@ Y_i =\beta_0 + \beta_1 X_i + \varepsilon_i,~~\mbox{where}~~
 </section>
 <section class="slide level2">
 
-<p>About estimating <span class="math inline">\(s\)</span> under sketchy SLR assumptions ...</p>
+<p>About estimating <span class="math inline">\(s\)</span> under sketchy SLR assumptions …</p>
 <p>We want to see whether any particular <span class="math inline">\(e_i\)</span> is “too big”, but we don’t want a single outlier to make <span class="math inline">\(s\)</span> artificially large.</p>
 <p><br></p>
 <div class="columns">
@@ -715,7 +715,7 @@ r_i = \frac{e_i}{s_{-i} \sqrt{1-h_i} }\sim t_{n-p-1}(0, 1)
 <section id="outliers-leverage-and-residuals" class="slide level2">
 <h2>Outliers, leverage, and residuals</h2>
 <p><span style="color: red;">Warning:</span> <span style="color: dodgerblue;">Unfortunately, outliers with high leverage are hard to catch through</span> <span class="math inline">\(\color{dodgerblue}{r_i}\)</span> <span style="color: dodgerblue;">(since the line is pulled towards them)</span>.</p>
-<p>Means get distracted by outliers...<br>
+<p>Means get distracted by outliers…<br>
 </p>
 <center>
 <img data-src="graphics/distracted_mean_meme.jpg" style="height:4in">
@@ -870,7 +870,7 @@ r_i = \frac{e_i}{s_{-i} \sqrt{1-h_i} }\sim t_{n-p-1}(0, 1)
 <p><span style="color: dodgerblue;">We have a multiplicative model now!</span></p>
 </div>
 <p><br></p>
-<p>Note: <strong>you <span style="color: red;">CANNOT</span> compare <span class="math inline">\(R^2\)</span> values for regressions corresponding to different transformations of the response.</strong></p>
+<p>Note: <strong>you <span style="color: red;">CANNOT</span> compare</strong> <span class="math inline">\(R^2\)</span> values for regressions corresponding to different transformations of the response.</p>
 <ul>
 <li><p><span class="math inline">\(Y\)</span> and <span class="math inline">\(f(Y)\)</span> may not be on the same scale,</p></li>
 <li><p>therefore <span class="math inline">\(\text{var}(Y)\)</span> and <span class="math inline">\(\text{var}(f(Y))\)</span> may not be either.</p></li>
@@ -912,7 +912,7 @@ r_i = \frac{e_i}{s_{-i} \sqrt{1-h_i} }\sim t_{n-p-1}(0, 1)
 <p>To see if you need more nonlinearity, try the regression which includes the next polynomial term, and see if it is significant.</p>
 <p>For example, to see if you need a <span style="color: dodgerblue;">quadratic term</span>,</p>
 <ul>
-<li><p>fit the model then run the regression <span class="math inline">\(\mathbb{E}[Y] = \beta_0 + \beta_1 X +  \beta_2 X^2\)</span>.</p></li>
+<li><p>fit the model then run the regression <span class="math inline">\(\mathbb{E}[Y] = \beta_0 + \beta_1 X + \beta_2 X^2\)</span>.</p></li>
 <li><p><span style="color: red;">If your test implies</span> <span class="math inline">\(\color{dodgerblue}{\beta_2 \neq 0}\)</span>, <span style="color: red;">you need</span> <span class="math inline">\(\color{dodgerblue}{X^2}\)</span> in your model.</p></li>
 </ul>
 <p>Note: <span class="math inline">\(p\)</span>-values are calculated “given the other <span class="math inline">\(\beta\)</span>’s are nonzero”; i.e., conditional on <span class="math inline">\(X\)</span> being in the model.</p>
@@ -953,7 +953,7 @@ r_i = \frac{e_i}{s_{-i} \sqrt{1-h_i} }\sim t_{n-p-1}(0, 1)
 <p>In practice, this is often used in conjunction with a <span class="math inline">\(\log(Y)\)</span> response transformation. The log-log model is <span class="math display">\[
     \color{red}{\log(Y) = \beta_0 + \beta_1 \log(X) + \varepsilon}.
     \]</span></p>
-<p>It is super useful, and has some special properties ...</p>
+<p>It is super useful, and has some special properties …</p>
 </section>
 <section class="slide level2">
 
@@ -1012,7 +1012,7 @@ log(IMPORTS)  0.96934    0.08807   11.01    1.21e-10 ***</code></pre>
 </section>
 <section class="slide level2">
 
-<p><strong><em>Summary: <span style="color: red;">Plots of residuals v.s.</span> <span class="math inline">\(\color{red}X\)</span> <span style="color: red;">or</span> <span class="math inline">\(\color{red}{\hat{Y~}}\)</span> <span style="color: red;">are most important for diagnosing problems</span>.</em></strong></p>
+<p><strong><em>Summary: <span style="color: red;">Plots of residuals v.s.</span></em></strong> <span class="math inline">\(\color{red}X\)</span> <span style="color: red;">or</span> <span class="math inline">\(\color{red}{\hat{Y~}}\)</span> <span style="color: red;">are most important for diagnosing problems</span>.</p>
 <ul>
 <li><p>Log transform is your top tool (log(<span class="math inline">\(X\)</span>), log(<span class="math inline">\(Y\)</span>), or both).</p></li>
 <li><p>Add polynomial terms (e.g.&nbsp;<span class="math inline">\(X^2\)</span>) to get nonlinear mean patterns.</p>
