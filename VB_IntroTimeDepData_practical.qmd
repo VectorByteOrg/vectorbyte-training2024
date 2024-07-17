@@ -175,3 +175,7 @@ Follow the procedure I showed for the model with a simple trend, and build ***at
 
 Check diagnostics/model assumptions as you go. Then at the end compare all of your models via BIC. What is your best model by that metric? We'll share among the group what folks found to be good models. 
 
+# Extra Practice 
+
+Imagine that you are missing a few months at random -- how would you need to modify the analysis. Try it out by removing about 5 months not at the beginning or end of the time series. 
+
