@@ -14,7 +14,7 @@ format:
 
 We will be using [`R`](https://cran.r-project.org/) for all data manipulation and analyses/model fitting. Any operating system (Windows, Mac, Linux) will do, as long as you have `R` (version 3.6 or higher) installed.
 
-You may use any IDE/ GUI for `R` (VScode, RStudio, Emacs, etc). For most people, [`RStudio`](https://www.rstudio.com/) is a good option. Whichever one you decide to use, please make sure it is installed and test it before the workshop.
+You may use any IDE/ GUI for `R` (VScode, RStudio, Emacs, etc). For most people, [`RStudio`](https://www.rstudio.com/) is a good option. Whichever one you decide to use, please make sure it is installed and tested before the workshop.
 
 We will also be using Slack for additional support during the training. Please have these installed in advance. We will have a channel on Slack dedicated to software/hardware issues and troubleshooting.
 
@@ -40,49 +40,45 @@ We are assuming familiarity with R basics as well as at least introductory stati
 
 ## Introduction to the Workshop and Time Dependent Abundance Data
 
-- [Lecture (coming soon)]()
+-   [Lecture (coming soon)]()
 
 <br> <br>
 
-
 ## Regression in R Refresher (Transformations and Diagnostics)
 
-- [Lecture Slides](VB_RegDiagTrans.qmd)
-- [Practical](VB_RegDiagTrans_practical.qmd)
-- Dataset: [transforms.csv](/data/transforms.csv) 
+-   [Lecture Slides](VB_RegDiagTrans.qmd)
+-   [Practical](VB_RegDiagTrans_practical.qmd)
+-   Dataset: [transforms.csv](/data/transforms.csv)
 
 <br> <br>
 
 ## Time dependent regression analysis
 
-- [Lecture Slides](VB_IntroTimeDepData.qmd)
-- [Practical](VB_IntroTimeDepData_practical.qmd)
-- Dataset: [Walton Co, FL Mosquito data](/data/Culex_erraticus_walton_covariates_aggregated.csv) 
+-   [Lecture Slides](VB_IntroTimeDepData.qmd)
+-   [Practical](VB_IntroTimeDepData_practical.qmd)
+-   Dataset: [Walton Co, FL Mosquito data](/data/Culex_erraticus_walton_covariates_aggregated.csv)
 
 <br> <br>
 
 ## Basics of Time Series using R
 
-- [Integrated Lecture and Activities (coming soon)]()
-- Dataset: [coming soon]() 
-
+-   [Integrated Lecture and Activities (coming soon)]()
+-   Dataset: [coming soon]()
 
 <br> <br>
 
 ## Introduction to the VecDyn database
 
--   [The VecDyn website](https://vectorbyte.crc.nd.edu/vecdyn-datasets). 
-- [About the VecDyn API](https://www.vectorbyte.org/blog/vecdyn-api)
-- Other Materials Coming Soon.
+-   [The VecDyn website](https://vectorbyte.crc.nd.edu/vecdyn-datasets).
+-   [About the VecDyn API](https://www.vectorbyte.org/blog/vecdyn-api)
+-   Other Materials Coming Soon.
 
 <br> <br>
 
-
 ## Gaussian Process models (GPs) for Time Dependent Data
 
-- [Lecture Slides (coming soon)]()
-- [Lecture Note (coming soon)]()
-- [Practical (coming soon)]()
-
+-   [Lecture Slides (coming soon)]()
+-   [Lecture Note (coming soon)]()
+-   [Practical (coming soon)]()
 
 <br> <br>

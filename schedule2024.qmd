@@ -1,6 +1,6 @@
 ---
 title: "2024 Training Schedule"
-description: "Schedule for synchronous training sessions"
+description: "Draft schedule for synchronous training sessions"
 format:
   html:
     toc: true
@@ -25,29 +25,64 @@ Information about pre-workshop preparation -- including software installation, e
 
 <br> <br> <br>
 
-# 23 July 2024 (08:30 - 17:00)
+# 23 July 2024 (08:30 - 17:30)
 
-| Time  | Activity                                      | Materials                                                          |
-|--------------|-----------------------|-----------------------------------|
-|  | Coming Soon!                                |                                                                    |
-| 12:00 | Lunch                                         |                                                                    |
+| Time   | Activity | Materials |
+|--------|----------|-----------|
+| 8:30   | Introduction to time dependent data, course overview            |           |
+| 9:30   | Goal setting, lighting presentations                                  |           |
+| 10:15  | Break    |           |
+| 10:45  | Lecture: Regression Transformations and Diagnostics         |           |
+| 11:45  | Practical: Regression Transformations and Diagnostics         |           |
+| 12:30  | Lunch    |           |
+| 13:30  | Lecture: Time Dependent Data Analysis                                 |           |
+| 14:30  | Practical: Time Dependent Data Analysis                               |           |
+| 15:15  | Break    |           |
+| 15:30  | Integrated Lecture and Practical: Basics of Time Series method       |           |
+
 
 <br> <br> <br>
 
-# 24 July 2024 (08:30 - 17:00)
+# 24 July 2024 (08:30 - 17:30)
 
-| Time  | Activity                      | Materials                                                            |
-|--------------|-----------------|-----------------------------------------|
-|       | Coming Soon!     |                                                                      |
-                       |
-| 12:00 | Lunch                         |                                                                      |
-                   |
+| Time   | Activity | Materials |
+|--------|----------|-----------|
+| 8:30   | Overview  of the day         |           |
+| 9:00   | Introduction to VecDyn Database and API                                   |           |
+| 10:00  | Break    |           |
+| 10:30  | Working with VecDyn/time dependent data (data aggregation, covariate/predictor sources)                                        |           |
+| 12:30  | Lunch    |           |
+| 13:30  | Lecture: Introduction to Gaussian Process (GP) regression applied to time dependent data                                        |           |
+| 14:45  | Break    |           |
+| 15:15  | Practical: GPs in R with `laGP` and `hetGP`                           |           |
+| 16:30  | Brainstorming planning for projects                                   |           |
+| 17:00  | Lightning talks                                                       |           |
 
-# 25 July 2024 (08:30 - 17:00)
+<br>
+<br>
+<br>
 
-| Time  | Activity                          | Materials |
-|-------|-----------------------------------|-----------|
-|        | Coming Soon!                      |           |
+# 25 July 2024 (08:30 - 17:30)
+
+| Time.  | Activity                       | Materials |
+|--------|--------------------------------|-----------|
+| 8:30   | Overview  of the day           |           |
+| 9:00   | Forecasting metrics and challenge introduction                                              |           |
+| 9:30   | Forecasting Challenge          |           |
+| 10:30  | Break                          |           |
+| 11:00  | Forecasting Challenge (cont)   |           |
+| 11:45  | Present and Eval forecasts     |           |
+| 12:30  | Lunch                          |           |
+| 13:30  | Mini projects                  |           |
+| 15:00  | Break                          |           |
+| 15:30  | Mini projects                  |           |
+| 16:30  | Present mini projects; wrap up |           |
+
+
+
+<br>
+<br>
+<br>
 
 # 26 July 2024
 
