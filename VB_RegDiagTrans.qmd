@@ -1,6 +1,6 @@
 ---
-title: "VectorByte Methods Training"
-subtitle: "Review of Diagnostics and Transformations for Regression Models"
+subtitle: "VectorByte Methods Training"
+title: "Review of Diagnostics and Transformations for Regression Models"
 author: "The VectorByte Team (Leah R. Johnson, Virginia Tech)"
 title-slide-attributes:
   data-background-image: VectorByte-logo_lg.png

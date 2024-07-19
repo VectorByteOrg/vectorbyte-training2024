@@ -1,7 +1,12 @@
 ---
-title: VectorByte Methods Training
-subtitle: Probability and Statistics Fundamentals
-author: The VectorByte Team (Leah R. Johnson, Virginia Tech)
+title: "VectorByte Methods Training: Probability and Statistics Fundamentals"
+author:
+  - name: Leah R. Johnson 
+    url: https://lrjohnson0.github.io/QEDLab/leahJ.html
+    affiliation: Virginia Tech and VectorByte
+citation: true
+date: 2024-07-01
+date-format: long
 format:
   html:
     toc: true

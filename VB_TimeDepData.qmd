@@ -1,6 +1,6 @@
 ---
-title: "VectorByte Methods Training"
-subtitle: "Regression Methods for Time Dependent Data"
+subtitle: "VectorByte Methods Training"
+title: "Regression Methods for Time Dependent Data"
 author: "The VectorByte Team (Leah R. Johnson, Virginia Tech)"
 title-slide-attributes:
   data-background-image: VectorByte-logo_lg.png

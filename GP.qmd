@@ -1,6 +1,6 @@
 ---
-title: "VectorByte Methods Training"
-subtitle: "Introduction to Gaussian Processes for Time Dependent Data"
+subtitle: "VectorByte Methods Training"
+title: "Introduction to Gaussian Processes for Time Dependent Data"
 editor: source
 author: "The VectorByte Team (Parul Patil, Virginia Tech)"
 title-slide-attributes:

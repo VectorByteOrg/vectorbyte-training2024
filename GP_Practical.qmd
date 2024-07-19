@@ -1,7 +1,11 @@
 ---
-title: "VectorByte Methods Training"
-subtitle: "Practical: Introduction to Gaussian Processes for Time Dependent Data"
-author: "The VectorByte Team (Parul Patil, Virginia Tech)"
+title: "VectorByte Methods Training:  Introduction to Gaussian Processes for Time Dependent Data (Practical)"
+author:
+  - name: Parul Patil 
+    affiliation: Virginia Tech and VectorByte
+citation: true
+date: 2024-07-21
+date-format: long
 format:
   html:
     toc: true
