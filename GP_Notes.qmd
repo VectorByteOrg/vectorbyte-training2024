@@ -1,13 +1,25 @@
 ---
-title: "Notes"
-author: "Parul Patil"
-date: "2024-07-18"
-output: html_document
+title: "VectorByte Methods Training"
+subtitle: "Introduction to Gaussian Processes for Time Dependent Data"
+author: "The VectorByte Team (Parul Patil, Virginia Tech)"
+title-slide-attributes:
+  data-background-image: VectorByte-logo_lg.png
+  data-background-size: contain
+  data-background-opacity: "0.2"
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
 ---
 
-### Gaussian Processes
+# Introduction to Gaussian Processes for Time Dependent Data
 
-#### Introduction
+This document introduces the conceptual background to Gaussian Process (GP) regression, along with mathematical concepts. We also demonstrate briefly fitting GPs using the `laGP` package in R. The material here is intended to give a more verbose introduction to what is covered in the [lecture](GP.qmd) in order to support a student to work through the [practical component](GP_Practical.qmd). This material has been adapted from chapter 5 of the book [Surrogates: Gaussian process modeling, design and optimization for the applied sciences](https://bobby.gramacy.com/surrogates/) by Robert Gramacy.
+
+
+# Gaussian Processes
 
 A Gaussian Process (GP) is a non-parameteric and flexible method to model data. Here, we assume that the data follow a Multivariate Normal Distribution. It is widely used in the fields of spatial statistics commonly known as *kriging* as well as machine learning as a surrogate model due to it's ability of making fast predictions with good uncertainty quantification. 
 
@@ -17,7 +29,7 @@ For e.g. Suppose we wish to estimate the amount of energy released when a bomb e
 
 In the field of ecology, as we will see in this tutorial, we will use a Gaussian Process model as a Non-Parametric Regression tool, similar to Linear Regression. We will assume our data follows a GP, and use Bayesian Methods to infer the distribution of new locations given the data. The predictions obtained will have good uncertainty quantification which is ofcourse valuable in this field due to the noisy nature of our data. 
 
-##### Gaussian Process Prior
+## Gaussian Process Prior
 
 In our setup, we assume that the data follows a Multivariate Normal Distribution. We can think of this as a Prior. Mathematically, we can write it as:
 
@@ -35,7 +47,7 @@ $$\Sigma(x, x') = \exp \left( \ \vert \vert{x - x'} \vert \vert^2 \ \right)$$
 
 This creates a positive semi-definite correlation kernel. It also uses the proximity of $x$ and $x'$ as a measure of correlation i.e. the closer two points in the input space are, the more highly their corresponding responses are correlated. We will learn the exact form of $\Sigma_n$ later in the tutorial. First, we need to learn about MVN Distribution and the Posterior Distribution given the data. 
 
-**Multivariate Normal Distribution**
+## Multivariate Normal Distribution
 
 Suppose we have $X = (X_1, X_2)$ 
 
@@ -116,7 +128,7 @@ Y(x_p) \vert \ D_n \ & \sim \mathcal{N} \left(\mu(x_p) \ , \ \sigma^2(x_p) \righ
 \end{aligned}
 \end{equation}
 
-**Visualization**
+## Example: GP for Toy Example
 
 Suppose we have data from the following function,
 $$Y(x) = 5 \ \sin (x)$$ 
@@ -180,7 +192,7 @@ ggplot() +
 
 <!-- Do it for one location -->
 
-##### Covariance Function
+## Covariance Function
 
 As mentioned before, the main action is in the specification of $\Sigma_n$. Let's express $\Sigma_n = \tau^2 C_n$ where $C_n$ is the correlation function. We will be using the squared exponential distance based correlation function. The kernel can be written down mathematically as, 
 
@@ -190,7 +202,7 @@ Here, if $x$ and $x'$ are closer in distance, the responses are more highly corr
 
 We have three main hyper-parameters here:
 
-###### $\tau^2$: Scale
+### $\tau^2$: Scale
 
 This parameter dictates the amplitude of our function. A MVN Distribution with scale = 1 will usually have data between -2 to 2. As the scale increases, this range expands. Here is a plo that shows two different scales for the same function, with all other parameters fixed. 
 
@@ -224,7 +236,7 @@ matplot(X, t(Y_scaled), type = 'l', main = expression(paste(tau^2, " = 25")),
         ylab = "Y", xlab = "X", lwd = 2, col = "red")
 ```
 
-###### $\theta$: Length-scale
+### $\theta$: Length-scale
 
 The length-scale controls the wiggliness of the function. It is also referred to as the rate of decay of correlation. The smaller it's value, the more wiggly the function gets. This is because we expect the change in directionalilty of the function to be rather quick. We will once again demonstrate how a difference in magnitude of $\theta$ affects the function, keeping everything else constant.
 
@@ -262,7 +274,7 @@ $$C_n = \exp{ \left( - \sum_{k=1}^{m}  \frac{\vert\vert x - x' \vert \vert ^2}{\
 
 This type of modelling is also referred to a seperable GP since we can take the sum outside the exponent and it will be a product of $m$ independent dimensions. If we set all $\theta_k= \theta$, it would be an isotropic GP. 
 
-###### $g$: Nugget
+### $g$: Nugget
 
 This parameter adds some noise into the function. For $g > 0$, it determines the magnitude of discontinuity as $x'$ tends to $x$. It is also called the nugget effect. For $g=0$, there would be no noise and the function would interpolate between the points. This effect is only added to the diagonals of the correlation matrix. We never add $g$ to the off-diagonal elements. This also allows for numeric stability. Below is a snippet of what different magnitudes of $g$ look like. 
 
@@ -306,7 +318,7 @@ For now, let's get back to GP and fitting and learn how to use it. We have alrea
 - $\tau^2$: An estimate is obtained as a closed form solution once we plug in g.
 
 
-### Heteroskedastic Gaussian Processes
+# Heteroskedastic Gaussian Processes
 
 Let $Y_N$ be the response vector of size N. Let $X_1, X_2 ... X_d$ be the input space.
 

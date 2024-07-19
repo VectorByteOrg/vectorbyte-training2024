@@ -1,8 +1,14 @@
 ---
-title: "Gaussian Processes"
+title: "VectorByte Methods Training"
+subtitle: "Introduction to Gaussian Processes for Time Dependent Data"
+editor: source
+author: "The VectorByte Team (Parul Patil, Virginia Tech)"
+title-slide-attributes:
+  data-background-image: VectorByte-logo_lg.png
+  data-background-size: contain
+  data-background-opacity: "0.2"
 format: revealjs
-editor: visual
-fontsize: 20pt
+fontsize: 22pt
 html-math-method: katex
 ---
 
@@ -120,11 +126,11 @@ ggplot() +
 
 -   Recall that in Linear Regression, you have $\ \Sigma \  = \sigma^2 \mathbb{I}$
 
--   For a GP, the cavariance matrix ( \$ \Sigma \$ ) is defined by a kernel.
+-   For a GP, the covariance matrix ( $\Sigma$ ) is defined by a kernel.
 
 -   Consider,
 
-\$\Sigma\_n = \tau\^2  C_n  \$;    \$C_n = \exp \left( - \vert \vert x - x' \vert \vert\^2 \right) \$, where $x$ and $x'$ are input locations.
+$\Sigma_n = \tau^2 C_n$ where $C_n = \exp \left( - \vert \vert x - x' \vert \vert^2 \right)$, and  $x$ and $x'$ are input locations.
 
 . . .
 

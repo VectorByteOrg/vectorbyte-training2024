@@ -1,16 +1,22 @@
 ---
-title: "Gaussian Processes: Practical"
-author: "Parul Patil"
-date: "2024-06-21"
-output: html_document
+title: "VectorByte Methods Training"
+subtitle: "Practical: Introduction to Gaussian Processes for Time Dependent Data"
+author: "The VectorByte Team (Parul Patil, Virginia Tech)"
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
 ---
 
-## Gaussian Processes 
+# Objectives 
 
+This practical will lead you through fitting a few versions of GPs using two R packages: `laGP` and `hetGP`. We will begin with a toy example from the lecture and then move on to a real data example to forecast tick abundances for a NEON site. 
 
-### Basics: Fitting a GP Model
+# Basics: Fitting a GP Model
 
-Remember the function we looked at before?
+Remember the function we looked at before:
 $$Y(x) = 5 \ \sin(x)$$
 Now, let's learn how we actually use the library `laGP` to fit a GP and make predictions at new locations. Let's begin by loading some libraries
 
@@ -117,10 +123,13 @@ ggplot() +
 
 Looks pretty cool. 
 
+
+# Using GPs for data on tick abundances over time
+
 We will try all this on a simple dataset: Tick Data from NEON Forecasting Challenge. We will first learn a little bit about this dataset, followed by setting up our predictors and using them in our model to predict tick density for the future season. We will also learn how to fit a separable GP and specify priors for our parameters. Finally, we will learn some basics about a HetGP (Heteroskedastic GP) and try and fit that model as well.
 
 
-### Overview of the Data
+## Overview of the Data
 
 -   **Objective**: Forecast tick density for 4 weeks into the future
 
@@ -144,7 +153,7 @@ target <- readr::read_csv("https://data.ecoforecast.org/neon4cast-targets/ticks/
 head(target)
 ```
 
-#### Initial Setup
+## Initial Setup
 
 - For a GP model, we assume the response ($Y$) should be normally distributed. 
 
@@ -180,7 +189,7 @@ fi <- function(y) {
 }
 ```
 
-#### Predictors
+## Predictors
 
 - The goal is to forecast tick populations for a season so our response (Y) here, is the tick density. However, we do not have a traditional data set with an obvious input space. What is the X? <!-- interactive -->
 
@@ -278,7 +287,7 @@ $X^* = (X_1^*, X_2^* ... X_n^*)$ will be the standarized $X$'s with all $X_i^*$ 
 
 We can either write a function for this, or in our case, we can just divide Iso-week by 53 since that would result effectively be the same. Our Sin Predictor already lies in the interval [0, 1].
 
-### Model Fitting
+## Model Fitting
 
 Now, let's start with modelling. We will start with one random location out of the 9 locations. 
 
@@ -310,7 +319,7 @@ df_train <- subset(df, df$datetime <= cutoff)
 df_test <- subset(df, df$datetime > cutoff)
 ```
 
-#### GP Model
+## GP Model
 
 Now we will setup our X's. We already have the functions to do this and can simply pass in the datetime. We then combine $X_1$ and $X_2$ to create out input matrix $X$. Remember, everything is ordered as in our dataset. 
 
@@ -433,11 +442,10 @@ rmse
 ```
 
 
-Next, we can attempt a hetGP. 
 
-#### HetGP Model
+## HetGP Model
 
-We are now interested in fitting a vector of nuggets rather than a single value.  
+Next, we can attempt a hetGP.  We are now interested in fitting a vector of nuggets rather than a single value.  
 
 Let's use the same data we have to fit a hetGP. We already have our data `(X, y)` as well as our prediction set `XXt`. We use the `mleHetGP` command to fit a GP and pass in our data. The default covariance structure is the Squared Exponential structure. We use the `predict` function in base R and pass the hetGP object i.e. `het_gpi` to make predictions on our set `XXt`. 
 
@@ -552,11 +560,13 @@ plot(X, y)
 # Add code to fit a hetGP model and visualise it as above
 ```
 
-### Challenges
+# Challenges
 
-- Fit a GP Model for the location "SERC" i.e. `site_number = 7`. 
+Now it's your turn to try to fit a GP on your own. Here are some options:
 
-- Use an environmental predictor in your model. Following is a function `fx.green` that creates the variable given the `datetime` and the `location`.
+### Fit a GP Model for the location "SERC" i.e. `site_number = 7`. 
+
+### Use an environmental predictor in your model. Following is a function `fx.green` that creates the variable given the `datetime` and the `location`.
 
 Here is a snippet of the supporting file that you will use; You can look into the data.frame and try to plot `ker` for one site at a time and see what it yields. 
 
@@ -576,10 +586,11 @@ fx.green <- function(datetime, site, site_info = df_green){
 }
 ```
 
-- Fit a GP Model for all the locations (*More advanced*).
+### Fit a GP Model for all the locations (*More advanced*).
 
 Hint: Write a *function* that can fit a GP and make predictions. Then, write a *for loop* where you subset the data for each location and then call the function to fit the GP.
 
 <!-- Change colors on plots -->
 
 <!-- \link{https://projects.ecoforecast.org/neon4cast-docs/Ticks.htmls} -->
+
