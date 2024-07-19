@@ -1,0 +1,649 @@
+---
+title: "Gaussian Processes"
+format: revealjs
+editor: visual
+fontsize: 20pt
+html-math-method: katex
+---
+
+## Gaussian Process: Introduction
+
+. . .
+
+-   A Gaussian Process model is a non paramteric and flexible regression model
+
+-   It started being used in the field of spatial statistics, where it is called *kriging*.
+
+-   It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a **surrogate model**.
+
+. . .
+
+**Surrogate Models**: Imagine a case where field experiments are infeasible and computer experiments take a long time to run, we can approximate the computer experiments using a surrogate model.
+
+-   The ability to this model to provide good UQ makes it very useful in other fields such as ecology where the data is sparse and noisy and therefore good uncertainty measures are paramount.
+
+## What is a GP?
+
+. . .
+
+-   Here, we assume that the data come from a Multivariate Normal Distribution (MVN).
+
+-   Any normal distribution can be described by a mean vector $\mu$ and a covariance matrix $\Sigma$.
+
+-   We then make predictions conditional on the data.
+
+. . .
+
+-   Mathematically, we can write it as,
+
+$$Y_{\ n \times 1} \sim N \ ( \ \mu(X)_{\ n \times 1} \ , \ \Sigma(X)_{ \ n \times n} \ )$$ Here, $Y$ is the response of interest and $n$ is the number of observations.
+
+. . .
+
+-   Our goal is to find $Y_p \ \vert \ Y, X$ which will also be a Normal distribution.
+
+-   To understand how it works, let's first visualize this concept and then look into the math
+
+## Visualizing a GP
+
+. . .
+
+```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+
+library(mvtnorm)
+library(laGP)
+library(ggplot2)
+library(plgp)
+
+n <- 8 
+X <- matrix(seq(0, 2*pi, length= n), ncol=1) 
+y <- 5*sin(X)
+
+XX <- matrix(seq(-0.5, 2*pi + 0.5, length= 100), ncol=1)
+# Fitting GP 
+gpi <- newGP(X,y,d = 1,g = sqrt(.Machine$double.eps),dK = TRUE)
+yy <- predGP(gpi,XX)
+
+YY <- rmvnorm (100, yy$mean, yy$Sigma)
+q1 <- yy$mean + qnorm(0.05, 0, sqrt(diag(yy$Sigma))) 
+q2 <- yy$mean + qnorm(0.95, 0, sqrt(diag(yy$Sigma))) 
+
+df <- data.frame(
+  XX = rep(XX, each = 100),
+  YY = as.vector(YY),
+  Line = factor(rep(1:100, 100))
+)
+
+ggplot() +
+  geom_line(aes(x = df$XX, y = df$YY, group = df$Line), color = "darkgray", alpha = 0.5,
+            linewidth =1.5) +
+  geom_point(aes(x = X, y = y), shape = 20, size = 10, color = "darkblue") +
+  geom_line(aes(x = XX, y = yy$mean), size = 1, linewidth =3) +
+  geom_line(aes(x = XX, y = 5*sin(XX)), color = "blue", linewidth =3, alpha = 0.8) +
+  geom_line(aes(x = XX, y = q1), linetype = "dashed", color = "red", size = 1,
+            alpha = 0.7,linewidth =2) +
+  geom_line(aes(x = XX, y = q2), linetype = "dashed", color = "red", size = 1,
+            alpha = 0.7,linewidth =2) +
+  labs(x = "x", y = "y") +
+  theme_minimal() + 
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 25, face = "bold"),
+    axis.text.y = element_text(size = 25, face = "bold"),
+    axis.title.y = element_text(margin = margin(r = 10), size = 20, face = "bold"),
+    axis.title.x = element_text(margin = margin(r = 10), size = 20, face = "bold"),
+    panel.grid.major = element_line(color = "lightgrey", linewidth =2, linetype = 2),
+    panel.background = element_rect(fill = "white"),
+    strip.background = element_rect(fill = "gray", color = "gray"),
+    strip.text = element_text(color = "black")) +
+  guides(color = "none")
+```
+
+. . .
+
+-   We are using points closer to each other to correlate the responses.
+
+-   While making predictions, we average over the data around the points.
+
+<!-- Put a plot and mention we are averaging data nearby -->
+
+## How does a GP work
+
+. . .
+
+-   As we saw, we are averaging the data "nearby"... How do you define that?
+
+. . .
+
+-   This indicates that we are using **distance** in some way. Where...?
+
+. . .
+
+-   Recall that in Linear Regression, you have $\ \Sigma \  = \sigma^2 \mathbb{I}$
+
+-   For a GP, the cavariance matrix ( \$ \Sigma \$ ) is defined by a kernel.
+
+-   Consider,
+
+\$\Sigma\_n = \tau\^2  C_n  \$;    \$C_n = \exp \left( - \vert \vert x - x' \vert \vert\^2 \right) \$, where $x$ and $x'$ are input locations.
+
+. . .
+
+-   The covariance structure now depends on how close together the inputs. If inputs are close in distance, then the responses are more highly correlated.
+
+-   The covariance will decay at an exponential rate as $x$ moves away from $x'$.
+
+## How to make predictions
+
+. . .
+
+-   Now we will learn how to use a GP to make predictions at new locations.
+
+-   As we learnt, we condition on the data. We can think of this as the prior.
+
+```{=tex}
+\begin{equation}
+Y_n \ \vert X_n \sim \mathcal{N} \ ( \ 0 \ , \ \tau^2 \ C_n(X)  \ ) \\ 
+\end{equation}
+```
+. . .
+
+Now, consider, $(\mathcal{X}, \mathcal{Y})$ as the predictive set.
+
+-   The goal is to find the distribution of $\mathcal{Y} \ \vert X_n, Y_n$ which in this case is the posterior distribution.
+
+-   By properties of Normal distribution, the posterior is also normally distributed.
+
+. . .
+
+We also need to write down the mean and variance of the posterior distribution so it's ready for use.
+
+## How to make predictions
+
+. . .
+
+-   First we will "stack" the predictions and the data.
+
+```{=tex}
+\begin{equation}
+\begin{bmatrix} 
+\mathcal{Y} \\ 
+Y_n \\ 
+\end{bmatrix}
+\ \sim \ \mathcal{N}
+\left(
+\;
+\begin{bmatrix} 
+0 \\ 
+0 \\ 
+\end{bmatrix}\; , \;
+\begin{bmatrix}
+\Sigma(\mathcal{X}, \mathcal{X}) & \Sigma(\mathcal{X}, X_n)\\
+\Sigma({X_n, \mathcal{X}}) &  \Sigma_n\\ 
+\end{bmatrix}
+\;
+\right)
+\\[5pt]
+\end{equation}
+```
+. . .
+
+-   Now, let's denote the predictive mean with $\mu(\mathcal{X})$ and predictive variance with $\sigma^2(\mathcal{X})$
+
+```{=tex}
+\begin{equation}
+\mathcal{Y} \mid Y_n, X_n \sim N\left(\mu(\mathcal{X}) \ , \ \sigma^2(\mathcal{X})\right)
+\end{equation}
+```
+. . .
+
+-   We will apply the properties of conditional Normal distributions.
+
+```{=tex}
+\begin{equation}
+\begin{aligned}
+\mu(\mathcal{X}) & = \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} Y_n \\
+\sigma^2(\mathcal{X}) & = \Sigma(\mathcal{X}, \mathcal{X}) - \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} \Sigma(X_n, \mathcal{X}) \\
+\end{aligned}
+\end{equation}
+```
+## Hyper Parameters
+
+. . .
+
+-   A GP is *non parameteric*, however, has some hyper-parameters as is the case with any Bayesian setup.
+
+One of the most common kernels which we will focus on is the squared exponential distance kernel written as
+
+$$C_n = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + g \mathbb{I_n}} $$
+
+. . .
+
+Recall, $$\Sigma_n = \tau^2 C_n$$
+
+We have three main parameters here:
+
+-   $\tau^2$: Scale
+
+-   $\theta$: Length-scale
+
+-   $g$: Nugget
+
+## Scale
+
+. . .
+
+-   This parameter can be used to adjust the amplitude of the data.
+
+-   A random draw from a multivariate normal distribution with $\tau^2$ = 1 will produce data between -2 and 2.
+
+. . .
+
+-   Now let's visualize what happens when we increase $\tau^2$ to 25.
+
+```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+
+set.seed(24)
+n <- 100
+X <- as.matrix(seq(0, 20, length.out = n))
+Dx <- laGP::distance(X)
+
+g <- sqrt(.Machine$double.eps)
+Cn <- (exp(-Dx) + diag(g, n))
+
+Y <- rmvnorm(1, sigma = Cn)
+
+set.seed(28)
+tau2 <- 25
+Y_scaled <- rmvnorm(1, sigma = tau2 * Cn)
+
+par(mfrow = c(1, 2), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+
+# Plot 1
+matplot(X, t(Y), type = 'l', main = expression(paste(tau^2, " = 1")), 
+        ylab = "Y", xlab = "X", lwd = 2, col = "blue")
+
+# Plot 2
+matplot(X, t(Y_scaled), type = 'l', main = expression(paste(tau^2, " = 25")), 
+        ylab = "Y", xlab = "X", lwd = 2, col = "red")
+```
+
+## Length-scale
+
+. . .
+
+-   This parameter controls the rate of decay of correlation.
+
+-   Larger $\theta$ will result in wigglier functions.
+
+. . .
+
+Let's also visualize different values of $\theta$.
+
+```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+library(mvtnorm)
+library(laGP)
+
+set.seed(1)
+n <- 100
+X <- as.matrix(seq(0, 10, length.out = n))
+Dx <- laGP::distance(X)
+
+g <- sqrt(.Machine$double.eps)
+theta1 <- 0.5
+Cn <- (exp(-Dx/theta1) + diag(g, n))
+
+Y <- rmvnorm(1, sigma = Cn)
+
+theta2 <- 5
+Cn <- (exp(-Dx/theta2) + diag(g, n))
+
+Y2 <- rmvnorm(1, sigma = Cn)
+
+par(mfrow = c(1, 2), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+matplot(X, t(Y), type= 'l', main = expression(paste(theta, " = 0.5")),
+     ylab = "Y", ylim = c(-2.2, 2.2), lwd = 2, col = "blue")
+matplot(X, t(Y2), type= 'l',  main = expression(paste(theta, " = 5")),
+     ylab = "Y", ylim = c(-2.2, 2.2), lwd = 2, col = "red")
+
+```
+
+## Nugget
+
+. . .
+
+-   It is responsible for introducing noise into the covariance structure so there is some discontinuity in the data.
+
+-   We will compare a sample from g \~ 0 (\< 1e-8 for numeric stability) vs g = 0.1 to observe what actually happens.
+
+. . .
+
+```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+library(mvtnorm)
+library(laGP)
+
+n <- 100
+X <- as.matrix(seq(0, 10, length.out = n))
+Dx <- laGP::distance(X)
+
+g <- sqrt(.Machine$double.eps)
+Cn <- (exp(-Dx) + diag(g, n))
+Y <- rmvnorm(1, sigma = Cn)
+
+Cn <- (exp(-Dx) + diag(1e-2, n))
+
+L <- rmvnorm(1, sigma = diag(1e-2, n))
+Y2 <- Y + L
+
+par(mfrow = c(1, 2), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+plot(X, t(Y), main = expression(paste(g, " < 1e-8")),
+     ylab = "Y", xlab = "X", pch = 19, cex = 1.5, col = 1)
+lines(X, t(Y), col = "blue", lwd = 3) 
+
+plot(X, t(Y2), main = expression(paste(g, " = 0.01")),
+     ylab = "Y", xlab = "X", pch = 19, cex = 1.5, col = 1)
+lines(X, t(Y), col = "blue", lwd = 3)
+```
+
+-   This parameter prevents interpolation which in turn yields better UQ.
+
+## Toy Example (1D Example)
+
+. . .
+
+<!-- (Code for fitting a 1D GP to show what it does exactly) - using laGP.. -->
+
+```{r, echo = T, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+
+X <- matrix(seq(0, 2*pi, length = 100), ncol =1)
+n <- nrow(X) 
+true_y <- 5 * sin(X)
+obs_y <- true_y + rnorm(n, sd=1)
+
+par(mfrow = c(1, 1), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+plot(X, obs_y, ylim = c(-10, 10), main = "GP fit", xlab = "X", ylab = "Y",
+     cex = 1.5, pch = 16)
+lines(X, true_y, col = 2, lwd = 3)
+
+```
+
+## Toy Example (1D Example)
+
+. . .
+
+```{r, echo = T, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+
+eps <- sqrt(.Machine$double.eps)
+gpi <- laGP::newGP(X = X,Z = obs_y, d = 0.1, g = 0.1 * var(obs_y), dK = TRUE) 
+mle <- laGP::mleGP(gpi = gpi, param = c("d", "g"), tmin= c(eps, eps), tmax= c(10, var(obs_y))) 
+
+XX <- matrix(seq(0, 2*pi, length = 1000), ncol =1)
+p <- laGP::predGP(gpi = gpi, XX = XX)
+```
+
+. . .
+
+```{r, echo = F, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+mean_gp <- p$mean
+s2_gp <- diag(p$Sigma)
+
+par(mfrow = c(1, 1), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+plot(X, obs_y, ylim = c(-10, 10), main = "GP fit", xlab = "X", ylab = "Y",
+     cex = 1.5, pch = 16)
+lines(X, true_y, col = 2, lwd = 3)
+lines(XX, mean_gp, col = 4, lwd =3)
+lines(XX, mean_gp - 2 * sqrt(s2_gp), col = 4, lty = 2, lwd = 3)
+lines(XX, mean_gp + 2 * sqrt(s2_gp), col = 4, lty = 2, lwd = 3)
+```
+
+## Anisotropic Gaussian Processes
+
+Suppose our data is multi-dimensional, we can control the length-scale ($\theta$) for each dimension.
+
+In this situation, we can rewrite the $C_n$ matrix as,
+
+$$C_\theta(x , x') = \exp{ \left( -\sum_{k=1}^{m} \frac{ (x_k - x_k')^2 }{\theta_k} \right ) + g \mathbb{I_n}}$$
+
+Here, $\theta$ = ($\theta_1$, $\theta_2$, ..., $\theta_m$) is a vector of length-scales, where $m$ = dimension of the input space.
+
+-   We can adjust the decay of correlation per dimension.
+
+## Heteroskedastic Gaussian Processes
+
+. . .
+
+-   Heteroskedasticity implies that the data is noisy, and thee noise is irregular.
+
+```{r hetviz, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 6, fig.height= 4, fig.align="center", warn.conflicts = FALSE}
+
+library(plgp)
+
+Sigma.sep <- function(x, theta, lam= NULL){
+  
+  if(!is.matrix(x)) x <- matrix(x, ncol =1)
+  Sig <- covar.sep(x, d= theta, g= 0)
+  
+  if(is.null(lam)) diag(Sig) <- diag(Sig) + 1e-5
+  else diag(Sig) <- diag(Sig) + lam
+  
+  return(Sig)
+}
+
+SigCross.sep <- function(x, x2 = NULL, theta, lam = NULL){
+  Sigma <- covar.sep(x, x2, d= theta, g = 0)
+}
+
+tau2 <- 10
+theta.y <- c(0.1)
+theta.lam <- c(0.5)
+g <- 0.01
+
+tau2.lam <- 1
+len = 100
+
+set.seed(1)
+lam <- rep(g, len)
+X <- Xlam <- as.matrix(seq(0, 1, length =len))
+X <- as.matrix(X)
+nx = nrow(X)
+
+px <- matrix(c(0.4, 0.8))
+py <- c(-2, 2)
+condMu <- SigCross.sep(x= Xlam ,x2= px, theta =theta.lam) %*% 
+  solve(Sigma.sep(x = px, theta =theta.lam)) %*% py
+condSig <- Sigma.sep(x=Xlam, theta =theta.lam) - 
+  SigCross.sep(x = Xlam, x2= px, theta =theta.lam) %*%
+  solve(Sigma.sep( x=px, theta =theta.lam)) %*% 
+  SigCross.sep(x = px, x2 = Xlam, theta =theta.lam)
+
+llam <- sqrt(tau2.lam) * drop(rmvnorm(1,mean = condMu, sigma= condSig))
+lam <- exp(llam)
+
+Kxy <- Sigma.sep(x = X, theta = theta.y)
+Fn <- sqrt(tau2) * drop(rmvnorm(1, sigma=Kxy))
+
+L <- as.vector(rmvnorm(1, sigma=diag(lam)))
+
+YNr <- Fn  + sqrt(tau2) * L
+
+par(mfrow = c(1, 1), mar = c(4, 4, 3, 2), cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.3, font.lab = 1.2)
+
+plot(X, YNr, col =1, ylim = c(-20, 20), cex = 1.3, pch = 16, ylab = "Y", main = "Heteroskedastic Data")
+lines(X, Fn, lwd = 2, col = 2)
+abline(v = 0.4, lwd = 3, col = 3)
+```
+
+. . .
+
+-   A Heteroskedastic Gaussian Process (hetGP) is used when the data is **noisy**.
+
+-   Noise is usually **input dependent** and may vary with one or more predictors
+
+## HetGP Setup
+
+. . .
+
+Let $Y_n$ be the response vector of size n. Let $X = (X_1, X_2 ... X_n)$ be the input space.
+
+Then, a regular GP is written as:
+
+$$
+\begin{align*} 
+Y_N \ & \ \sim GP \left( 0 \ , \tau^2 C_n  \right); \ \text{where, }\\[2pt]
+C_n  & \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + g \mathbb{I_n}} 
+\end{align*}
+$$
+
+. . .
+
+In case of a hetGP, we have:
+
+$$
+\begin{aligned} 
+Y_n\ & \ \sim GP \left( 0 \ , \tau^2 C_{n, \Lambda}  \right) \ \ \text{where, }\\[2pt]
+C_{n, \Lambda}  & \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + \Lambda_n} \ \ \ \text{and, }\ \\[2pt]
+\ \ \Lambda_n \  & \ = \ \text{Diag}(\lambda_1, \lambda_2 ... , \lambda_n) \\[2pt]
+\end{aligned} 
+$$
+
+-   Instead of one nugget for the GP, we have a **vector of nuggets** i.e. a unique nugget for each unique input.
+
+. . .
+
+<!-- \text{log} \ \lambda \ & \ \sim \ GP \left( 0 \ , \ K_{\theta_\lambda} (X_N) \right) \\[2pt] -->
+
+We can make predictions exactly as seen in case of a GP in Equation(4) with $$
+\begin{aligned}
+\Sigma(X) \ & \ = \nu \left( \ K_{\theta_Y}(X) + \Lambda_N(X) \  \right) \\[2pt]
+\end{aligned}
+$$
+
+## Toy Example (1D Example)
+
+. . .
+
+```{r fit, include = TRUE, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE}
+library(mvtnorm)
+library(laGP)
+library(hetGP)
+
+Sigma <- function(x, theta= theta_lam, lam= NULL){
+  D <- distance(x)
+  if(is.null(lam)) Sigma <- exp(-D/theta) + diag(1e-5,length(x))
+  else Sigma <- exp(-D/theta) + diag(lam)
+  return(Sigma)
+}
+
+SigCross <- function(x, x2 = NULL, theta = theta_lam, lam = NULL){
+  # if(is.null(x2)) D <- distance(x)
+  # else D <- distance(x,x2)
+  D <- distance(x, x2)
+  if (is.null(lam)) Sigma <- exp(-D/theta)
+  else Sigma <- exp(-D/theta) + diag(lam)
+  
+  return(Sigma)
+}
+
+set.seed(212)
+tau2 <- 10
+theta_y <- 0.1
+theta_lam <- 0.5
+
+X <- seq(0,1,length=100)
+px <- c(runif(1,0,0.3),runif(1,0.7,1))
+py <- c(-2, 2)
+condMu <- SigCross(x= X ,x2= px) %*% solve(Sigma(x = px)) %*% py
+condSig <- Sigma(x=X) - SigCross(x = X, x2= px) %*% solve(Sigma(x=px)) %*% SigCross(x = px,x2 = X)
+
+llam <- drop(rmvnorm(1,mean = condMu, sigma= condSig))
+lam <- exp(llam)
+
+Kxy <- Sigma(x = X, theta = theta_y)
+Fn <- sqrt(tau2) * drop(rmvnorm(1,sigma=Kxy))
+
+L <- drop(rmvnorm(1, sigma = diag(lam)))
+Y <- Fn + sqrt(tau2) * L
+
+input <- X
+output <- Y
+true_fn <- Fn
+
+xp <- seq(0,1,length = 1000)
+
+homgp <- mleHomGP(X, Y, known = list(theta = theta_y, g = 1e-5))
+p_hom <- predict(x = as.matrix(xp), object =  homgp)
+
+mean_gp <- p_hom$mean
+s2_gp <- p_hom$sd2 + p_hom$nugs
+
+hetgp <- mleHetGP(X, Y, known = list(theta = theta_y))
+p_het <- predict(x = as.matrix(xp), object =  hetgp)
+
+mean <-  p_het$mean
+s2 <-  p_het$sd2 + p_het$nugs
+```
+
+```{r data,  include = TRUE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width=8, fig.height=6, fig.align="center", warn.conflicts = FALSE}
+par(mfrow = c(1, 1), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+plot(input, output, ylim = c(-25,25), main = "Data", xlab = "X", ylab = "Y",
+     cex = 1.5, pch = 16)
+lines(input, true_fn, col = 2, lwd = 3)
+```
+
+## Toy Example (1D Example)
+
+. . .
+
+```{r dataviz,  include = TRUE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width=8, fig.height=6, fig.align="center", warn.conflicts = FALSE}
+
+par(mfrow = c(1, 1), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+plot(input, output, ylim = c(-25,25), main = "GP fit", xlab = "X", ylab = "Y",
+     cex = 1.5, pch = 16)
+lines(input, true_fn, col = 2, lwd = 3)
+lines(xp, mean_gp, col = 4, lwd =3)
+lines(xp, mean_gp - 2 * sqrt(s2_gp), col = 4, lty = 2, lwd = 3)
+lines(xp, mean_gp + 2 * sqrt(s2_gp), col = 4, lty = 2, lwd = 3)
+```
+
+## Toy Example (1D Example)
+
+. . .
+
+```{r dataviz2,  include = TRUE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width=8, fig.height=6, fig.align="center", warn.conflicts = FALSE}
+
+par(mfrow = c(1, 1), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
+
+plot(input, output, ylim = c(-25,25),main = "HetGP fit",  xlab = "X", ylab = "Y",
+     cex = 1.5, pch = 16)
+lines(input, true_fn, col = 2, lwd = 3)
+lines(xp, mean, col = 4, lwd = 3)
+lines(xp, mean - 2 * sqrt(s2), col = 4, lty = 2, lwd = 3)
+lines(xp, mean + 2 * sqrt(s2), col = 4, lty = 2, lwd = 3)
+```
+
+## Intro to Ticks Problem
+
+-   EFI-RCN held an ecological forecasting challenge
+
+-   We focus on the Tick Populations theme which studies the abundance of the lone star tick (*Amblyomma americanum*)
+
+Some details about the challenge:
+
+-   **Objective**: Forecast tick density for 4 weeks into the future
+
+-   **Sites**: The data is collected across 9 different sites, each plot was of size 1600$m^2$ using a drag cloth
+
+-   **Data**: Sparse and irregularly spaced. We only have \~650 observations across 10 years at 9 locations
+
+## Predictors
+
+-   $X_1$ Iso-week: The week in which the tick density was recorded.
+
+-   $X_2$ Sine wave: $\left( \text{sin} \ ( \frac{2 \ \pi \ X_1}{106} ) \right)^2$.
+
+## Practical
+
+-   Setup these predictors
+-   Transform the data to normal
+-   Fit a GP to the Data
+-   Make Predictions on a testing set
+-   Check how predictions perform.
