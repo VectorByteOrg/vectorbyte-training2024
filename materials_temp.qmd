@@ -81,5 +81,6 @@ We are assuming familiarity with R basics as well as at least introductory stati
 -   [Lecture Slides](GP.qmd)
 -   [Lecture Notes](GP_Notes.qmd)
 -   [Practical](GP_Practical.qmd)
+-   [additional R code -- df_spline.R](code/df_spline.R)
 
 <br> <br>

@@ -200,7 +200,7 @@
     "href": "materials_temp.html#gaussian-process-models-gps-for-time-dependent-data",
     "title": "VectorByte Training Materials 2024",
     "section": "Gaussian Process models (GPs) for Time Dependent Data",
-    "text": "Gaussian Process models (GPs) for Time Dependent Data\n\nLecture Slides\nLecture Notes\nPractical"
+    "text": "Gaussian Process models (GPs) for Time Dependent Data\n\nLecture Slides\nLecture Notes\nPractical\nadditional R code – df_spline.R"
   },
   {
     "objectID": "index.html",
