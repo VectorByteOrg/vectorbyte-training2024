@@ -120,7 +120,7 @@ $\Sigma_{X_1 \vert X_2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1} \Sigma_{21}$
 
 Now, let's look at this in our context.
 
-Suppose we have, $D_n = (X_n, Y_n)$ where $Y_n \sim N \ ( \ 0 \ , \ \Sigma_n \ )$. Now, for a new location $x_p$, we need to find the distribution of$Y(x_p)$.
+Suppose we have, $D_n = (X_n, Y_n)$ where $Y_n \sim N \ ( \ 0 \ , \ \Sigma_n \ )$. Now, for a new location $x_p$, we need to find the distribution of $Y(x_p)$.
 
 We want to find the distribution of $Y(x_p) \ \vert \ D_n$. Using the information from above, we know this is normally distributed and we need to identify then mean and variance. Thus, we have
 

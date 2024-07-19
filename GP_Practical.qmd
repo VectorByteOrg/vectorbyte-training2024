@@ -170,11 +170,10 @@ head(target)
 \begin{equation}
 \begin{aligned}
 f(y) \ & = \text{log } \ (y + 1) \ \ ; \ \ \ \\[2pt]
-<!-- \ & = \sqrt{y} \ \ \ \; \ \ \ otherwise -->
 \end{aligned}
 \end{equation}
 
-We pass in ($response$ + 1) into this function to ensure we don';t take a log of 0. We will adjust this in our back transform. 
+We pass in (`response` + 1) into this function to ensure we don't take a log of 0. We will adjust this in our back transform. 
 
 Let's write a function for this, as well as the inverse of the transform.
 
@@ -380,7 +379,7 @@ Now, we will create a grid from the first week in our dataset to 1 year into the
 startdate <- as.Date(min(df$datetime))# identify start week
 grid_datetime <- seq.Date(startdate, Sys.Date() + 365, by = 7) # create sequence from 
 
-# Build the inpu space for the predictive space (All weeks from 04-2014 to 07-2025)
+# Build the input space for the predictive space (All weeks from 04-2014 to 07-2025)
 XXt1 <- fx.iso_week(grid_datetime)
 XXt2 <- fx.sin(grid_datetime)
 

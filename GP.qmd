@@ -212,6 +212,7 @@ Y_n \\
 \end{aligned}
 \end{equation}
 ```
+
 ## Hyper Parameters
 
 . . .
@@ -222,11 +223,9 @@ One of the most common kernels which we will focus on is the squared exponential
 
 $$C_n = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + g \mathbb{I_n}} $$
 
-. . .
-
-Recall, $$\Sigma_n = \tau^2 C_n$$
-
-We have three main parameters here:
+. . . 
+ 
+Recall, $\Sigma_n = \tau^2 C_n$. We have three main parameters here:
 
 -   $\tau^2$: Scale
 
@@ -417,7 +416,7 @@ Here, $\theta$ = ($\theta_1$, $\theta_2$, ..., $\theta_m$) is a vector of length
 
 . . .
 
--   Heteroskedasticity implies that the data is noisy, and thee noise is irregular.
+-   Heteroskedasticity implies that the data is noisy, and the noise is irregular.
 
 ```{r hetviz, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 6, fig.height= 4, fig.align="center", warn.conflicts = FALSE}
 
