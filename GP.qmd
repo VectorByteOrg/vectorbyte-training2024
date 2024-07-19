@@ -510,17 +510,23 @@ C_{n, \Lambda}  & \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\the
 \end{aligned} 
 $$
 
--   Instead of one nugget for the GP, we have a **vector of nuggets** i.e. a unique nugget for each unique input.
+## HetGP Predictions
 
-. . .
+-   Instead of one nugget for the GP, we have a **vector of nuggets** i.e. a unique nugget for each unique input. 
 
-<!-- \text{log} \ \lambda \ & \ \sim \ GP \left( 0 \ , \ K_{\theta_\lambda} (X_N) \right) \\[2pt] -->
+- Recall, for a GP, we make predictions using the following:
 
-We can make predictions exactly as seen in case of a GP in Equation(4) with $$
+```{=tex}
+\begin{equation*}
 \begin{aligned}
-\Sigma(X) \ & \ = \nu \left( \ K_{\theta_Y}(X) + \Lambda_N(X) \  \right) \\[2pt]
+\mu(\mathcal{X}) & = \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} Y_n \\
+\sigma^2(\mathcal{X}) & = \Sigma(\mathcal{X}, \mathcal{X}) - \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} \Sigma(X_n, \mathcal{X}) \\
 \end{aligned}
-$$
+\end{equation*}
+```
+
+- We can make predictions using these same equations with 
+$$\Sigma(X_n) \ \ = \tau^2 C_{n, \Lambda}$$
 
 ## Toy Example (1D Example)
 
