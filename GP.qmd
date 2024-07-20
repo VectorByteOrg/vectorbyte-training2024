@@ -8,7 +8,6 @@ title-slide-attributes:
   data-background-size: contain
   data-background-opacity: "0.2"
 format: revealjs
-fontsize: 22pt
 html-math-method: katex
 ---
 
@@ -22,11 +21,16 @@ html-math-method: katex
 
 -   It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a **surrogate model**.
 
+## Uses and Benefits
+
 . . .
 
-**Surrogate Models**: Imagine a case where field experiments are infeasible and computer experiments take a long time to run, we can approximate the computer experiments using a surrogate model.
+-   **Surrogate Models**: Imagine a case where field experiments are infeasible and computer experiments take a long time to run, we can approximate the computer experiments using a surrogate model.
+
+-   It can be used to calibrate computer models w.r.t the field observations or computer simulations.
 
 -   The ability to this model to provide good UQ makes it very useful in other fields such as ecology where the data is sparse and noisy and therefore good uncertainty measures are paramount.
+
 
 ## What is a GP?
 
@@ -34,27 +38,20 @@ html-math-method: katex
 
 -   Here, we assume that the data come from a Multivariate Normal Distribution (MVN).
 
--   Any normal distribution can be described by a mean vector $\mu$ and a covariance matrix $\Sigma$.
-
 -   We then make predictions conditional on the data.
 
 . . .
 
--   Mathematically, we can write it as,
-
-$$Y_{\ n \times 1} \sim N \ ( \ \mu(X)_{\ n \times 1} \ , \ \Sigma(X)_{ \ n \times n} \ )$$ Here, $Y$ is the response of interest and $n$ is the number of observations.
-
-. . .
-
--   Our goal is to find $Y_p \ \vert \ Y, X$ which will also be a Normal distribution.
+-   We are essentially taking a "fancy" average of the data to make predictions
 
 -   To understand how it works, let's first visualize this concept and then look into the math
+
 
 ## Visualizing a GP
 
 . . .
 
-```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
 
 library(mvtnorm)
 library(laGP)
@@ -104,27 +101,45 @@ ggplot() +
   guides(color = "none")
 ```
 
-. . .
-
--   We are using points closer to each other to correlate the responses.
-
--   While making predictions, we average over the data around the points.
-
-<!-- Put a plot and mention we are averaging data nearby -->
-
 ## How does a GP work
 
 . . .
 
--   As we saw, we are averaging the data "nearby"... How do you define that?
+-   Our "fancy" average was just using data around the new location.
+
+-   We are using points closer to each other to correlate the responses.
+
+-   Now we know, we are averaging the data "nearby"... How do you define that?
 
 . . .
 
--   This indicates that we are using **distance** in some way. Where...?
+-   This indicates that we are using **distance** in some way. Where...? We need some math
+
+
+## Mathematically
+
+. . .
+
+
+-   Any normal distribution can be described by a mean vector $\mu$ and a covariance matrix $\Sigma$.
+
+
+-   Mathematically, we can write it as,
+
+$$Y_{\ n \times 1} \sim N \ ( \ \mu(X)_{\ n \times 1} \ , \ \Sigma(X)_{ \ n \times n} \ )$$ Here, $Y$ is the response of interest and $n$ is the number of observations.
+
+-   Our goal is to find $Y_p \ \vert \ Y, X$.
+
+
+<!-- Put a plot and mention we are averaging data nearby -->
+
+## Distance
 
 . . .
 
 -   Recall that in Linear Regression, you have $\ \Sigma \  = \sigma^2 \mathbb{I}$
+
+. . .
 
 -   For a GP, the covariance matrix ( $\Sigma$ ) is defined by a kernel.
 
@@ -134,11 +149,17 @@ $\Sigma_n = \tau^2 C_n$ where $C_n = \exp \left( - \vert \vert x - x' \vert \ver
 
 . . .
 
+## Interpretation of the kernel
+
+. . .
+
+-   $C_n = \exp \left( - \vert \vert x - x' \vert \vert^2 \right)$
+
 -   The covariance structure now depends on how close together the inputs. If inputs are close in distance, then the responses are more highly correlated.
 
 -   The covariance will decay at an exponential rate as $x$ moves away from $x'$.
 
-## How to make predictions
+## Summarizing our data
 
 . . .
 
@@ -148,12 +169,17 @@ $\Sigma_n = \tau^2 C_n$ where $C_n = \exp \left( - \vert \vert x - x' \vert \ver
 
 ```{=tex}
 \begin{equation}
-Y_n \ \vert X_n \sim \mathcal{N} \ ( \ 0 \ , \ \tau^2 \ C_n(X)  \ ) \\ 
+Y_n \ \vert X_n \sim \mathcal{N} \ ( \ 0 \ , \ \tau^2 \ C_n(X_n)  \ ) \\ 
 \end{equation}
 ```
+
 . . .
 
 Now, consider, $(\mathcal{X}, \mathcal{Y})$ as the predictive set.
+
+## How to make predictions
+
+. . .
 
 -   The goal is to find the distribution of $\mathcal{Y} \ \vert X_n, Y_n$ which in this case is the posterior distribution.
 
@@ -170,7 +196,7 @@ We also need to write down the mean and variance of the posterior distribution s
 -   First we will "stack" the predictions and the data.
 
 ```{=tex}
-\begin{equation}
+\begin{equation*}
 \begin{bmatrix} 
 \mathcal{Y} \\ 
 Y_n \\ 
@@ -189,7 +215,7 @@ Y_n \\
 \;
 \right)
 \\[5pt]
-\end{equation}
+\end{equation*}
 ```
 . . .
 
@@ -197,53 +223,70 @@ Y_n \\
 
 ```{=tex}
 \begin{equation}
+\begin{aligned}
 \mathcal{Y} \mid Y_n, X_n \sim N\left(\mu(\mathcal{X}) \ , \ \sigma^2(\mathcal{X})\right)
+\end{aligned}
 \end{equation}
 ```
+
+
+## Distribution of Interest!
+
 . . .
 
 -   We will apply the properties of conditional Normal distributions.
 
 ```{=tex}
-\begin{equation}
+\begin{equation*}
 \begin{aligned}
-\mu(\mathcal{X}) & = \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} Y_n \\
+\mu(\mathcal{X}) & = \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} Y_n \\[10pt]  
 \sigma^2(\mathcal{X}) & = \Sigma(\mathcal{X}, \mathcal{X}) - \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} \Sigma(X_n, \mathcal{X}) \\
 \end{aligned}
-\end{equation}
+\end{equation*}
 ```
+
+. . .
+
+-   Everything we do, relies on these equations. Now, let's learn more about $\Sigma$
+
+## Sigma Matrix
+
+. . . 
+
+-   $\Sigma_n = \tau^2 C_n$ where $C_n$ is our kernel.
+
+. . . 
+
+-   One of the most common kernels which we will focus on is the squared exponential distance kernel written as
+
+$$C_n = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + g \mathbb{I_n}} $$
+
+. . .
+
+-  What's $\tau^2$, $g$ and $\theta$ though? No more math. We will just conceptually go through these
+
 
 ## Hyper Parameters
 
 . . .
 
--   A GP is *non parameteric*, however, has some hyper-parameters as is the case with any Bayesian setup.
+A GP is *non parameteric*, however, has some hyper-parameters. In this case,
 
-One of the most common kernels which we will focus on is the squared exponential distance kernel written as
+-   $\tau^2$ (Scale): This parameter can be used to adjust the amplitude of the data.
 
-$$C_n = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + g \mathbb{I_n}} $$
+-   $\theta$ (Length-scale): This parameter controls the rate of decay of correlation.
 
-. . . 
- 
-Recall, $\Sigma_n = \tau^2 C_n$. We have three main parameters here:
+-   $g$ (Nugget): This parameter controls the noise in the covariance structure (adds discontinuity)
 
--   $\tau^2$: Scale
-
--   $\theta$: Length-scale
-
--   $g$: Nugget
-
-## Scale
+## Scale (Amplitude)
 
 . . .
-
--   This parameter can be used to adjust the amplitude of the data.
 
 -   A random draw from a multivariate normal distribution with $\tau^2$ = 1 will produce data between -2 and 2.
 
-. . .
-
 -   Now let's visualize what happens when we increase $\tau^2$ to 25.
+
+. . . 
 
 ```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 
@@ -272,17 +315,13 @@ matplot(X, t(Y_scaled), type = 'l', main = expression(paste(tau^2, " = 25")),
         ylab = "Y", xlab = "X", lwd = 2, col = "red")
 ```
 
-## Length-scale
+## Length-scale (Rate of decay of correlation)
+
+-   Determines how "wiggly" a function is
+
+-    Smaller $\theta$ means wigglier functions i.e. visually:
 
 . . .
-
--   This parameter controls the rate of decay of correlation.
-
--   Larger $\theta$ will result in wigglier functions.
-
-. . .
-
-Let's also visualize different values of $\theta$.
 
 ```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 library(mvtnorm)
@@ -312,15 +351,11 @@ matplot(X, t(Y2), type= 'l',  main = expression(paste(theta, " = 5")),
 
 ```
 
-## Nugget
+## Nugget (Noise)
 
-. . .
-
--   It is responsible for introducing noise into the covariance structure so there is some discontinuity in the data.
+-   Ensures discontinuity and prevents interpolation which in turn yields better UQ.
 
 -   We will compare a sample from g \~ 0 (\< 1e-8 for numeric stability) vs g = 0.1 to observe what actually happens.
-
-. . .
 
 ```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 library(mvtnorm)
@@ -349,8 +384,6 @@ plot(X, t(Y2), main = expression(paste(g, " = 0.01")),
 lines(X, t(Y), col = "blue", lwd = 3)
 ```
 
--   This parameter prevents interpolation which in turn yields better UQ.
-
 ## Toy Example (1D Example)
 
 . . .
@@ -363,6 +396,9 @@ X <- matrix(seq(0, 2*pi, length = 100), ncol =1)
 n <- nrow(X) 
 true_y <- 5 * sin(X)
 obs_y <- true_y + rnorm(n, sd=1)
+```
+
+```{r, echo = F, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 
 par(mfrow = c(1, 1), mar = c(5, 5, 4, 2), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
 plot(X, obs_y, ylim = c(-10, 10), main = "GP fit", xlab = "X", ylab = "Y",
@@ -379,8 +415,8 @@ lines(X, true_y, col = 2, lwd = 3)
 
 eps <- sqrt(.Machine$double.eps)
 gpi <- laGP::newGP(X = X,Z = obs_y, d = 0.1, g = 0.1 * var(obs_y), dK = TRUE) 
-mle <- laGP::mleGP(gpi = gpi, param = c("d", "g"), tmin= c(eps, eps), tmax= c(10, var(obs_y))) 
-
+mle <- laGP::mleGP(gpi = gpi, param = c("d", "g"), 
+                   tmin= c(eps, eps), tmax= c(10, var(obs_y))) 
 XX <- matrix(seq(0, 2*pi, length = 1000), ncol =1)
 p <- laGP::predGP(gpi = gpi, XX = XX)
 ```
@@ -400,25 +436,27 @@ lines(XX, mean_gp - 2 * sqrt(s2_gp), col = 4, lty = 2, lwd = 3)
 lines(XX, mean_gp + 2 * sqrt(s2_gp), col = 4, lty = 2, lwd = 3)
 ```
 
-## Anisotropic Gaussian Processes
+## Extentions
 
-Suppose our data is multi-dimensional, we can control the length-scale ($\theta$) for each dimension.
+-   **Anisotropic Gaussian Processes**: Suppose our data is multi-dimensional, we can control the **length-scale** ($\theta$) for each dimension.
+
+-   **Heteroskedastic Gaussian Processes**: Suppose our data is noisy and the noise is input dependent, then we can use a different **nugget** for each unique input rather than a scalar $g$. 
+
+## Anisotropic Gaussian Processes
 
 In this situation, we can rewrite the $C_n$ matrix as,
 
 $$C_\theta(x , x') = \exp{ \left( -\sum_{k=1}^{m} \frac{ (x_k - x_k')^2 }{\theta_k} \right ) + g \mathbb{I_n}}$$
 
-Here, $\theta$ = ($\theta_1$, $\theta_2$, ..., $\theta_m$) is a vector of length-scales, where $m$ = dimension of the input space.
-
--   We can adjust the decay of correlation per dimension.
+Here, $\theta$ = ($\theta_1$, $\theta_2$, ..., $\theta_m$) is a vector of length-scales, where $m$ is the dimension of the input space.
 
 ## Heteroskedastic Gaussian Processes
 
 . . .
 
--   Heteroskedasticity implies that the data is noisy, and the noise is irregular.
+-   Heteroskedasticity implies that the data is noisy, and the noise is input dependent and irregular.
 
-```{r hetviz, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 6, fig.height= 4, fig.align="center", warn.conflicts = FALSE}
+```{r hetviz, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 
 library(plgp)
 
@@ -477,17 +515,14 @@ lines(X, Fn, lwd = 2, col = 2)
 abline(v = 0.4, lwd = 3, col = 3)
 ```
 
-. . .
-
--   A Heteroskedastic Gaussian Process (hetGP) is used when the data is **noisy**.
-
--   Noise is usually **input dependent** and may vary with one or more predictors
 
 ## HetGP Setup
 
 . . .
 
-Let $Y_n$ be the response vector of size n. Let $X = (X_1, X_2 ... X_n)$ be the input space.
+- Let $Y_n$ be the response vector of size n. 
+
+- Let $X = (X_1, X_2 ... X_n)$ be the input space.
 
 Then, a regular GP is written as:
 
@@ -498,21 +533,22 @@ C_n  & \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right 
 \end{align*}
 $$
 
-. . .
+## HetGP Setup
 
 In case of a hetGP, we have:
 
 $$
 \begin{aligned} 
 Y_n\ & \ \sim GP \left( 0 \ , \tau^2 C_{n, \Lambda}  \right) \ \ \text{where, }\\[2pt]
-C_{n, \Lambda}  & \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + \Lambda_n} \ \ \ \text{and, }\ \\[2pt]
-\ \ \Lambda_n \  & \ = \ \text{Diag}(\lambda_1, \lambda_2 ... , \lambda_n) \\[2pt]
+C_{n, \Lambda}  & \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + \Lambda_n} \ \ \ \text{and, }\ \ \\[2pt]
+\ \ \Lambda_n \ & \ = \ \text{Diag}(\lambda_1, \lambda_2 ... , \lambda_n) \\[2pt]
 \end{aligned} 
 $$
 
-## HetGP Predictions
-
 -   Instead of one nugget for the GP, we have a **vector of nuggets** i.e. a unique nugget for each unique input. 
+
+
+## HetGP Predictions
 
 - Recall, for a GP, we make predictions using the following:
 
@@ -636,6 +672,8 @@ lines(xp, mean + 2 * sqrt(s2), col = 4, lty = 2, lwd = 3)
 -   EFI-RCN held an ecological forecasting challenge
 
 -   We focus on the Tick Populations theme which studies the abundance of the lone star tick (*Amblyomma americanum*)
+
+## Tick Population Forecasting
 
 Some details about the challenge:
 
