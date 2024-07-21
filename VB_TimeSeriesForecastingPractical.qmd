@@ -1,0 +1,874 @@
+---
+title: "VectorByte Methods Training: Introduction to Time Series Forecasting (practical)"
+author:
+  - name: Alicia Arneson 
+    affiliation: Virginia Tech and VectorByte
+citation: true
+date: 2024-07-01
+date-format: long
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(123)
+```
+
+<br>
+
+# Overview and Instructions
+
+The goals of this practical are to:
+
+1.  Practice setting up data for forecasting
+
+2.  Practice fitting time series models for forecasting
+
+3.  Practice generating forecasts for a given model and evaluating its performance
+
+4.  Learn aggressively.... See the forecasting challenge section below :)
+
+<br>
+
+This practical will take you through an example of modeling a terrestrial phenology (how much greenness can be observed from above) data set from NEON and generating forecasts from the best model. Then, we will have the world's smallest (and fastest) forecasting competition for you to practice your skills via trial by fire, because everyone learns best under pressure! :)
+
+# Defining the Goal
+
+#### Slide 4
+
+The first step of forecasting is to define the forecasting goal - why the heck are you about to spend several hours of your life gathering data and modeling it?? Also, once you know that - how are you going to do it?
+
+This process can sometimes take a really long time (even a year or more) for large forecasting projects. It often involves a team of people who have some kind of stake in the forecasting process or results.
+
+In our case, it will just take however much time you need to read the following sentence. The goals of our forecasting exercise are to (1) Practice the forecasting process and (2) Generate 30 day out forecasts for tree greenness using data provided by the NEON Forecasting Challenge and publicly available weather data.
+
+# Getting the Data and Pre-Processing
+
+#### Slide 5 & 7
+
+This data set originally required some cleaning and wrangling. The version you have [NEONphenologyClean.csv](data/NEONphenologyClean.csv) is ready to explore and model! However, the cleaning process is shown here in case you ever need to do something like this on your own. \*\*This section is optional to look through.\*\*
+
+*Note: there are more automated ways to pull weather data for your future forecasting for better reproducibility, but I ran out of time to make code like that for our use*.
+
+1.  The data set was compiled from two separate data sets: the phenology data set for the HARV site from the NEON website and publicly available weather data from a nearby airport retrieved from NOAA's website.
+
+    **NOAA Data:** phenologyWeather.csv (taken from: https://www.ncei.noaa.gov/cdo-web/)
+
+    **NEON Phenology Data:**
+
+    ```{r, eval = F}
+
+    library(tidyverse)
+
+    url <- "https://sdsc.osn.xsede.org/bio230014-bucket01/challenges/targets/project_id=neon4cast/duration=P1D/phenology-targets.csv.gz"
+
+    phenology_targets <- read_csv(url, show_col_types = FALSE)
+
+    phenology <- phenology_targets %>% filter(site_id == "HARV" & variable == "gcc_90")
+    ```
+
+2.  The NEON data set needed some imputation, which was done using a centered moving average approach. A nice package called `imputeTS` is available in R to do this kind of imputation quickly. The package contains several more advanced imputation methods as well, but we kept it straightforward for this.
+
+    ```{r, eval = F}
+
+library(imputeTS)
+
+phenology$update <- na_ma(phenology$observation, k = 6, weighting = "exponential", maxgap = Inf)
+
+phenology <- phenology %>% mutate(observation = coalesce(observation, update))
+
+    ```
+
+3.  The NOAA data needed to be summarized from hourly measurements to daily summaries and lagged predictors were added to the data set as well.
+
+```{r, eval = F}
+
+# Read it in from the file
+weather <- read.csv("data/phenologyWeather.csv")
+
+# Clean it up and add necessary variables
+weather$DATE<- ymd(weather$DATE)
+
+weather$iso_week <- isoweek(weather$DATE)
+weather$year <- year(weather$DATE)
+
+weather$iso_week <- as.factor(weather$iso_week)
+
+weather$year <- as.factor(weather$year)
+
+weather$HourlyDryBulbTemperature <- as.numeric(weather$HourlyDryBulbTemperature)
+
+weather$HourlyRelativeHumidity <- as.numeric(weather$HourlyRelativeHumidity)
+
+weather$HourlyPrecipitation <- as.numeric(weather$HourlyPrecipitation)
+
+weather$HourlyWindSpeed <- as.numeric(weather$HourlyWindSpeed)
+
+# Summarize the variables to a daily timescale to match the data set
+
+weatherSum <- weather %>% group_by(DATE) %>%
+  summarize(meanTemp = mean(HourlyDryBulbTemperature, 
+                            na.rm = T),
+            minTemp = min(HourlyDryBulbTemperature, 
+                          na.rm = T),
+            maxTemp = max(HourlyDryBulbTemperature, 
+                          na.rm = T),
+            meanRH = mean(HourlyRelativeHumidity, na.rm = T),
+            minRH = min(HourlyRelativeHumidity, na.rm = T),
+            maxRH = max(HourlyRelativeHumidity, na.rm = T),
+            totalPrecipitation = sum(HourlyPrecipitation,
+                                     na.rm = T),
+            meanWindSpeed = mean(HourlyWindSpeed, na.rm = T),
+            maxWindSpeed = max(HourlyWindSpeed, na.rm = T))
+
+## Add one day back lags (you would probably want some others, but we'll keep it simple). The "ungroup()" step here is crucial or the lags will be grouped by date, which makes no sense.
+
+    weatherSum <- weatherSum %>% ungroup() %>% 
+      mutate(meanTempLag1 = lag(meanTemp, 1),
+      minTempLag1 = lag(minTemp, 1),
+      maxTempLag1 = lag(maxTemp, 1),
+      meanRHLag1 = lag(meanRH, 1),
+      minRHLag1 = lag(minRH, 1),
+      maxRHLag1 = lag(maxRH, 1),
+      totalPrecipitationLag1 = lag(totalPrecipitation, 1),
+      meanWindSpeedLag1 = lag(meanWindSpeed, 1),
+      maxWindSpeedLag1 = lag(maxWindSpeed, 1))
+
+
+```
+
+4.  The two cleaned up data sets were merged together.
+
+```{r, eval = F}
+
+# Make the date names match for easy merging
+phenology$DATE <- phenology$datetime
+
+# Make the full data set!
+phenWithWeather <- merge(phenology, weatherSum, by = c("DATE"))
+```
+
+# Exploring and Visualizing the Data
+
+#### Slide 6
+
+A simple plot of the time series can go a long way in telling us what kinds of patterns are present. We can already see some strong evidence of seasonality and maybe a slight trend.
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+
+# Read in the clean data set
+
+phen <- read.csv("data/NEONphenologyClean.csv")
+
+library(tidyverse)  
+
+ggplot(data = phen, aes(x = DATE, y = observation))+   
+  geom_point() 
+```
+
+We can explore some of the predictors we have available as well to see if the patterns in the predictors match up. Temperature seems to share a similar seasonal pattern to our variable of interest. Take some time here and explore some of the other predictors to see how they might match up.
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+
+ggplot(data = phen, aes(x = DATE, y = meanTemp))+   
+  geom_point() 
+```
+
+Decomposition plots and autocorrelation plots are also useful tools to help us prepare to fit appropriate forecasting models. In order to make a decomposition plot, we have to formally declare that the data are a time series by turning them into a time series object in R. We do that by using the `ts()` function. Several of the more basic time series models also require (or at least prefer) data to be in this format. Within the `ts()` function, we need to specify a frequency. The documentation does a good job of explaining what frequency is:
+
+"Argument `frequency` indicates the sampling frequency of the time series, with the default value `1` indicating one sample in each unit time interval. For example, one could use a value of `7` for `frequency` when the data are sampled daily, and the natural time period is a week, or `12` when the data are sampled monthly and the natural time period is a year."
+
+Given that definition, we can set the frequency here to 365 because the repeating period for trees losing their leaves and greening back up is roughly one year and we have daily observations.
+
+```{r}
+phenTS <- ts(phen$observation, frequency = 365) 
+```
+
+The decomposition plot shows that there may be a small trend in the series. It also confirms our intuition that seasonality is present.
+
+```{r}
+phenDecomp <- decompose(phenTS) 
+plot(phenDecomp)
+```
+
+The autocorrelation plot shows that there seems to be multiple levels of autocorrelation occurring in the series. On one hand, the series is pretty sticky for nearly 100 days out. On the other hand, the direction of the correlation reverses for certain lags. This also supports the presence of both a trend and seasonal pattern.
+
+```{r}
+acf(phen$observation, lag.max = 365)
+```
+
+# Partitioning the data
+
+#### Slide 8
+
+Remember, when your goal is forecasting, data partitioning should not be done randomly. The earlier observations in the data set will be used for training and the remaining observations will be held back as a test set. Generally speaking, it is good to try to match the intended forecasting horizon with the size of the test set. The NEON challenge goal is to forecast at least 30 days out, so we will hold back 30 days of data (i.e. the most recent 30 observations).
+
+There are probably packages out there that can do this for you, so feel free to explore other ways of achieving this kind of partitioning!
+
+```{r}
+n <- nrow(phen)
+
+# The length of the data set minus the most recent 30 days
+trainN <- n-30
+testN <- trainN+1
+
+# Index the earlier rows for training
+train <- phen[1:trainN,] 
+
+# Index the later 30 for testing
+test <- phen[testN:n,]
+nrow(test) # Should be 30
+```
+
+# Modeling - *Woot Woot 🥳*
+
+We discussed several kinds of models during the lecture. There are many more model types out there that you may encounter, but this set should get you a good start and will provide you with the foundation you need to continue learning on your own should you need to.
+
+In each section, we will fit the model to the training set, generate forecasts to compare to the test set, and generate RMSE and MAE for each model on its test set performance to evaluate each one and compare them in the next section.
+
+## Series Decomposition by Loess + ARIMA or Exponential Smoothing
+
+#### Slide 22-27 & 40-43
+
+In this approach the time series is first de-trended and de-seasonalized using loess smoothing. Then the remaining stationary series is modeled using ARIMA (or another method if we select a different one). The ARIMA part is fitted via an automated process in the background so we do not have to manually specify p, d, and q. For more information about this process, see the documentation for the `auto.arima()` function.
+
+If you want to try out exponential smoothing, you will use `method = "ETS"` and you can specify different model types using `etsmodel = "ANN"` for example. Other potential models can be found in the lecture slides (e.g. "MNN", "AAA", etc.). Note that because we have de-trended and de-seasonalized the series, we do not really need the latter two letters to change from "N".
+
+First, we have to turn our training data into a time series object like we did with the whole series for plotting.
+
+```{r}
+library(forecast)
+
+# STL requires a UNIVARIATE time series object
+ts.train <- ts(train$observation, frequency = 365)
+```
+
+Below you can see the output for the STL + ARIMA model. The ETS version is commented out here, but you can try it out on your machine.
+
+```{r}
+## There are several options that we can customize in the stl() function, but the one we have to specify is the s.window. Check out the documentation and play around with some of the other options if you would like.
+stl.fit <- stlm(ts.train, s.window = "periodic", 
+                method = "arima")
+
+##stl.fit <- stlm(ts.train, s.window = "periodic", 
+##                method = "ets",
+##                etsmodel = "ANN")
+
+summary(stl.fit$model)
+
+```
+
+Let's look at the residuals to see if there is anything left unaccounted for.
+
+```{r}
+## Check for leftover autocorrelation in the residuals
+acf(stl.fit$residuals)
+
+## These models still do assume normal residuals - these look good!
+hist(stl.fit$residuals)
+```
+
+Now that we are comfortable with the model set up, we can generate forecasts.
+
+```{r}
+## We can generate forecasts with the forecast() function in the forecast package
+
+stl.forecasts <- forecast(stl.fit, h = 30)
+
+## The forecast function gives us point forecasts, as well as prediction intervals
+stl.forecasts
+
+## Notice that it is not straightforward to get the point forecasts out - we have to convert it to a data frame first.
+str(stl.forecasts)
+
+stl.df <- as.data.frame(stl.forecasts)
+```
+
+Let's visualize the forecasts! For the basic models available in the forecast package, we can use the `plot()` function to see a quick time series plot.
+
+```{r}
+# Let's look at the forecasts!
+plot(stl.forecasts)
+```
+
+Let's compare them to the observed test series values.
+
+```{r}
+# First make a data frame with both in there
+compare <- data.frame(time = seq(1:30),
+                      observed = test$observation,
+                      forecast = stl.df$`Point Forecast`)
+
+# What do you think??
+ggplot(data = compare, aes(x = time, y = observed))+
+  geom_line(color = "blue")+
+  geom_point(color = "blue")+
+  geom_line(aes(y = forecast), color = "red")+
+  geom_point(aes(y = forecast), color = "red")
+
+```
+
+Finally, we can generate some accuracy metrics and save them in a data frame for later use.
+
+```{r}
+# Last - let's get the RMSE and MAE out. We can use the Metrics package for this. While we're at it, let's save them to a data set for later.
+
+library(Metrics)
+stl.rmse <- rmse(compare$observed, compare$forecast)
+stl.mae <- mae(compare$observed, compare$forecast)
+
+(comparisonDF <- data.frame(model = "stl",
+                           RMSE = stl.rmse,
+                           MAE = stl.mae))
+
+```
+
+An additional argument in `stlm()` exists that allows for the inclusion of extra predictors into an ARIMA-based model post-decomposition. This function requires the predictors to exist in a separate matrix rather than inside of a data frame, which makes it somewhat challenging to use if you are unfamiliar with using matrices in R.
+
+## Linear Regression
+
+#### Slide 29-32
+
+Fortunately, there are several kinds of time series models that accommodate extra predictors in a more intuitive way. The most obvious starting place is linear regression! We have a lot of predictors in our data set to choose from. Feel free to play around with them! For time's sake, I am going to use mean temperature and its one day lag only. This part is probably not too different from what you are used to doing for non-time series data. The only major difference is in what predictors we choose to include to account for autocorrelation, trend, and seasonality.
+
+```{r}
+
+# We will start with just our predictors
+lm.fit <- lm(observation ~ meanTemp + meanTempLag1, 
+             data = train)
+summary(lm.fit)
+acf(lm.fit$residuals, 365) # Still a lot of seasonality left
+
+```
+
+Let's add the sine and cosine terms we discussed into the data set to include them in the model. We will need to do this for `train` and `test`. Note that if you were to be forecasting beyond test, you would need to generate these terms for those time points as well.
+
+```{r}
+
+# Add to the training set
+train$sinSeason <- sin((2*pi*train$X)/365)
+train$cosSeason <- cos((2*pi*train$X)/365)
+
+# Add to the testing set
+test$sinSeason <- sin((2*pi*test$X)/365)
+test$cosSeason <- cos((2*pi*test$X)/365)
+
+```
+
+Back to business! Let's add in the sine and cosine terms for seasonality.
+
+```{r}
+# Add seasonality via sine and cosine terms
+lm.fit <- lm(observation ~ sinSeason + cosSeason + meanTemp +
+               meanTempLag1, 
+             data = train)
+
+summary(lm.fit)
+acf(lm.fit$residuals, 365)
+```
+
+Finally, we can add in the trend.
+
+```{r}
+
+# Add trend
+lm.fit <- lm(observation ~ X + sinSeason + cosSeason + meanTemp +
+               meanTempLag1, 
+             data = train)
+
+summary(lm.fit)
+
+# Check for leftover autocorrelation in the residuals - still a lot.
+
+#   Stay tuned for how to deal with this! For now we will move forward.
+acf(lm.fit$residuals)
+
+# These models still do assume normal residuals - these look good!
+hist(lm.fit$residuals)
+```
+
+Next we'll generate forecasts for this model.
+
+```{r}
+
+# We can generate forecasts with the forecast() function in the forecast package
+lm.forecasts <- forecast(lm.fit, h = 30, newdata = test)
+
+# The forecast function gives us point forecasts, as well as prediction intervals
+lm.forecasts
+
+# Notice that it is not straightforward to get the point forecasts out - we have to convert it to a data frame first.
+str(lm.forecasts)
+
+lm.df <- as.data.frame(lm.forecasts)
+```
+
+We can visualize the forecasts against the observed values if we add them to our `test` data set.
+
+```{r}
+
+# Add the forecasts to test
+test$forecast <- lm.df$`Point Forecast`
+
+# Let's look at the forecasts!
+
+# What do you test??
+ggplot(data = compare, aes(x = time, y = observed))+
+  geom_line(color = "blue")+
+  geom_point(color = "blue")+
+  geom_line(aes(y = forecast), color = "red")+
+  geom_point(aes(y = forecast), color = "red")
+```
+
+Finally we will generate and save the accuracy metrics again.
+
+```{r}
+
+# Last - let's get the RMSE and MAE out. We can use the Metrics package for this. While we're at it, let's save them to a data set for later.
+
+lm.rmse <- rmse(test$observation, test$forecast)
+lm.mae <- mae(test$observation, test$forecast)
+
+newrow <- c("lm", lm.rmse, lm.mae)
+
+(comparisonDF <- rbind(comparisonDF, newrow))
+
+```
+
+### Applying ARIMA to the residual series (ARIMA as a second-layer model)
+
+#### Slide 34-39
+
+We can adjust any model with correlated error terms by modeling its residuals! The process is as follows:
+
+1.  Build a model
+2.  Extract the residual series
+3.  Model the residuals using ARIMA (or another time series model of your choosing)
+4.  Forecast the future residuals
+5.  Adjust your forecasts using your forecasted residuals.
+
+We are going to use the linear model from above as an example to see what effect it has on our predictions. First, let's extract the residuals and turn them into a time series object.
+
+```{r}
+
+# Make a time series of the residuals from the model
+lmResids <- ts(lm.fit$residuals)
+```
+
+Now we can use the `auto.arima()` function to fit an ARIMA model to the residual series. Remember, `auto.arima()` will select p, d, and q for us.
+
+```{r}
+
+# Use the auto.arima() function to easily fit an ARIMA model
+resid.fit <- auto.arima(lmResids)
+summary(resid.fit)
+```
+
+Now we will make forecasts for the error for the next 30 days and use those forecasted errors to adjust our original forecasts.
+
+```{r}
+
+# Forecast the error
+resid.forecast <- forecast(resid.fit, h = 30)
+
+resid.df <- as.data.frame(resid.forecast)
+
+# Adjust the original forecasts using the forecasted residuals
+test$adjForecast <- test$forecast + resid.df$`Point Forecast`
+```
+
+Let's see what effect that had on our original forecasts - any better?
+
+```{r}
+# Some data cleaning...
+testLong <- test %>% pivot_longer(cols = c(forecast, observation, adjForecast), names_to = "forecastType", values_to = "prediction")
+
+# Plot the results! What do you think?
+ggplot(data = testLong, aes(x = X, y = prediction))+
+  geom_line(aes(color = forecastType, lty = forecastType))+
+  geom_point(aes(color = forecastType))
+```
+
+We can look at the `acf()` plots from before and after to see how they compare.
+
+```{r}
+# Did we take care of that extra autocorrelation from before?
+test$oldResids <- test$observation - test$forecast
+acf(test$oldResids)
+
+test$newResids <- test$observation - test$adjForecast
+acf(test$newResids)
+```
+
+Finally, let's generate a new set of accuracy metrics for the adjusted model.
+
+```{r}
+# We will add this to our comparisonDF to compare later
+
+lmAdj.rmse <- rmse(test$observation, test$adjForecast)
+lmAdj.mae <- mae(test$observation, test$adjForecast)
+
+newrow <- c("lmAdj", lmAdj.rmse, lmAdj.mae)
+
+(comparisonDF <- rbind(comparisonDF, newrow))
+```
+
+## (Generalized) Additive Models (GAMs)
+
+#### Not in lecture :) \#Bonus
+
+We did not explicitly cover these in the lecture, but Generalized Additive Models (GAMs) are similar to generalized linear models except that they allow us to include spline terms. These can be useful tools for seasonal data as well. On the flip side, splines are complicated beasts and highly susceptible to traps like overfitting. We don't have time to cover them in depth today so I set a few things in the `s()` function for you, but I highly encourage you to look at the documentation for both the `gam()` model fitting function in `mgcv` and the `s()` function that produces the spline terms.
+
+```{r}
+# GAM modeling
+library(mgcv)
+
+# We need a 'day of the year' variable to capture the annual seasonality.
+train$DOY <- yday(train$DATE)
+test$DOY <- yday(test$DATE)
+
+gam.fit <- gam(observation ~ X + meanTemp + meanTempLag1 + 
+                 s(DOY, bs = "cr", k = 2),
+               data = train)
+
+summary(gam.fit)
+```
+
+Most of the techniques from the linear model above apply here. We can evaluate the residuals to see if we missed any opportunities.
+
+```{r}
+
+# Check for leftover autocorrelation in the residuals - it may be wise to apply the residual ARIMA from above.
+acf(gam.fit$residuals)
+
+# These models still do assume normal residuals - these look good!
+hist(gam.fit$residuals)
+```
+
+This time we will generate forecasts using the `predict()` function because it works better with this kind of model.
+
+```{r}
+
+# For some reason the forecast() function did not like the GAM... We can just use good old predict to do the same thing since test contains the number of rows we need.
+gam.forecasts <- predict(gam.fit, newdata = test)
+
+# The predict function gives us point forecasts.
+gam.forecasts
+
+# Add the forecasts to test
+test$GAMforecast <- gam.forecasts
+```
+
+Let's see what they look like and stash the accuracy metrics for later.
+
+```{r}
+
+# Let's look at the forecasts!
+
+# What do you think??
+ggplot(data = test, aes(x = X, y = observation))+
+  geom_line(color = "blue")+
+  geom_point(color = "blue")+
+  geom_line(aes(y = GAMforecast), color = "red")+
+  geom_point(aes(y = GAMforecast), color = "red")
+
+
+# Save the results
+
+gam.rmse <- rmse(test$observation, test$GAMforecast)
+gam.mae <- mae(test$observation, test$GAMforecast)
+
+newrow <- c("gam", gam.rmse, gam.mae)
+
+(comparisonDF <- rbind(comparisonDF, newrow))
+
+```
+
+## Time-Varying Coefficient AR Model
+
+#### Slide 50-51
+
+Time-varying (TV) coefficient models gained popularity after their introduction to the forecasting world and their applications and methodologies are now expansive. There is no way to cover all of the TV models that are now available in software, so we will explore a time-varying auto-regressive (TVAR) model in the `tvReg` package in R. This package supports several other kinds of TV models as well.
+
+`tvReg` requires that we clean up our data some to only include the necessary information. We will do that first.
+
+```{r}
+library(tvReg)
+
+trainRed <- train %>% select(meanTemp,
+                             meanTempLag1,
+                             sinSeason,
+                             cosSeason)
+
+testRed <- test %>% select(meanTemp,
+                           meanTempLag1,
+                           sinSeason,
+                           cosSeason)
+```
+
+Now we can fit the model! We are fitting a TV model that accounts for autocorrelation via an AR model. The argument `p` lets us tell `tvAR` how many lags to include in the AR part of the model. The `exogen` argument is where we put our data set of predictor variables that we made above.
+
+```{r}
+
+# Fit the model - p represents the order of the AR model. 
+#     Exogen contains the exogenous variables we want to use.
+#     See the documentation for explanations of the other 
+#     available options.
+tvar.fit <- tvAR(train$observation, p = 1, exogen = trainRed)
+summary(tvar.fit)
+
+acf(tvar.fit$residuals, 365)
+
+```
+
+A neat thing to look at for the TV models is how the coefficients change with time. This is set within the modeling framework, so it is no surprise that these graphs look this way - hopefully these help you see how the model is allowing the betas to change.
+
+```{r, fig.align='center', fig.height=8, fig.width=6}
+# Plot how the coefficients change over time
+par(mfrow=c(3,2), bty="n")
+plot(train$X[2:1528], tvar.fit$coefficients[,1]) # Intercept
+plot(train$X[2:1528], tvar.fit$coefficients[,2]) # coef for AR1
+plot(train$X[2:1528], tvar.fit$coefficients[,3]) # coef meanTemp
+plot(train$X[2:1528], tvar.fit$coefficients[,4]) # coef for meanTempLag1
+plot(train$X[2:1528], tvar.fit$coefficients[,5]) # coef for sin
+plot(train$X[2:1528], tvar.fit$coefficients[,6]) # coef for cos
+```
+
+Forecast generation time! The forecast function works for this package too! How do they look?
+
+```{r}
+# Generate 30 day out forecasts using the forecast function
+test$tvarForecast <- forecast(tvar.fit, n.ahead = 30, 
+                              newexogen = testRed)
+
+# What do you think?
+ggplot(data = test, aes(x = X, y = observation))+
+  geom_line(color = "black")+
+  geom_point(color = "black")+
+  geom_line(aes(y = tvarForecast), color = "red")+
+  geom_point(aes(y = tvarForecast), color = "red")
+```
+
+We'll save the results for later comparison.
+
+```{r}
+
+# Save the results
+
+tvar.rmse <- rmse(test$observation, test$tvarForecast)
+tvar.mae <- mae(test$observation, test$tvarForecast)
+
+newrow <- c("tvar", tvar.rmse, tvar.mae)
+
+(comparisonDF <- rbind(comparisonDF, newrow))
+```
+
+## Neural Network
+
+#### Slide 53-55
+
+*Disclaimer: I do not claim to be an expert of any kind in machine learning methods, but I wanted to provide you with a basic ML option to explore. Additionally, if ML is what you find yourself interested in, I highly suggest you learn how to code in Python because it has way more tools for this kind of modeling :).*
+
+We need a particular predictor set up to model time series data and capture autocorrelation and seasonality. We can build this kind of model using the `nnetar()` function in the `forecast` package in R. This is nice because that means we can use all of the other useful functions in the `forecast` package too! It is also nice because it does all of the tedious pre-processing for us!
+
+First we need to set up a data frame with relevant predictors like we did for the TV model.
+
+```{r}
+
+# Make reduced data set of predictors - this is how we have to set up the predictors for the model fitting package.
+trainRed <- train %>% select(meanTemp,
+                             meanTempLag1)
+
+testRed <- test %>% select(meanTemp,
+                           meanTempLag1)
+```
+
+Now we can fit the model! Notice we are building a time series object again and specifying a frequency. This tells `nnetar()` that the data are seasonal annually. We get to tell the model how far back to look using the `p` and `P` arguments. The argument `scale_inputs = T` does some critical centering and scaling for us to save us a lot of coding time.
+
+```{r}
+
+# Now we are ready to fit the model!
+obsTrain <- ts(train$observation, frequency = 365)
+
+nn.fit <- nnetar(obsTrain,
+                 xreg = trainRed, #include our external predictors
+                 scale.inputs = T, # scale the inputs - critical for ML. The only time this would be set to F is if you already scaled them.
+                 size = 1, # size of the hidden layer
+                 p = 2, # number of regular lags
+                 P = 2) # number of seasonal lags
+```
+
+Time to make some forecasts!
+
+```{r}
+
+
+# To get the forecasts, we can use the forecast function. I had to explicitly tell R to look in the forecast package for this one. You may not need the extra forecast:: part.
+nn.results <- as.data.frame(forecast::forecast(nn.fit, 30, xreg = testRed))
+
+results <- data.frame(time = 1:30,
+                      actual = test$observation, 
+                      forecast = nn.results$`Point Forecast`)
+```
+
+Let's have a look at the forecasts and save some accuracy metrics!
+
+```{r}
+# Let's check out the results!
+ggplot(data = results, aes(x = time, y = actual))+
+  geom_line(color = "blue")+
+  geom_point(color = "blue")+
+  geom_line(aes(y = forecast), color = "red")+
+  geom_point(aes(y = forecast), color = "red")
+
+# Save the results for comparison
+
+nn.rmse <- rmse(results$actual, results$forecast)
+nn.mae <- mae(results$actual, results$forecast)
+
+newrow <- c("nn", nn.rmse, nn.mae)
+
+(comparisonDF <- rbind(comparisonDF, newrow))
+
+```
+
+## An Easy Ensemble
+
+#### Slide 57-58
+
+The last modeling approach we will explore today is a basic ensemble modeling approach. Ensemble models incorporate forecasts from multiple other models to produce forecasts that are some kind of average of all the others. There are several averaging methods that exist, but a really simple one is to use a weighted average where the weight is based on each model's test set RMSE. This way, the best performing models get to contribute the most information to the new forecasts. Amazingly, these ensembles often produce better predictions than any one model alone - even with bad predictions included!
+
+First we will pull all of the forecasts we made into a data set.
+
+```{r}
+
+# Make a data set of all of the previous forecasts
+
+ensembleDF <- data.frame(stl = stl.df$`Point Forecast`,
+                         lm = lm.df$`Point Forecast`,
+                         lmAdj = test$adjForecast,
+                         gam = test$GAMforecast,
+                         tvar = test$tvarForecast,
+                         nn =  results$forecast,
+                         observed = test$observation)
+
+```
+
+Now we need to build a weighting system for the ensemble predictions. Here we are going to use the system shown in the lecture (slide 58).
+
+```{r}
+# Now we can set up our weighting system based on RMSE
+
+totalWeight <- (1/stl.rmse) +
+               (1/lm.rmse) +
+               (1/lmAdj.rmse) +
+               (1/gam.rmse) +
+               (1/tvar.rmse) +
+               (1/nn.rmse)
+  
+weightSTL <- (1/stl.rmse)/totalWeight
+weightLM <- (1/lm.rmse)/totalWeight
+weightLMadj <- (1/lmAdj.rmse)/totalWeight
+weightGAM <- (1/gam.rmse)/totalWeight
+weightTVAR <- (1/tvar.rmse)/totalWeight
+weightNN <- (1/nn.rmse)/totalWeight
+```
+
+Now we can use those weights to build a column of ensemble forecasts into the data set we made. All we have to do is multiply the other forecasts by their weights and add them all up.
+
+```{r}
+# Add a column to our data frame with the ensemble forecasts
+
+ensembleDF <- ensembleDF %>% mutate(ensembleForecast = 
+                                      (stl*weightSTL)+
+                                      (lm*weightLM)+
+                                      (lmAdj*weightLMadj)+
+                                      (gam*weightGAM)+
+                                      (tvar*weightTVAR)+
+                                      (nn*weightNN))
+```
+
+Let's see how the ensemble predictions look!
+
+```{r}
+
+# Let's check them out!
+ensembleDF$time <- 1:30
+
+# What do you think??
+ggplot(ensembleDF, aes(x = time, y = observed))+
+  geom_line(color = "blue")+
+  geom_point(color = "blue")+
+  geom_line(aes(y = ensembleForecast), color = "red")+
+  geom_point(aes(y = ensembleForecast), color = "red")
+```
+
+Last we will save the accuracy metrics.
+
+```{r}
+
+# Save the results like before
+
+ens.rmse <- rmse(ensembleDF$observed, ensembleDF$ensembleForecast)
+ens.mae <- mae(ensembleDF$observed, ensembleDF$ensembleForecast)
+
+newrow <- c("ens", ens.rmse, ens.mae)
+
+(comparisonDF <- rbind(comparisonDF, newrow))
+```
+
+# Evaluate and Compare Performance
+
+#### Slide 10-12
+
+We have been saving performance metrics for all of our models so far - let's check them out with a graph! Remember - for RMSE and MAE, lower is better. Feel free to take the inverse and look at that if it is confusing to consider this visually.\
+
+```{r}
+comparisonDF$RMSE <- as.numeric(comparisonDF$RMSE)
+comparisonDF$MAE <- as.numeric(comparisonDF$MAE)
+
+# Which model did the best based on RMSE?
+ggplot(data = comparisonDF, aes(x = model, y = RMSE))+
+  geom_bar(stat = "identity", fill = "slateblue1")+
+  labs(title = "RMSE Comparison")
+
+# Which model did the best based on MAE?
+ggplot(data = comparisonDF, aes(x = model, y = MAE))+
+  geom_bar(stat = "identity", fill = "plum")+
+  labs(title = "MAE Comparison")
+```
+
+You probably notice that the best model is a little bit different depending on the metric you use. I would consider what we just did to be an exploratory modeling exercise. We went through a high volume of candidate models with very little fine tuning to see what worked. If we were to want to forecast tree greenness for real, we could take all three of the best overall performing models and try to fine tune them more to get even better results.
+
+### Next Steps
+
+To generate the real forecasts, we would re-fit the best model using *all* of the data we have. Using the new model parameters, we would then make forecasts out to the desired horizon (in this case 30 days out).
+
+If your chosen model is the ensemble, you would re-fit *all* of the models with *all* of the data and then multiply the forecasts you make by the weights you already generated.
+
+# Your Turn!
+
+NOW IT IS TIME FOR THE FORECASTING CHALLENGE OF A LIFETIME (or at least of the workshop). You (and your team??) are going to use another NEON data set that contains information about beetle abundances to generate the best forecasts you can for 5 observation periods past the end of the data set that is provided to you. You will submit your 5 forecasts and some details about your final model to a Google form and they will be judged on accuracy and perhaps creativity if necessary. The winning person (team?) will receive a fabulous prize that you do NOT want to miss!
+
+The catch?? You only have 1 hour.... GO!
+
+## Challenge Details
+
+### The Data Set
+
+You will use the data set called NEONbeetlesChallenge.csv for this challenge. It contains biweekly (every two weeks) observations of beetle abundances at one NEON site, in addition to several climatological covariates for that site. You also have access to one-week lagged versions of the climate variables to use if you choose.
+
+The data set called tinyForecastingChallengeCovs.csv contains all of the covariates for the 5 time-steps that you need to forecast for.
+
+When you have your forecasts, enter them here: [Beetle Forecasting Challenge Entry Form](https://forms.gle/TmMN7DxCJM45Zpq29)
+
+### Hints
+
+1.  Notice that the data set has an indicator variable that tells you whether or not there is an active sampling period going on, because when no sampling occurs we are assuming the number of beetles observed will always be 0. That makes these cases 'special events' - how can you take advantage of that information? *See slides 46-49*
