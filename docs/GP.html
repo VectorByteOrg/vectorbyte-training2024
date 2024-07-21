@@ -94,7 +94,27 @@
     code span.va { color: #111111; } /* Variable */
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto.css">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -423,15 +443,19 @@ The VectorByte Team (Parul Patil, Virginia Tech)
 <h2>Gaussian Process: Introduction</h2>
 <div class="fragment">
 <ul>
-<li><p>A Gaussian Process model is a non paramteric and flexible regression model</p></li>
+<li><p>A Gaussian Process model is a non paramteric and flexible regression model.</p></li>
 <li><p>It started being used in the field of spatial statistics, where it is called <em>kriging</em>.</p></li>
-<li><p>It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a <strong>surrogate model</strong>.</p></li>
+<li><p>It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a <strong>surrogate model</strong>. <span class="citation" data-cites="gramacy2020surrogates">(<a href="#/references" role="doc-biblioref" onclick="">Gramacy 2020</a>)</span></p></li>
 </ul>
 </div>
+</section>
+<section id="uses-and-benefits" class="slide level2">
+<h2>Uses and Benefits</h2>
 <div class="fragment">
-<p><strong>Surrogate Models</strong>: Imagine a case where field experiments are infeasible and computer experiments take a long time to run, we can approximate the computer experiments using a surrogate model.</p>
 <ul>
-<li>The ability to this model to provide good UQ makes it very useful in other fields such as ecology where the data is sparse and noisy and therefore good uncertainty measures are paramount.</li>
+<li><p><strong>Surrogate Models</strong>: Imagine a case where field experiments are infeasible and computer experiments take a long time to run, we can approximate the computer experiments using a surrogate model.</p></li>
+<li><p>It can be used to calibrate computer models w.r.t the field observations or computer simulations.</p></li>
+<li><p>The ability to this model to provide good UQ makes it very useful in other fields such as ecology where the data is sparse and noisy and therefore good uncertainty measures are paramount.</p></li>
 </ul>
 </div>
 </section>
@@ -440,19 +464,12 @@ The VectorByte Team (Parul Patil, Virginia Tech)
 <div class="fragment">
 <ul>
 <li><p>Here, we assume that the data come from a Multivariate Normal Distribution (MVN).</p></li>
-<li><p>Any normal distribution can be described by a mean vector <span class="math inline">\mu</span> and a covariance matrix <span class="math inline">\Sigma</span>.</p></li>
 <li><p>We then make predictions conditional on the data.</p></li>
 </ul>
 </div>
 <div class="fragment">
 <ul>
-<li>Mathematically, we can write it as,</li>
-</ul>
-<p><span class="math display">Y_{\ n \times 1} \sim N \ ( \ \mu(X)_{\ n \times 1} \ , \ \Sigma(X)_{ \ n \times n} \ )</span> Here, <span class="math inline">Y</span> is the response of interest and <span class="math inline">n</span> is the number of observations.</p>
-</div>
-<div class="fragment">
-<ul>
-<li><p>Our goal is to find <span class="math inline">Y_p \ \vert \ Y, X</span> which will also be a Normal distribution.</p></li>
+<li><p>We are essentially taking a “fancy” average of the data to make predictions</p></li>
 <li><p>To understand how it works, let’s first visualize this concept and then look into the math</p></li>
 </ul>
 </div>
@@ -464,60 +481,85 @@ The VectorByte Team (Parul Patil, Virginia Tech)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="GP_files/figure-revealjs/unnamed-chunk-1-1.png" class="quarto-figure quarto-figure-center" width="672"></p>
+<p><img data-src="GP_files/figure-revealjs/unnamed-chunk-1-1.png" class="quarto-figure quarto-figure-center" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div class="fragment">
-<ul>
-<li><p>We are using points closer to each other to correlate the responses.</p></li>
-<li><p>While making predictions, we average over the data around the points.</p></li>
-</ul>
-<!-- Put a plot and mention we are averaging data nearby -->
 </div>
 </section>
 <section id="how-does-a-gp-work" class="slide level2">
 <h2>How does a GP work</h2>
 <div class="fragment">
 <ul>
-<li>As we saw, we are averaging the data “nearby”… How do you define that?</li>
+<li><p>Our “fancy” average was just using data around the new location.</p></li>
+<li><p>We are using points closer to each other to correlate the responses.</p></li>
+<li><p>Now we know, we are averaging the data “nearby”… How do you define that?</p></li>
 </ul>
 </div>
 <div class="fragment">
 <ul>
-<li>This indicates that we are using <strong>distance</strong> in some way. Where…?</li>
+<li>This indicates that we are using <strong>distance</strong> in some way. Where…? We need some math</li>
+</ul>
+</div>
+</section>
+<section id="mathematically" class="slide level2">
+<h2>Mathematically</h2>
+<div class="fragment">
+<ul>
+<li><p>Any normal distribution can be described by a mean vector <span class="math inline">\mu</span> and a covariance matrix <span class="math inline">\Sigma</span>.</p></li>
+<li><p>Mathematically, we can write it as,</p></li>
+</ul>
+<p><span class="math display">Y_{\ n \times 1} \sim N \ ( \ \mu(X)_{\ n \times 1} \ , \ \Sigma(X)_{ \ n \times n} \ )</span> Here, <span class="math inline">Y</span> is the response of interest and <span class="math inline">n</span> is the number of observations.</p>
+<ul>
+<li>Our goal is to find <span class="math inline">Y_p \ \vert \ Y, X</span>.</li>
+</ul>
+<!-- Put a plot and mention we are averaging data nearby -->
+</div>
+</section>
+<section id="distance" class="slide level2">
+<h2>Distance</h2>
+<div class="fragment">
+<ul>
+<li>Recall that in Linear Regression, you have <span class="math inline">\ \Sigma \  = \sigma^2 \mathbb{I}</span></li>
 </ul>
 </div>
 <div class="fragment">
 <ul>
-<li><p>Recall that in Linear Regression, you have <span class="math inline">\ \Sigma \  = \sigma^2 \mathbb{I}</span></p></li>
 <li><p>For a GP, the covariance matrix ( <span class="math inline">\Sigma</span> ) is defined by a kernel.</p></li>
 <li><p>Consider,</p></li>
 </ul>
 <p><span class="math inline">\Sigma_n = \tau^2 C_n</span> where <span class="math inline">C_n = \exp \left( - \vert \vert x - x' \vert \vert^2 \right)</span>, and <span class="math inline">x</span> and <span class="math inline">x'</span> are input locations.</p>
 </div>
+</section>
+<section id="interpretation-of-the-kernel" class="slide level2">
+<h2>Interpretation of the kernel</h2>
 <div class="fragment">
 <ul>
+<li><p><span class="math inline">C_n = \exp \left( - \vert \vert x - x' \vert \vert^2 \right)</span></p></li>
 <li><p>The covariance structure now depends on how close together the inputs. If inputs are close in distance, then the responses are more highly correlated.</p></li>
 <li><p>The covariance will decay at an exponential rate as <span class="math inline">x</span> moves away from <span class="math inline">x'</span>.</p></li>
 </ul>
 </div>
 </section>
-<section id="how-to-make-predictions" class="slide level2">
-<h2>How to make predictions</h2>
+<section id="summarizing-our-data" class="slide level2">
+<h2>Summarizing our data</h2>
 <div class="fragment">
 <ul>
 <li><p>Now we will learn how to use a GP to make predictions at new locations.</p></li>
 <li><p>As we learnt, we condition on the data. We can think of this as the prior.</p></li>
 </ul>
 <span class="math display">\begin{equation}
-Y_n \ \vert X_n \sim \mathcal{N} \ ( \ 0 \ , \ \tau^2 \ C_n(X)  \ ) \\
+Y_n \ \vert X_n \sim \mathcal{N} \ ( \ 0 \ , \ \tau^2 \ C_n(X_n)  \ ) \\
 \end{equation}</span>
 </div>
 <div class="fragment">
 <p>Now, consider, <span class="math inline">(\mathcal{X}, \mathcal{Y})</span> as the predictive set.</p>
+</div>
+</section>
+<section id="how-to-make-predictions" class="slide level2">
+<h2>How to make predictions</h2>
+<div class="fragment">
 <ul>
 <li><p>The goal is to find the distribution of <span class="math inline">\mathcal{Y} \ \vert X_n, Y_n</span> which in this case is the posterior distribution.</p></li>
 <li><p>By properties of Normal distribution, the posterior is also normally distributed.</p></li>
@@ -533,7 +575,7 @@ Y_n \ \vert X_n \sim \mathcal{N} \ ( \ 0 \ , \ \tau^2 \ C_n(X)  \ ) \\
 <ul>
 <li>First we will “stack” the predictions and the data.</li>
 </ul>
-<span class="math display">\begin{equation}
+<span class="math display">\begin{equation*}
 \begin{bmatrix}
 \mathcal{Y} \\
 Y_n \\
@@ -552,59 +594,77 @@ Y_n \\
 \;
 \right)
 \\[5pt]
-\end{equation}</span>
+\end{equation*}</span>
 </div>
 <div class="fragment">
 <ul>
 <li>Now, let’s denote the predictive mean with <span class="math inline">\mu(\mathcal{X})</span> and predictive variance with <span class="math inline">\sigma^2(\mathcal{X})</span></li>
 </ul>
 <span class="math display">\begin{equation}
+\begin{aligned}
 \mathcal{Y} \mid Y_n, X_n \sim N\left(\mu(\mathcal{X}) \ , \ \sigma^2(\mathcal{X})\right)
+\end{aligned}
 \end{equation}</span>
 </div>
+</section>
+<section id="distribution-of-interest" class="slide level2">
+<h2>Distribution of Interest!</h2>
 <div class="fragment">
 <ul>
 <li>We will apply the properties of conditional Normal distributions.</li>
 </ul>
-<span class="math display">\begin{equation}
+<span class="math display">\begin{equation*}
 \begin{aligned}
-\mu(\mathcal{X}) &amp; = \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} Y_n \\
+\mu(\mathcal{X}) &amp; = \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} Y_n \\[10pt]  
 \sigma^2(\mathcal{X}) &amp; = \Sigma(\mathcal{X}, \mathcal{X}) - \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} \Sigma(X_n, \mathcal{X}) \\
 \end{aligned}
-\end{equation}</span>
+\end{equation*}</span>
+</div>
+<div class="fragment">
+<ul>
+<li>Everything we do, relies on these equations. Now, let’s learn more about <span class="math inline">\Sigma</span></li>
+</ul>
+</div>
+</section>
+<section id="sigma-matrix" class="slide level2">
+<h2>Sigma Matrix</h2>
+<div class="fragment">
+<ul>
+<li><span class="math inline">\Sigma_n = \tau^2 C_n</span> where <span class="math inline">C_n</span> is our kernel.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>One of the most common kernels which we will focus on is the squared exponential distance kernel written as</li>
+</ul>
+<p><span class="math display">C_n = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + g \mathbb{I_n}} </span></p>
+</div>
+<div class="fragment">
+<ul>
+<li>What’s <span class="math inline">\tau^2</span>, <span class="math inline">g</span> and <span class="math inline">\theta</span> though? No more math. We will just conceptually go through these</li>
+</ul>
 </div>
 </section>
 <section id="hyper-parameters" class="slide level2">
 <h2>Hyper Parameters</h2>
 <div class="fragment">
+<p>A GP is <em>non parameteric</em>, however, has some hyper-parameters. In this case,</p>
 <ul>
-<li>A GP is <em>non parameteric</em>, however, has some hyper-parameters as is the case with any Bayesian setup.</li>
-</ul>
-<p>One of the most common kernels which we will focus on is the squared exponential distance kernel written as</p>
-<p><span class="math display">C_n = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + g \mathbb{I_n}} </span></p>
-</div>
-<div class="fragment">
-<p>Recall, <span class="math display">\Sigma_n = \tau^2 C_n</span></p>
-<p>We have three main parameters here:</p>
-<ul>
-<li><p><span class="math inline">\tau^2</span>: Scale</p></li>
-<li><p><span class="math inline">\theta</span>: Length-scale</p></li>
-<li><p><span class="math inline">g</span>: Nugget</p></li>
+<li><p><span class="math inline">\tau^2</span> (Scale): This parameter can be used to adjust the amplitude of the data.</p></li>
+<li><p><span class="math inline">\theta</span> (Length-scale): This parameter controls the rate of decay of correlation.</p></li>
+<li><p><span class="math inline">g</span> (Nugget): This parameter controls the noise in the covariance structure (adds discontinuity)</p></li>
 </ul>
 </div>
 </section>
-<section id="scale" class="slide level2">
-<h2>Scale</h2>
+<section id="scale-amplitude" class="slide level2">
+<h2>Scale (Amplitude)</h2>
 <div class="fragment">
 <ul>
-<li><p>This parameter can be used to adjust the amplitude of the data.</p></li>
 <li><p>A random draw from a multivariate normal distribution with <span class="math inline">\tau^2</span> = 1 will produce data between -2 and 2.</p></li>
+<li><p>Now let’s visualize what happens when we increase <span class="math inline">\tau^2</span> to 25.</p></li>
 </ul>
 </div>
 <div class="fragment">
-<ul>
-<li>Now let’s visualize what happens when we increase <span class="math inline">\tau^2</span> to 25.</li>
-</ul>
 <div class="cell" data-layout-align="center" data-warn.conflicts="false">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -616,16 +676,15 @@ Y_n \\
 </div>
 </div>
 </section>
-<section id="length-scale" class="slide level2">
-<h2>Length-scale</h2>
+<section id="length-scale-rate-of-decay-of-correlation" class="slide level2">
+<h2>Length-scale (Rate of decay of correlation)</h2>
 <div class="fragment">
 <ul>
-<li><p>This parameter controls the rate of decay of correlation.</p></li>
-<li><p>Larger <span class="math inline">\theta</span> will result in wigglier functions.</p></li>
+<li><p>Determines how “wiggly” a function is</p></li>
+<li><p>Smaller <span class="math inline">\theta</span> means wigglier functions i.e.&nbsp;visually:</p></li>
 </ul>
 </div>
 <div class="fragment">
-<p>Let’s also visualize different values of <span class="math inline">\theta</span>.</p>
 <div class="cell" data-layout-align="center" data-warn.conflicts="false">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -637,15 +696,13 @@ Y_n \\
 </div>
 </div>
 </section>
-<section id="nugget" class="slide level2">
-<h2>Nugget</h2>
+<section id="nugget-noise" class="slide level2">
+<h2>Nugget (Noise)</h2>
 <div class="fragment">
 <ul>
-<li><p>It is responsible for introducing noise into the covariance structure so there is some discontinuity in the data.</p></li>
+<li><p>Ensures discontinuity and prevents interpolation which in turn yields better UQ.</p></li>
 <li><p>We will compare a sample from g ~ 0 (&lt; 1e-8 for numeric stability) vs g = 0.1 to observe what actually happens.</p></li>
 </ul>
-</div>
-<div class="fragment">
 <div class="cell" data-layout-align="center" data-warn.conflicts="false">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -655,9 +712,6 @@ Y_n \\
 </div>
 </div>
 </div>
-<ul>
-<li>This parameter prevents interpolation which in turn yields better UQ.</li>
-</ul>
 </div>
 </section>
 <section id="toy-example-1d-example" class="slide level2">
@@ -668,16 +722,13 @@ Y_n \\
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">length =</span> <span class="dv">100</span>), <span class="at">ncol =</span><span class="dv">1</span>)</span>
 <span id="cb1-2"><a></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X) </span>
 <span id="cb1-3"><a></a>true_y <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">*</span> <span class="fu">sin</span>(X)</span>
-<span id="cb1-4"><a></a>obs_y <span class="ot">&lt;-</span> true_y <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd=</span><span class="dv">1</span>)</span>
-<span id="cb1-5"><a></a></span>
-<span id="cb1-6"><a></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">2</span>), <span class="at">cex.axis =</span> <span class="dv">2</span>, <span class="at">cex.lab =</span> <span class="dv">2</span>, <span class="at">cex.main =</span> <span class="dv">3</span>, <span class="at">font.lab =</span> <span class="dv">2</span>)</span>
-<span id="cb1-7"><a></a><span class="fu">plot</span>(X, obs_y, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>), <span class="at">main =</span> <span class="st">"GP fit"</span>, <span class="at">xlab =</span> <span class="st">"X"</span>, <span class="at">ylab =</span> <span class="st">"Y"</span>,</span>
-<span id="cb1-8"><a></a>     <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">pch =</span> <span class="dv">16</span>)</span>
-<span id="cb1-9"><a></a><span class="fu">lines</span>(X, true_y, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a></a>obs_y <span class="ot">&lt;-</span> true_y <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center" data-warn.conflicts="false">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="GP_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center" width="672"></p>
+<p><img data-src="GP_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center" width="672"></p>
 </figure>
 </div>
 </div>
@@ -690,8 +741,8 @@ Y_n \\
 <div class="cell" data-layout-align="center" data-warn.conflicts="false">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>eps <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(.Machine<span class="sc">$</span>double.eps)</span>
 <span id="cb2-2"><a></a>gpi <span class="ot">&lt;-</span> laGP<span class="sc">::</span><span class="fu">newGP</span>(<span class="at">X =</span> X,<span class="at">Z =</span> obs_y, <span class="at">d =</span> <span class="fl">0.1</span>, <span class="at">g =</span> <span class="fl">0.1</span> <span class="sc">*</span> <span class="fu">var</span>(obs_y), <span class="at">dK =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb2-3"><a></a>mle <span class="ot">&lt;-</span> laGP<span class="sc">::</span><span class="fu">mleGP</span>(<span class="at">gpi =</span> gpi, <span class="at">param =</span> <span class="fu">c</span>(<span class="st">"d"</span>, <span class="st">"g"</span>), <span class="at">tmin=</span> <span class="fu">c</span>(eps, eps), <span class="at">tmax=</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="fu">var</span>(obs_y))) </span>
-<span id="cb2-4"><a></a></span>
+<span id="cb2-3"><a></a>mle <span class="ot">&lt;-</span> laGP<span class="sc">::</span><span class="fu">mleGP</span>(<span class="at">gpi =</span> gpi, <span class="at">param =</span> <span class="fu">c</span>(<span class="st">"d"</span>, <span class="st">"g"</span>), </span>
+<span id="cb2-4"><a></a>                   <span class="at">tmin=</span> <span class="fu">c</span>(eps, eps), <span class="at">tmax=</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="fu">var</span>(obs_y))) </span>
 <span id="cb2-5"><a></a>XX <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">length =</span> <span class="dv">1000</span>), <span class="at">ncol =</span><span class="dv">1</span>)</span>
 <span id="cb2-6"><a></a>p <span class="ot">&lt;-</span> laGP<span class="sc">::</span><span class="fu">predGP</span>(<span class="at">gpi =</span> gpi, <span class="at">XX =</span> XX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -701,50 +752,54 @@ Y_n \\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="GP_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center" width="672"></p>
+<p><img data-src="GP_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </section>
+<section id="extentions" class="slide level2">
+<h2>Extentions</h2>
+<div class="fragment">
+<ul>
+<li><p><strong>Anisotropic Gaussian Processes</strong>: Suppose our data is multi-dimensional, we can control the <strong>length-scale</strong> (<span class="math inline">\theta</span>) for each dimension.</p></li>
+<li><p><strong>Heteroskedastic Gaussian Processes</strong>: Suppose our data is noisy and the noise is input dependent, then we can use a different <strong>nugget</strong> for each unique input rather than a scalar <span class="math inline">g</span>.</p></li>
+</ul>
+</div>
+</section>
 <section id="anisotropic-gaussian-processes" class="slide level2">
 <h2>Anisotropic Gaussian Processes</h2>
-<p>Suppose our data is multi-dimensional, we can control the length-scale (<span class="math inline">\theta</span>) for each dimension.</p>
+<div class="fragment">
 <p>In this situation, we can rewrite the <span class="math inline">C_n</span> matrix as,</p>
 <p><span class="math display">C_\theta(x , x') = \exp{ \left( -\sum_{k=1}^{m} \frac{ (x_k - x_k')^2 }{\theta_k} \right ) + g \mathbb{I_n}}</span></p>
-<p>Here, <span class="math inline">\theta</span> = (<span class="math inline">\theta_1</span>, <span class="math inline">\theta_2</span>, …, <span class="math inline">\theta_m</span>) is a vector of length-scales, where <span class="math inline">m</span> = dimension of the input space.</p>
-<ul>
-<li>We can adjust the decay of correlation per dimension.</li>
-</ul>
+<p>Here, <span class="math inline">\theta</span> = (<span class="math inline">\theta_1</span>, <span class="math inline">\theta_2</span>, …, <span class="math inline">\theta_m</span>) is a vector of length-scales, where <span class="math inline">m</span> is the dimension of the input space.</p>
+</div>
 </section>
 <section id="heteroskedastic-gaussian-processes" class="slide level2">
 <h2>Heteroskedastic Gaussian Processes</h2>
 <div class="fragment">
 <ul>
-<li>Heteroskedasticity implies that the data is noisy, and thee noise is irregular.</li>
+<li>Heteroskedasticity implies that the data is noisy, and the noise is input dependent and irregular. <span class="citation" data-cites="binois2018practical">(<a href="#/references" role="doc-biblioref" onclick="">Binois, Gramacy, and Ludkovski 2018</a>)</span></li>
 </ul>
 <div class="cell" data-layout-align="center" data-warn.conflicts="false">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="GP_files/figure-revealjs/hetviz-1.png" class="quarto-figure quarto-figure-center" width="576"></p>
+<p><img data-src="GP_files/figure-revealjs/hetviz-1.png" class="quarto-figure quarto-figure-center" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div class="fragment">
-<ul>
-<li><p>A Heteroskedastic Gaussian Process (hetGP) is used when the data is <strong>noisy</strong>.</p></li>
-<li><p>Noise is usually <strong>input dependent</strong> and may vary with one or more predictors</p></li>
-</ul>
-</div>
 </section>
 <section id="hetgp-setup" class="slide level2">
 <h2>HetGP Setup</h2>
 <div class="fragment">
-<p>Let <span class="math inline">Y_n</span> be the response vector of size n.&nbsp;Let <span class="math inline">X = (X_1, X_2 ... X_n)</span> be the input space.</p>
+<ul>
+<li><p>Let <span class="math inline">Y_n</span> be the response vector of size n.&nbsp;</p></li>
+<li><p>Let <span class="math inline">X = (X_1, X_2 ... X_n)</span> be the input space.</p></li>
+</ul>
 <p>Then, a regular GP is written as:</p>
 <p><span class="math display">
 \begin{align*}
@@ -753,26 +808,38 @@ C_n  &amp; \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \ri
 \end{align*}
 </span></p>
 </div>
+</section>
+<section id="hetgp-setup-1" class="slide level2">
+<h2>HetGP Setup</h2>
 <div class="fragment">
 <p>In case of a hetGP, we have:</p>
 <p><span class="math display">
 \begin{aligned}
 Y_n\ &amp; \ \sim GP \left( 0 \ , \tau^2 C_{n, \Lambda}  \right) \ \ \text{where, }\\[2pt]
-C_{n, \Lambda}  &amp; \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + \Lambda_n} \ \ \ \text{and, }\ \\[2pt]
-\ \ \Lambda_n \  &amp; \ = \ \text{Diag}(\lambda_1, \lambda_2 ... , \lambda_n) \\[2pt]
+C_{n, \Lambda}  &amp; \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + \Lambda_n} \ \ \ \text{and, }\ \ \\[2pt]
+\ \ \Lambda_n \ &amp; \ = \ \text{Diag}(\lambda_1, \lambda_2 ... , \lambda_n) \\[2pt]
 \end{aligned}
 </span></p>
 <ul>
 <li>Instead of one nugget for the GP, we have a <strong>vector of nuggets</strong> i.e.&nbsp;a unique nugget for each unique input.</li>
 </ul>
 </div>
+</section>
+<section id="hetgp-predictions" class="slide level2">
+<h2>HetGP Predictions</h2>
 <div class="fragment">
-<!-- \text{log} \ \lambda \ & \ \sim \ GP \left( 0 \ , \ K_{\theta_\lambda} (X_N) \right) \\[2pt] -->
-<p>We can make predictions exactly as seen in case of a GP in Equation(4) with <span class="math display">
+<ul>
+<li>Recall, for a GP, we make predictions using the following:</li>
+</ul>
+<span class="math display">\begin{equation*}
 \begin{aligned}
-\Sigma(X) \ &amp; \ = \nu \left( \ K_{\theta_Y}(X) + \Lambda_N(X) \  \right) \\[2pt]
+\mu(\mathcal{X}) &amp; = \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} Y_n \\
+\sigma^2(\mathcal{X}) &amp; = \Sigma(\mathcal{X}, \mathcal{X}) - \Sigma(\mathcal{X}, X_n) \Sigma_n^{-1} \Sigma(X_n, \mathcal{X}) \\
 \end{aligned}
-</span></p>
+\end{equation*}</span>
+<ul>
+<li>We can make predictions using these same equations with <span class="math display">\Sigma(X_n) \ \ = \tau^2 C_{n, \Lambda}</span></li>
+</ul>
 </div>
 </section>
 <section id="toy-example-1d-example-2" class="slide level2">
@@ -819,26 +886,37 @@ C_{n, \Lambda}  &amp; \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{
 </section>
 <section id="intro-to-ticks-problem" class="slide level2">
 <h2>Intro to Ticks Problem</h2>
+<div class="fragment">
 <ul>
-<li><p>EFI-RCN held an ecological forecasting challenge</p></li>
+<li><p>EFI-RCN held an ecological forecasting challenge <a href="https://projects.ecoforecast.org/neon4cast-docs/Ticks.html">NEON Forecasting Challenge</a> <span class="citation" data-cites="thomas2022neon">(<a href="#/references" role="doc-biblioref" onclick="">Thomas et al. 2022</a>)</span></p></li>
 <li><p>We focus on the Tick Populations theme which studies the abundance of the lone star tick (<em>Amblyomma americanum</em>)</p></li>
 </ul>
+</div>
+</section>
+<section id="tick-population-forecasting" class="slide level2">
+<h2>Tick Population Forecasting</h2>
+<div class="fragment">
 <p>Some details about the challenge:</p>
 <ul>
 <li><p><strong>Objective</strong>: Forecast tick density for 4 weeks into the future</p></li>
 <li><p><strong>Sites</strong>: The data is collected across 9 different sites, each plot was of size 1600<span class="math inline">m^2</span> using a drag cloth</p></li>
 <li><p><strong>Data</strong>: Sparse and irregularly spaced. We only have ~650 observations across 10 years at 9 locations</p></li>
 </ul>
+</div>
 </section>
 <section id="predictors" class="slide level2">
 <h2>Predictors</h2>
+<div class="fragment">
 <ul>
 <li><p><span class="math inline">X_1</span> Iso-week: The week in which the tick density was recorded.</p></li>
 <li><p><span class="math inline">X_2</span> Sine wave: <span class="math inline">\left( \text{sin} \ ( \frac{2 \ \pi \ X_1}{106} ) \right)^2</span>.</p></li>
+<li><p><span class="math inline">X_3</span> Greenness: Environmental predictor (in practical)</p></li>
 </ul>
+</div>
 </section>
 <section id="practical" class="slide level2">
 <h2>Practical</h2>
+<div class="fragment">
 <ul>
 <li>Setup these predictors</li>
 <li>Transform the data to normal</li>
@@ -846,10 +924,25 @@ C_{n, \Lambda}  &amp; \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{
 <li>Make Predictions on a testing set</li>
 <li>Check how predictions perform.</li>
 </ul>
+</div>
+</section>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
+</div>
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-binois2018practical" class="csl-entry" role="listitem">
+Binois, Mickael, Robert B Gramacy, and Mike Ludkovski. 2018. <span>“Practical Heteroscedastic Gaussian Process Modeling for Large Simulation Experiments.”</span> <em>Journal of Computational and Graphical Statistics</em> 27 (4): 808–21.
+</div>
+<div id="ref-gramacy2020surrogates" class="csl-entry" role="listitem">
+Gramacy, Robert B. 2020. <em>Surrogates: Gaussian Process Modeling, Design, and Optimization for the Applied Sciences</em>. Chapman; Hall/CRC.
+</div>
+<div id="ref-thomas2022neon" class="csl-entry" role="listitem">
+Thomas, R Quinn, Carl Boettiger, Cayelan C Carey, Michael C Dietze, Leah R Johnson, Melissa A Kenney, Jason S Mclachlan, et al. 2022. <span>“The NEON Ecological Forecasting Challenge.”</span> <em>Authorea Preprints</em>.
 </div>
 </div>
 </section>

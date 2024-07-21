@@ -60,11 +60,15 @@ We are assuming familiarity with R basics as well as at least introductory stati
 
 <br> <br>
 
-## Basics of Time Series using R
+## Basics of Forecasting Time Series using R
 
--   [Lecture(coming soon)]()
--   [Practical(coming soon)]()
--   Datasets: [coming soon]()
+-   [Lecture](VB_TimeSeriesBasicsR_Lecture.pdf)
+-   [Practical](VB_TimeSeriesForecastingPractical.qmd)
+-   Datasets: 
+    + [NEONphenologyClean.csv](data/NEONphenologyClean.csv)
+    + [phenologyWeather.csv](data/phenologyWeather.csv)
+    + [NEONbeetlesChallenge.csv](data/NEONbeetlesChallenge.csv)
+    + [tinyForecastingChallengeCovs.csv](data/tinyForecastingChallengeCovs.csv)
 
 <br> <br>
 

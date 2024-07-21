@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -273,7 +293,7 @@ window.Quarto = {
 
 <section id="introduction-to-gaussian-processes-for-time-dependent-data" class="level1">
 <h1>Introduction to Gaussian Processes for Time Dependent Data</h1>
-<p>This document introduces the conceptual background to Gaussian Process (GP) regression, along with mathematical concepts. We also demonstrate briefly fitting GPs using the <code>laGP</code> package in R. The material here is intended to give a more verbose introduction to what is covered in the <a href="./GP.html">lecture</a> in order to support a student to work through the <a href="./GP_Practical.html">practical component</a>. This material has been adapted from chapter 5 of the book <a href="https://bobby.gramacy.com/surrogates/">Surrogates: Gaussian process modeling, design and optimization for the applied sciences</a> by Robert Gramacy.</p>
+<p>This document introduces the conceptual background to Gaussian Process (GP) regression, along with mathematical concepts. We also demonstrate briefly fitting GPs using the <code>laGP</code><span class="citation" data-cites="laGP">(<a href="#ref-laGP" role="doc-biblioref">Gramacy 2016</a>)</span> package in R. The material here is intended to give a more verbose introduction to what is covered in the <a href="./GP.html">lecture</a> in order to support a student to work through the <a href="./GP_Practical.html">practical component</a>. This material has been adapted from chapter 5 of the book <a href="https://bobby.gramacy.com/surrogates/">Surrogates: Gaussian process modeling, design and optimization for the applied sciences</a> by Robert Gramacy.</p>
 </section>
 <section id="gaussian-processes" class="level1">
 <h1>Gaussian Processes</h1>
@@ -349,7 +369,7 @@ X_2 \\
 <p><span class="math inline">\mu_{X_1 \vert X_2} = \mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(x_2 - \mu_2)</span></p>
 <p><span class="math inline">\Sigma_{X_1 \vert X_2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1} \Sigma_{21}</span></p>
 <p>Now, let’s look at this in our context.</p>
-<p>Suppose we have, <span class="math inline">D_n = (X_n, Y_n)</span> where <span class="math inline">Y_n \sim N \ ( \ 0 \ , \ \Sigma_n \ )</span>. Now, for a new location <span class="math inline">x_p</span>, we need to find the distribution of<span class="math inline">Y(x_p)</span>.</p>
+<p>Suppose we have, <span class="math inline">D_n = (X_n, Y_n)</span> where <span class="math inline">Y_n \sim N \ ( \ 0 \ , \ \Sigma_n \ )</span>. Now, for a new location <span class="math inline">x_p</span>, we need to find the distribution of <span class="math inline">Y(x_p)</span>.</p>
 <p>We want to find the distribution of <span class="math inline">Y(x_p) \ \vert \ D_n</span>. Using the information from above, we know this is normally distributed and we need to identify then mean and variance. Thus, we have</p>
 <p><span class="math display">\begin{equation}
 \begin{aligned}
@@ -524,12 +544,20 @@ C_{n, \Lambda}  &amp; \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{
 \end{aligned}
 </span></p>
 <p>Instead of one nugget for the GP, we have a <strong>vector of nuggets</strong> i.e.&nbsp;a unique nugget for each unique input. This allows us to obtain tighter bounds as we can have a large nugget where we have less data/ more noise and a smaller nugget where we have more data and/or less noise.</p>
-<p>We can fit a hetGP using the<code>hetGP</code> package on CRAN very similar to that as a regular GP, also called homoskedastic GP.</p>
+<p>We can fit a hetGP using the<code>hetGP</code> <span class="citation" data-cites="binois2021hetgp">(<a href="#ref-binois2021hetgp" role="doc-biblioref">Binois and Gramacy 2021</a>)</span> package on CRAN very similar to that as a regular GP, also called homoskedastic GP.</p>
+
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{patil2024,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-binois2021hetgp" class="csl-entry" role="listitem">
+Binois, Mickaël, and Robert B Gramacy. 2021. <span>“Hetgp: Heteroskedastic Gaussian Process Modeling and Sequential Design in r.”</span> <em>Journal of Statistical Software</em> 98: 1–44.
+</div>
+<div id="ref-laGP" class="csl-entry" role="listitem">
+Gramacy, Robert B. 2016. <span>“<span class="nocase">laGP: Large-Scale Spatial Modeling via Local Approximate Gaussian Processes in R</span>.”</span> <em>Journal of Statistical Software</em> 72 (i01). https://doi.org/<a href="http://hdl.handle.net/10.">http://hdl.handle.net/10.</a>
+</div>
+</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{patil2024,
   author = {Patil, Parul},
   title = {VectorByte {Methods} {Training:} {Introduction} to {Gaussian}
     {Processes} for {Time} {Dependent} {Data} (Notes)},

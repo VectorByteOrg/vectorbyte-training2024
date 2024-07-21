@@ -340,7 +340,7 @@ plot(reg3$fitted,reg3$residuals, col=3, pch=20, cex=1.5)
 plot(reg3$fitted,rstudent(reg3), col=3, pch=20, cex=1.5)
 ```
 
-<small> `r myred("(Note: As $n$ gets much bigger, we will expect to see some very rare events (big $\varepsilon_i$) and not get worried unless $|r_i| > 3$ or $4$.)")` </small>
+<small> `r myred("(Note: As $n$ gets much bigger, we will expect to see some very rare events (big")` $\color{red}{\varepsilon_i}$ `r myred(") and not get worried unless $|r_i| > 3$ or $4$.)")` </small>
 
 ## How to deal with outliers
 
@@ -368,7 +368,7 @@ There is nothing wrong with running a regression with and without potential outl
 
 Means get distracted by outliers...\
 
-<center>![](graphics/distracted_mean_meme.jpg){height="4in"}</center>
+<center>![](graphics/distracted_mean_meme_new.jpg){height="4in"}</center>
 
 ## Outliers, leverage, and residuals
 

@@ -53,7 +53,9 @@ set.seed(1984)
 
 ## Learning Objectives
 
-1.  
+1. Understand a bit about the types of time-dependent data
+2. Be able to conduct simple regression based analyses for time-dependent data.
+3. Be able to check model assumptions for time dependent data. 
 
 ## Time Dependent Data
 

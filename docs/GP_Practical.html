@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -222,8 +242,8 @@ window.Quarto = {
   </ul></li>
   <li><a href="#challenges" id="toc-challenges" class="nav-link" data-scroll-target="#challenges">Challenges</a>
   <ul class="collapse">
-  <li><a href="#fit-a-gp-model-for-the-location-serc-i.e.-site_number-7." id="toc-fit-a-gp-model-for-the-location-serc-i.e.-site_number-7." class="nav-link" data-scroll-target="#fit-a-gp-model-for-the-location-serc-i.e.-site_number-7.">Fit a GP Model for the location “SERC” i.e.&nbsp;<code>site_number = 7</code>.</a></li>
-  <li><a href="#use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location." id="toc-use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location." class="nav-link" data-scroll-target="#use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location.">Use an environmental predictor in your model. Following is a function <code>fx.green</code> that creates the variable given the <code>datetime</code> and the <code>location</code>.</a></li>
+  <li><a href="#fit-a-gp-model-for-the-location-serc-i.e.-site_number-7-and-site_number-4" id="toc-fit-a-gp-model-for-the-location-serc-i.e.-site_number-7-and-site_number-4" class="nav-link" data-scroll-target="#fit-a-gp-model-for-the-location-serc-i.e.-site_number-7-and-site_number-4">Fit a GP Model for the location “SERC” i.e.&nbsp;<code>site_number = 7</code> and <code>site_number = 4</code></a></li>
+  <li><a href="#use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-site_number-7.-check-the-rmses" id="toc-use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-site_number-7.-check-the-rmses" class="nav-link" data-scroll-target="#use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-site_number-7.-check-the-rmses">Use an environmental predictor in your model. Following is a function <code>fx.green</code> that creates the variable given the <code>datetime</code> and the <code>site_number = 7</code>. Check the RMSEs</a></li>
   <li><a href="#fit-a-gp-model-for-all-the-locations-more-advanced." id="toc-fit-a-gp-model-for-all-the-locations-more-advanced." class="nav-link" data-scroll-target="#fit-a-gp-model-for-all-the-locations-more-advanced.">Fit a GP Model for all the locations (<em>More advanced</em>).</a></li>
   </ul></li>
   </ul>
@@ -276,11 +296,11 @@ window.Quarto = {
 
 <section id="objectives" class="level1">
 <h1>Objectives</h1>
-<p>This practical will lead you through fitting a few versions of GPs using two R packages: <code>laGP</code> and <code>hetGP</code>. We will begin with a toy example from the lecture and then move on to a real data example to forecast tick abundances for a NEON site.</p>
+<p>This practical will lead you through fitting a few versions of GPs using two R packages: <code>laGP</code> <span class="citation" data-cites="laGP">(<a href="#ref-laGP" role="doc-biblioref">Gramacy 2016</a>)</span> and <code>hetGP</code> <span class="citation" data-cites="binois2021hetgp">(<a href="#ref-binois2021hetgp" role="doc-biblioref">Binois and Gramacy 2021</a>)</span>. We will begin with a toy example from the lecture and then move on to a real data example to forecast tick abundances for a NEON site.</p>
 </section>
 <section id="basics-fitting-a-gp-model" class="level1">
 <h1>Basics: Fitting a GP Model</h1>
-<p>Remember the function we looked at before: <span class="math display">Y(x) = 5 \ \sin(x)</span> Now, let’s learn how we actually use the library <code>laGP</code> to fit a GP and make predictions at new locations. Let’s begin by loading some libraries</p>
+<p>Here’s our function from before: <span class="math display">Y(x) = 5 \ \sin(x)</span> Now, let’s learn how we actually use the library <code>laGP</code> to fit a GP and make predictions at new locations. Let’s begin by loading some libraries</p>
 <div class="cell" data-warn.conflicts="false">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(laGP)</span>
@@ -380,7 +400,7 @@ window.Quarto = {
 </section>
 <section id="using-gps-for-data-on-tick-abundances-over-time" class="level1">
 <h1>Using GPs for data on tick abundances over time</h1>
-<p>We will try all this on a simple dataset: Tick Data from NEON Forecasting Challenge. We will first learn a little bit about this dataset, followed by setting up our predictors and using them in our model to predict tick density for the future season. We will also learn how to fit a separable GP and specify priors for our parameters. Finally, we will learn some basics about a HetGP (Heteroskedastic GP) and try and fit that model as well.</p>
+<p>We will try all this on a simple dataset: Tick Data from <a href="https://projects.ecoforecast.org/neon4cast-docs/Ticks.html">NEON Forecasting Challenge</a> We will first learn a little bit about this dataset, followed by setting up our predictors and using them in our model to predict tick density for the future season. We will also learn how to fit a separable GP and specify priors for our parameters. Finally, we will learn some basics about a HetGP (Heteroskedastic GP) and try and fit that model as well.</p>
 <section id="overview-of-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="overview-of-the-data">Overview of the Data</h2>
 <ul>
@@ -423,10 +443,9 @@ window.Quarto = {
 <p><span class="math display">\begin{equation}
 \begin{aligned}
 f(y) \ &amp; = \text{log } \ (y + 1) \ \ ; \ \ \ \\[2pt]
-&lt;!-- \ &amp; = \sqrt{y} \ \ \ \; \ \ \ otherwise --&gt;
 \end{aligned}
 \end{equation}</span></p>
-<p>We pass in (<span class="math inline">response</span> + 1) into this function to ensure we don’;t take a log of 0. We will adjust this in our back transform.</p>
+<p>We pass in (<code>response</code> + 1) into this function to ensure we don’t take a log of 0. We will adjust this in our back transform.</p>
 <p>Let’s write a function for this, as well as the inverse of the transform.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transforms y</span></span>
@@ -614,7 +633,7 @@ f(y) \ &amp; = \text{log } \ (y + 1) \ \ ; \ \ \ \\[2pt]
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>startdate <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">min</span>(df<span class="sc">$</span>datetime))<span class="co"># identify start week</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>grid_datetime <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(startdate, <span class="fu">Sys.Date</span>() <span class="sc">+</span> <span class="dv">365</span>, <span class="at">by =</span> <span class="dv">7</span>) <span class="co"># create sequence from </span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the inpu space for the predictive space (All weeks from 04-2014 to 07-2025)</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the input space for the predictive space (All weeks from 04-2014 to 07-2025)</span></span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>XXt1 <span class="ot">&lt;-</span> <span class="fu">fx.iso_week</span>(grid_datetime)</span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>XXt2 <span class="ot">&lt;-</span> <span class="fu">fx.sin</span>(grid_datetime)</span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -802,11 +821,11 @@ f(y) \ &amp; = \text{log } \ (y + 1) \ \ ; \ \ \ \\[2pt]
 <section id="challenges" class="level1">
 <h1>Challenges</h1>
 <p>Now it’s your turn to try to fit a GP on your own. Here are some options:</p>
-<section id="fit-a-gp-model-for-the-location-serc-i.e.-site_number-7." class="level3">
-<h3 class="anchored" data-anchor-id="fit-a-gp-model-for-the-location-serc-i.e.-site_number-7.">Fit a GP Model for the location “SERC” i.e.&nbsp;<code>site_number = 7</code>.</h3>
+<section id="fit-a-gp-model-for-the-location-serc-i.e.-site_number-7-and-site_number-4" class="level3">
+<h3 class="anchored" data-anchor-id="fit-a-gp-model-for-the-location-serc-i.e.-site_number-7-and-site_number-4">Fit a GP Model for the location “SERC” i.e.&nbsp;<code>site_number = 7</code> and <code>site_number = 4</code></h3>
 </section>
-<section id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location." class="level3">
-<h3 class="anchored" data-anchor-id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location.">Use an environmental predictor in your model. Following is a function <code>fx.green</code> that creates the variable given the <code>datetime</code> and the <code>location</code>.</h3>
+<section id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-site_number-7.-check-the-rmses" class="level3">
+<h3 class="anchored" data-anchor-id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-site_number-7.-check-the-rmses">Use an environmental predictor in your model. Following is a function <code>fx.green</code> that creates the variable given the <code>datetime</code> and the <code>site_number = 7</code>. Check the RMSEs</h3>
 <p>Here is a snippet of the supporting file that you will use; You can look into the data.frame and try to plot <code>ker</code> for one site at a time and see what it yields.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'code/df_spline.R'</span>) <span class="co"># sources the cript to make greenness predictor</span></span>
@@ -829,20 +848,33 @@ f(y) \ &amp; = \text{log } \ (y + 1) \ \ ; \ \ \ \\[2pt]
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  df.green <span class="ot">&lt;-</span> df.iso <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(sites.ker, <span class="at">by =</span> <span class="st">'iso'</span>) <span class="co"># join dataframes by iso week</span></span>
 <span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  ker <span class="ot">&lt;-</span> df.green<span class="sc">$</span>ker <span class="co"># return kernel</span></span>
 <span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(ker)</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset df_green and extract infor for site_number = 2</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass the above dataframe as site.info = df_green (site2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="fit-a-gp-model-for-all-the-locations-more-advanced." class="level3">
 <h3 class="anchored" data-anchor-id="fit-a-gp-model-for-all-the-locations-more-advanced.">Fit a GP Model for all the locations (<em>More advanced</em>).</h3>
-<p>Hint: Write a <em>function</em> that can fit a GP and make predictions. Then, write a <em>for loop</em> where you subset the data for each location and then call the function to fit the GP.</p>
+<p>Hint 1: Write a <em>function</em> that can fit a GP and make predictions (keep it simple - only take in the input space, the response and the set on which you want to make predicions).</p>
+<p>Hint 2: Write a <em>for loop</em> where you subset the data for each location and then call the function to fit the GP.</p>
 <!-- Change colors on plots -->
 <!-- \link{https://projects.ecoforecast.org/neon4cast-docs/Ticks.htmls} -->
 
 
+
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{patil2024,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-binois2021hetgp" class="csl-entry" role="listitem">
+Binois, Mickaël, and Robert B Gramacy. 2021. <span>“Hetgp: Heteroskedastic Gaussian Process Modeling and Sequential Design in r.”</span> <em>Journal of Statistical Software</em> 98: 1–44.
+</div>
+<div id="ref-laGP" class="csl-entry" role="listitem">
+Gramacy, Robert B. 2016. <span>“<span class="nocase">laGP: Large-Scale Spatial Modeling via Local Approximate Gaussian Processes in R</span>.”</span> <em>Journal of Statistical Software</em> 72 (i01). https://doi.org/<a href="http://hdl.handle.net/10.">http://hdl.handle.net/10.</a>
+</div>
+</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{patil2024,
   author = {Patil, Parul},
   title = {VectorByte {Methods} {Training:} {Introduction} to {Gaussian}
     {Processes} for {Time} {Dependent} {Data} {(Practical)}},
