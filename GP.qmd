@@ -8,7 +8,9 @@ title-slide-attributes:
   data-background-size: contain
   data-background-opacity: "0.2"
 format: revealjs
-html-math-method: katex
+html-math-method: katex 
+bibliography: references.bib
+link-citations: TRUE
 ---
 
 ## Gaussian Process: Introduction
@@ -19,7 +21,7 @@ html-math-method: katex
 
 -   It started being used in the field of spatial statistics, where it is called *kriging*.
 
--   It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a **surrogate model**.
+-   It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a **surrogate model**. [@gramacy2020surrogates]
 
 ## Uses and Benefits
 
@@ -317,6 +319,8 @@ matplot(X, t(Y_scaled), type = 'l', main = expression(paste(tau^2, " = 25")),
 
 ## Length-scale (Rate of decay of correlation)
 
+. . .
+
 -   Determines how "wiggly" a function is
 
 -    Smaller $\theta$ means wigglier functions i.e. visually:
@@ -352,6 +356,8 @@ matplot(X, t(Y2), type= 'l',  main = expression(paste(theta, " = 5")),
 ```
 
 ## Nugget (Noise)
+
+. . .
 
 -   Ensures discontinuity and prevents interpolation which in turn yields better UQ.
 
@@ -438,11 +444,15 @@ lines(XX, mean_gp + 2 * sqrt(s2_gp), col = 4, lty = 2, lwd = 3)
 
 ## Extentions
 
+. . .
+
 -   **Anisotropic Gaussian Processes**: Suppose our data is multi-dimensional, we can control the **length-scale** ($\theta$) for each dimension.
 
 -   **Heteroskedastic Gaussian Processes**: Suppose our data is noisy and the noise is input dependent, then we can use a different **nugget** for each unique input rather than a scalar $g$. 
 
 ## Anisotropic Gaussian Processes
+
+. . .
 
 In this situation, we can rewrite the $C_n$ matrix as,
 
@@ -454,9 +464,9 @@ Here, $\theta$ = ($\theta_1$, $\theta_2$, ..., $\theta_m$) is a vector of length
 
 . . .
 
--   Heteroskedasticity implies that the data is noisy, and the noise is input dependent and irregular.
+-   Heteroskedasticity implies that the data is noisy, and the noise is input dependent and irregular. [@binois2018practical]
 
-```{r hetviz, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+```{r hetviz, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 4, fig.align="center", warn.conflicts = FALSE}
 
 library(plgp)
 
@@ -535,6 +545,8 @@ $$
 
 ## HetGP Setup
 
+. . .
+
 In case of a hetGP, we have:
 
 $$
@@ -547,8 +559,9 @@ $$
 
 -   Instead of one nugget for the GP, we have a **vector of nuggets** i.e. a unique nugget for each unique input. 
 
-
 ## HetGP Predictions
+
+. . .
 
 - Recall, for a GP, we make predictions using the following:
 
@@ -669,11 +682,15 @@ lines(xp, mean + 2 * sqrt(s2), col = 4, lty = 2, lwd = 3)
 
 ## Intro to Ticks Problem
 
--   EFI-RCN held an ecological forecasting challenge
+. . .
+
+-   EFI-RCN held an ecological forecasting challenge [NEON Forecasting Challenge](https://projects.ecoforecast.org/neon4cast-docs/Ticks.html) [@thomas2022neon]
 
 -   We focus on the Tick Populations theme which studies the abundance of the lone star tick (*Amblyomma americanum*)
 
 ## Tick Population Forecasting
+
+. . .
 
 Some details about the challenge:
 
@@ -685,11 +702,18 @@ Some details about the challenge:
 
 ## Predictors
 
+. . .
+
 -   $X_1$ Iso-week: The week in which the tick density was recorded.
 
 -   $X_2$ Sine wave: $\left( \text{sin} \ ( \frac{2 \ \pi \ X_1}{106} ) \right)^2$.
 
+-   $X_3$ Greenness: Environmental predictor (in practical)
+
+
 ## Practical
+
+. . .
 
 -   Setup these predictors
 -   Transform the data to normal

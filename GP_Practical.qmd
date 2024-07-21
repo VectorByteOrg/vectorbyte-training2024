@@ -12,11 +12,13 @@ format:
     toc-location: left
     html-math-method: katex
     css: styles.css
+bibliography: references.bib
+link-citations: TRUE
 ---
 
 # Objectives 
 
-This practical will lead you through fitting a few versions of GPs using two R packages: `laGP` and `hetGP`. We will begin with a toy example from the lecture and then move on to a real data example to forecast tick abundances for a NEON site. 
+This practical will lead you through fitting a few versions of GPs using two R packages: `laGP` [@laGP] and `hetGP` [@binois2021hetgp]. We will begin with a toy example from the lecture and then move on to a real data example to forecast tick abundances for a NEON site. 
 
 # Basics: Fitting a GP Model
 
@@ -130,7 +132,7 @@ Looks pretty cool.
 
 # Using GPs for data on tick abundances over time
 
-We will try all this on a simple dataset: Tick Data from NEON Forecasting Challenge. We will first learn a little bit about this dataset, followed by setting up our predictors and using them in our model to predict tick density for the future season. We will also learn how to fit a separable GP and specify priors for our parameters. Finally, we will learn some basics about a HetGP (Heteroskedastic GP) and try and fit that model as well.
+We will try all this on a simple dataset: Tick Data from [NEON Forecasting Challenge](https://projects.ecoforecast.org/neon4cast-docs/Ticks.html) We will first learn a little bit about this dataset, followed by setting up our predictors and using them in our model to predict tick density for the future season. We will also learn how to fit a separable GP and specify priors for our parameters. Finally, we will learn some basics about a HetGP (Heteroskedastic GP) and try and fit that model as well.
 
 
 ## Overview of the Data
