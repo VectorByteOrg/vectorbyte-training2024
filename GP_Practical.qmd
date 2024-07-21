@@ -22,7 +22,7 @@ This practical will lead you through fitting a few versions of GPs using two R p
 
 # Basics: Fitting a GP Model
 
-Remember the function we looked at before:
+Here's our function from before:
 $$Y(x) = 5 \ \sin(x)$$
 Now, let's learn how we actually use the library `laGP` to fit a GP and make predictions at new locations. Let's begin by loading some libraries
 

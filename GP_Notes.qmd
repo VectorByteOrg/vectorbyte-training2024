@@ -349,4 +349,4 @@ $$
 
 Instead of one nugget for the GP, we have a **vector of nuggets** i.e. a unique nugget for each unique input. This allows us to obtain tighter bounds as we can have a large nugget where we have less data/ more noise and a smaller nugget where we have more data and/or less noise. 
 
-We can fit a hetGP using the`hetGP` package on CRAN very similar to that as a regular GP, also called homoskedastic GP.
+We can fit a hetGP using the`hetGP` [@binois2021hetgp] package on CRAN very similar to that as a regular GP, also called homoskedastic GP.

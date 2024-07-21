@@ -17,11 +17,11 @@ link-citations: TRUE
 
 . . .
 
--   A Gaussian Process model is a non paramteric and flexible regression model
+-   A Gaussian Process model is a non paramteric and flexible regression model.
 
 -   It started being used in the field of spatial statistics, where it is called *kriging*.
 
--   It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a **surrogate model**. [@gramacy2020surrogates]
+-   It is also widely used in the field of machine learning since it makes fast predictions and gives good uncertainty quantification commonly used as a **surrogate model**. [@gramacy2020surrogates] 
 
 ## Uses and Benefits
 
@@ -720,3 +720,5 @@ Some details about the challenge:
 -   Fit a GP to the Data
 -   Make Predictions on a testing set
 -   Check how predictions perform.
+
+## References
