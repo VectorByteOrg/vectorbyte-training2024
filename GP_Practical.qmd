@@ -569,9 +569,9 @@ plot(X, y)
 
 Now it's your turn to try to fit a GP on your own. Here are some options:
 
-### Fit a GP Model for the location "SERC" i.e. `site_number = 7`. 
+### Fit a GP Model for the location "SERC" i.e. `site_number = 7` and `site_number = 4`
 
-### Use an environmental predictor in your model. Following is a function `fx.green` that creates the variable given the `datetime` and the `location`.
+### Use an environmental predictor in your model. Following is a function `fx.green` that creates the variable given the `datetime` and the `site_number = 7`. Check the RMSEs
 
 Here is a snippet of the supporting file that you will use; You can look into the data.frame and try to plot `ker` for one site at a time and see what it yields. 
 
@@ -589,11 +589,18 @@ fx.green <- function(datetime, site, site_info = df_green){
   ker <- df.green$ker # return kernel
   return(ker)
 }
+
+# Subset df_green and extract infor for site_number = 2
+
+# Pass the above dataframe as site.info = df_green (site2)
+
 ```
 
 ### Fit a GP Model for all the locations (*More advanced*).
 
-Hint: Write a *function* that can fit a GP and make predictions. Then, write a *for loop* where you subset the data for each location and then call the function to fit the GP.
+Hint 1: Write a *function* that can fit a GP and make predictions (keep it simple - only take in the input space, the response and the set on which you want to make predicions). 
+
+Hint 2: Write a *for loop* where you subset the data for each location and then call the function to fit the GP.
 
 <!-- Change colors on plots -->
 
