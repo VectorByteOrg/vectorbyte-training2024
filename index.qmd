@@ -12,7 +12,7 @@ format:
 
 
 
-***Check out our [about](about.qmd) and [schedule: coming soon!]() pages to continue.***
+***Check out our [about](about.qmd) and [schedule](schedule2024.qmd) pages to continue.***
 
 Information about pre-workshop preparation -- including software installation, expectations for what you should already be familiar with, and review materials -- is available in the [pre-work portion of the materials page](materials.html#pre-work-and-set-up).
 

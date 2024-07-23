@@ -137,11 +137,11 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#live-workshop-materials" id="toc-live-workshop-materials" class="nav-link" data-scroll-target="#live-workshop-materials">Live Workshop Materials</a>
   <ul class="collapse">
-  <li><a href="#introduction-to-time-dependent-abundance-data" id="toc-introduction-to-time-dependent-abundance-data" class="nav-link" data-scroll-target="#introduction-to-time-dependent-abundance-data">Introduction to Time Dependent Abundance Data</a></li>
-  <li><a href="#introduction-to-the-vecdyn-database1" id="toc-introduction-to-the-vecdyn-database1" class="nav-link" data-scroll-target="#introduction-to-the-vecdyn-database1">Introduction to the VecDyn database</a></li>
-  <li><a href="#regression-in-r-refresher" id="toc-regression-in-r-refresher" class="nav-link" data-scroll-target="#regression-in-r-refresher">Regression in R Refresher</a></li>
+  <li><a href="#introduction-to-the-workshop" id="toc-introduction-to-the-workshop" class="nav-link" data-scroll-target="#introduction-to-the-workshop">Introduction to the Workshop</a></li>
+  <li><a href="#regression-in-r-refresher-transformations-and-diagnostics" id="toc-regression-in-r-refresher-transformations-and-diagnostics" class="nav-link" data-scroll-target="#regression-in-r-refresher-transformations-and-diagnostics">Regression in R Refresher (Transformations and Diagnostics)</a></li>
   <li><a href="#time-dependent-regression-analysis" id="toc-time-dependent-regression-analysis" class="nav-link" data-scroll-target="#time-dependent-regression-analysis">Time dependent regression analysis</a></li>
-  <li><a href="#basics-of-time-series-using-r" id="toc-basics-of-time-series-using-r" class="nav-link" data-scroll-target="#basics-of-time-series-using-r">Basics of Time Series using R</a></li>
+  <li><a href="#basics-of-forecasting-time-series-using-r" id="toc-basics-of-forecasting-time-series-using-r" class="nav-link" data-scroll-target="#basics-of-forecasting-time-series-using-r">Basics of Forecasting Time Series using R</a></li>
+  <li><a href="#introduction-to-the-vecdyn-database" id="toc-introduction-to-the-vecdyn-database" class="nav-link" data-scroll-target="#introduction-to-the-vecdyn-database">Introduction to the VecDyn database</a></li>
   <li><a href="#gaussian-process-models-gps-for-time-dependent-data" id="toc-gaussian-process-models-gps-for-time-dependent-data" class="nav-link" data-scroll-target="#gaussian-process-models-gps-for-time-dependent-data">Gaussian Process models (GPs) for Time Dependent Data</a></li>
   </ul></li>
   </ul>
@@ -199,44 +199,70 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="live-workshop-materials" class="level1">
 <h1>Live Workshop Materials</h1>
-<section id="introduction-to-time-dependent-abundance-data" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-to-time-dependent-abundance-data">Introduction to Time Dependent Abundance Data</h2>
-<p><br> <br></p>
-</section>
-<section id="introduction-to-the-vecdyn-database1" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-to-the-vecdyn-database1">Introduction to the VecDyn database<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></h2>
+<section id="introduction-to-the-workshop" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-the-workshop">Introduction to the Workshop</h2>
 <ul>
-<li>This component will be delivered live &amp; synchronously. The VecDyn website can be found <a href="https://vectorbyte.crc.nd.edu/vecdyn-datasets">here</a>. It might be an idea to explore this prior to the workshop.</li>
+<li><a href="./VB_IntroTimeDepData.html">Lecture</a></li>
 </ul>
 <p><br> <br></p>
 </section>
-<section id="regression-in-r-refresher" class="level2">
-<h2 class="anchored" data-anchor-id="regression-in-r-refresher">Regression in R Refresher</h2>
+<section id="regression-in-r-refresher-transformations-and-diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="regression-in-r-refresher-transformations-and-diagnostics">Regression in R Refresher (Transformations and Diagnostics)</h2>
+<ul>
+<li><a href="./VB_RegDiagTrans.html">Lecture Slides</a></li>
+<li><a href="./VB_RegDiagTrans_practical.html">Practical</a></li>
+<li>Dataset: <a href="./data/transforms.csv">transforms.csv</a></li>
+</ul>
 <p><br> <br></p>
 </section>
 <section id="time-dependent-regression-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="time-dependent-regression-analysis">Time dependent regression analysis</h2>
+<ul>
+<li><a href="./VB_TimeDepData.html">Lecture Slides</a></li>
+<li><a href="./VB_TimeDepData_practical.html">Practical</a></li>
+<li>Dataset: <a href="./data/Culex_erraticus_walton_covariates_aggregated.csv">Walton Co, FL Mosquito data</a></li>
+</ul>
 <p><br> <br></p>
 </section>
-<section id="basics-of-time-series-using-r" class="level2">
-<h2 class="anchored" data-anchor-id="basics-of-time-series-using-r">Basics of Time Series using R</h2>
+<section id="basics-of-forecasting-time-series-using-r" class="level2">
+<h2 class="anchored" data-anchor-id="basics-of-forecasting-time-series-using-r">Basics of Forecasting Time Series using R</h2>
+<ul>
+<li><a href="VB_TimeSeriesBasicsR_Lecture.pdf">Lecture</a></li>
+<li><a href="./VB_TimeSeriesForecastingPractical.html">Practical</a></li>
+<li>Datasets:
+<ul>
+<li><a href="data/NEONphenologyClean.csv">NEONphenologyClean.csv</a></li>
+<li><a href="data/phenologyWeather.csv">phenologyWeather.csv</a></li>
+<li><a href="data/NEONbeetlesChallenge.csv">NEONbeetlesChallenge.csv</a></li>
+<li><a href="data/tinyForecastingChallengeCovs.csv">tinyForecastingChallengeCovs.csv</a></li>
+</ul></li>
+</ul>
+<p><br> <br></p>
+</section>
+<section id="introduction-to-the-vecdyn-database" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-the-vecdyn-database">Introduction to the VecDyn database</h2>
+<ul>
+<li><a href="https://vectorbyte.crc.nd.edu/vecdyn-datasets">The VecDyn website</a>.</li>
+<li><a href="https://www.vectorbyte.org/blog/vecdyn-api">About the VecDyn API</a></li>
+<li>Other Materials Coming Soon!</li>
+</ul>
 <p><br> <br></p>
 </section>
 <section id="gaussian-process-models-gps-for-time-dependent-data" class="level2">
 <h2 class="anchored" data-anchor-id="gaussian-process-models-gps-for-time-dependent-data">Gaussian Process models (GPs) for Time Dependent Data</h2>
+<ul>
+<li><a href="./GP.html">Lecture Slides</a></li>
+<li><a href="./GP_Notes.html">Lecture Notes</a></li>
+<li><a href="./GP_Practical.html">Practical</a></li>
+<li><a href="code/df_spline.R">additional R code – df_spline.R</a></li>
+</ul>
 <p><br> <br></p>
 
 
 </section>
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>What is the difference between VectorBiTE and VectorByte? We are glad you asked! <a href="http://vectorbite.org/">VectorBiTE</a> was an RCN or a research coordination network funded by a 5 year grant from the BBSRC. <a href="https://www.vectorbyte.org/">VectorByte</a> is hosting this training which is a newly funded NSF grant to establish a global open access data platform to study disease vectors. All the databases have transitioned to VectorByte but the legacy options will still be available on the VectorBiTE website.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
