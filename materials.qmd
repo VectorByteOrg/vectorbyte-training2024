@@ -38,30 +38,53 @@ We are assuming familiarity with R basics as well as at least introductory stati
 
 # Live Workshop Materials
 
-## Introduction to Time Dependent Abundance Data
+## Introduction to the Workshop
+
+-   [Lecture](VB_IntroTimeDepData.qmd)
 
 <br> <br>
 
-## Introduction to the VecDyn database[^1]
+## Regression in R Refresher (Transformations and Diagnostics)
 
-[^1]: What is the difference between VectorBiTE and VectorByte? We are glad you asked! [VectorBiTE](http://vectorbite.org/) was an RCN or a research coordination network funded by a 5 year grant from the BBSRC. [VectorByte](https://www.vectorbyte.org/) is hosting this training which is a newly funded NSF grant to establish a global open access data platform to study disease vectors. All the databases have transitioned to VectorByte but the legacy options will still be available on the VectorBiTE website.
-
--   This component will be delivered live & synchronously. The VecDyn website can be found [here](https://vectorbyte.crc.nd.edu/vecdyn-datasets). It might be an idea to explore this prior to the workshop.
-
-<br> <br>
-
-## Regression in R Refresher
+-   [Lecture Slides](VB_RegDiagTrans.qmd)
+-   [Practical](VB_RegDiagTrans_practical.qmd)
+-   Dataset: [transforms.csv](/data/transforms.csv)
 
 <br> <br>
 
 ## Time dependent regression analysis
 
+-   [Lecture Slides](VB_TimeDepData.qmd)
+-   [Practical](VB_TimeDepData_practical.qmd)
+-   Dataset: [Walton Co, FL Mosquito data](/data/Culex_erraticus_walton_covariates_aggregated.csv)
+
 <br> <br>
 
-## Basics of Time Series using R
+## Basics of Forecasting Time Series using R
+
+-   [Lecture](VB_TimeSeriesBasicsR_Lecture.pdf)
+-   [Practical](VB_TimeSeriesForecastingPractical.qmd)
+-   Datasets: 
+    + [NEONphenologyClean.csv](data/NEONphenologyClean.csv)
+    + [phenologyWeather.csv](data/phenologyWeather.csv)
+    + [NEONbeetlesChallenge.csv](data/NEONbeetlesChallenge.csv)
+    + [tinyForecastingChallengeCovs.csv](data/tinyForecastingChallengeCovs.csv)
+
+<br> <br>
+
+## Introduction to the VecDyn database
+
+-   [The VecDyn website](https://vectorbyte.crc.nd.edu/vecdyn-datasets).
+-   [About the VecDyn API](https://www.vectorbyte.org/blog/vecdyn-api)
+-   Other Materials Coming Soon!
 
 <br> <br>
 
 ## Gaussian Process models (GPs) for Time Dependent Data
+
+-   [Lecture Slides](GP.qmd)
+-   [Lecture Notes](GP_Notes.qmd)
+-   [Practical](GP_Practical.qmd)
+-   [additional R code -- df_spline.R](code/df_spline.R)
 
 <br> <br>
