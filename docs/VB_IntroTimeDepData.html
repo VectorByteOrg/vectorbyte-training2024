@@ -338,22 +338,29 @@ The VectorByte Team (Leah R. Johnson, Virginia Tech)
 </div>
 
 </section>
-<section id="learning-objectives" class="slide level2">
-<h2>Learning Objectives</h2>
-<ol type="1">
-<li>Understand basic concepts in how we understand and model time-dependent population data in VBD applications</li>
-<li>Review basic idea of forecasting</li>
-<li>Overview of course</li>
-</ol>
-</section>
 <section id="population-dynamics-of-disease" class="slide level2">
 <h2>Population dynamics of disease</h2>
-<p>The number of hosts, vectors, pathogens, and infected individuals change over time</p>
-<p>We use models to understand and to forecast/predict</p>
+<p>The number of hosts, vectors, pathogens, and infected individuals change over time.</p>
+<p>We use models models of various types to: - understand relationships - forecast/predict possible future outcomes</p>
 </section>
 <section id="what-types-of-models" class="slide level2">
 <h2>What types of models?</h2>
-<p>tactical to strategic</p>
+<center>
+<p><img data-src="graphics/model_continuum.png"></p>
+</center>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Focus on describing/quantifying patterns</li>
+<li>Statistical Models, e.g.&nbsp;regression, time series</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Seek to understand mechanisms, less prediction</li>
+<li>ODEs, dynamical systems, Stochastic DEs, Individual Based Models</li>
+</ul>
+</div>
+</div>
 <p>We’ll focus on the tactical end of things here (i.e., no dif eqs)</p>
 </section>
 <section id="simple-example-a-first-deterministic-model" class="slide level2">
@@ -399,7 +406,8 @@ W(t) &amp; \stackrel{\mathrm{iid}}{\sim} \mathcal{N}(0, \sigma^2)
 <img data-src="VB_IntroTimeDepData_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="observation-models" class="slide level2">
 <h2>Observation Models</h2>
-<p>We also have to go out into the field and take some observations of the populations. Let’s say that we observe <span class="math inline">\(N_{\mathrm{obs}}(t)\)</span> individuals at time <span class="math inline">\(t\)</span>. How does this relate to the true population size? One possibility is: <span class="math display">\[\begin{align*}
+<p>We also have to go out into the field and take some observations of the populations.</p>
+<p>Let’s say that we observe <span class="math inline">\(N_{\mathrm{obs}}(t)\)</span> individuals at time <span class="math inline">\(t\)</span>. How does this relate to the true population size? One possibility is: <span class="math display">\[\begin{align*}
 N_{\mathrm{obs}}(t) = N(t) + V(t)
 \end{align*}\]</span> where <span class="math inline">\(V(t)\)</span> is our “observation uncertainty”, and all together this equation describes our <span style="color: dodgerblue;">observation model</span>.</p>
 </section>
@@ -408,22 +416,31 @@ N_{\mathrm{obs}}(t) = N(t) + V(t)
 <p>With the observation model, our full system (process + observation models) might be <span class="math display">\[\begin{align*}
 N(t) &amp; = s N(t-1) + b(t-1) +W(t)\\
 N_{\mathrm{obs}}(t) &amp; =  N(t) + V(t)
-\end{align*}\]</span> plus distributions for <span class="math inline">\(W(t)\)</span>, <span class="math inline">\(V(t)\)</span>, and the initial population size.</p>
+\end{align*}\]</span></p>
+<p>plus:</p>
+<ul>
+<li>distributions for <span class="math inline">\(W(t)\)</span>, <span class="math inline">\(V(t)\)</span></li>
+<li>the initial population size.</li>
+</ul>
 </section>
 <section id="observation-process-matters" class="slide level2">
 <h2>Observation process matters</h2>
-<p>Analysis approach depends on the sampling – evenly or unevenly spaced, goal of the modeling exercise (understanding vs forecasting/prediction).</p>
-</section>
-<section id="forecasting-process" class="slide level2">
-<h2>Forecasting process</h2>
-<p>something about forecasting</p>
+<p>Analysis approach depends on not only the goal of the modeling exercise (understanding vs forecasting/prediction) but also on details of the way that data are observed</p>
+<ul>
+<li>evenly or unevenly spaced observations</li>
+<li>consistent sampling locations</li>
+<li>types of observation/instrument (automated? trap type?)</li>
+</ul>
+<p>Although we focus on tools this week, we’ll also talk about general modeling considerations and how to think some of these as we conduct an analyses.</p>
 </section>
 <section id="outline-of-course" class="slide level2">
 <h2>Outline of Course</h2>
-<ol type="1">
-<li>Abundance data from VecDyn and NEON</li>
-<li>Regression refresher for time dep data – basics plus time dependent predictors, transformations, simple AR</li>
+<ol start="0" type="1">
+<li>Introductions and Goals</li>
+<li>Regression refresher focusing on diagnostics and transformations</li>
+<li>Regression approaches for time dependent data – basics plus time dependent predictors, transformations, simple AR</li>
 <li>Analysis of evenly-spaced data: basic time-series methods</li>
+<li>Abundance data from VecDyn and NEON + climate and meteorological variables</li>
 <li>Advanced modeling with Gaussian Process Models</li>
 </ol>
 

@@ -11,14 +11,14 @@
     "href": "VB_IntroTimeDepData.html#population-dynamics-of-disease",
     "title": "VectorByte Methods Training",
     "section": "Population dynamics of disease",
-    "text": "Population dynamics of disease\nThe number of hosts, vectors, pathogens, and infected individuals change over time\nWe use models to understand and to forecast/predict"
+    "text": "Population dynamics of disease\nThe number of hosts, vectors, pathogens, and infected individuals change over time.\nWe use models models of various types to: - understand relationships - forecast/predict possible future outcomes"
   },
   {
     "objectID": "VB_IntroTimeDepData.html#what-types-of-models",
     "href": "VB_IntroTimeDepData.html#what-types-of-models",
     "title": "VectorByte Methods Training",
     "section": "What types of models?",
-    "text": "What types of models?\ntactical to strategic\nWe’ll focus on the tactical end of things here (i.e., no dif eqs)"
+    "text": "What types of models?\n\n\n\n\n\n\nFocus on describing/quantifying patterns\nStatistical Models, e.g. regression, time series\n\n\n\nSeek to understand mechanisms, less prediction\nODEs, dynamical systems, Stochastic DEs, Individual Based Models\n\n\n\nWe’ll focus on the tactical end of things here (i.e., no dif eqs)"
   },
   {
     "objectID": "VB_IntroTimeDepData.html#simple-example-a-first-deterministic-model",
@@ -39,14 +39,14 @@
     "href": "VB_IntroTimeDepData.html#observation-models",
     "title": "VectorByte Methods Training",
     "section": "Observation Models",
-    "text": "Observation Models\nWe also have to go out into the field and take some observations of the populations. Let’s say that we observe \\(N_{\\mathrm{obs}}(t)\\) individuals at time \\(t\\). How does this relate to the true population size? One possibility is: \\[\\begin{align*}\nN_{\\mathrm{obs}}(t) = N(t) + V(t)\n\\end{align*}\\] where \\(V(t)\\) is our “observation uncertainty”, and all together this equation describes our observation model."
+    "text": "Observation Models\nWe also have to go out into the field and take some observations of the populations.\nLet’s say that we observe \\(N_{\\mathrm{obs}}(t)\\) individuals at time \\(t\\). How does this relate to the true population size? One possibility is: \\[\\begin{align*}\nN_{\\mathrm{obs}}(t) = N(t) + V(t)\n\\end{align*}\\] where \\(V(t)\\) is our “observation uncertainty”, and all together this equation describes our observation model."
   },
   {
     "objectID": "VB_IntroTimeDepData.html#observation-process-matters",
     "href": "VB_IntroTimeDepData.html#observation-process-matters",
     "title": "VectorByte Methods Training",
     "section": "Observation process matters",
-    "text": "Observation process matters\nAnalysis approach depends on the sampling – evenly or unevenly spaced, goal of the modeling exercise (understanding vs forecasting/prediction)."
+    "text": "Observation process matters\nAnalysis approach depends on not only the goal of the modeling exercise (understanding vs forecasting/prediction) but also on details of the way that data are observed\n\nevenly or unevenly spaced observations\nconsistent sampling locations\ntypes of observation/instrument (automated? trap type?)\n\nAlthough we focus on tools this week, we’ll also talk about general modeling considerations and how to think some of these as we conduct an analyses."
   },
   {
     "objectID": "VB_IntroTimeDepData.html#forecasting-process",
@@ -60,7 +60,7 @@
     "href": "VB_IntroTimeDepData.html#outline-of-course",
     "title": "VectorByte Methods Training",
     "section": "Outline of Course",
-    "text": "Outline of Course\n\nAbundance data from VecDyn and NEON\nRegression refresher for time dep data – basics plus time dependent predictors, transformations, simple AR\nAnalysis of evenly-spaced data: basic time-series methods\nAdvanced modeling with Gaussian Process Models"
+    "text": "Outline of Course\n\nIntroductions and Goals\nRegression refresher focusing on diagnostics and transformations\nRegression approaches for time dependent data – basics plus time dependent predictors, transformations, simple AR\nAnalysis of evenly-spaced data: basic time-series methods\nAbundance data from VecDyn and NEON + climate and meteorological variables\nAdvanced modeling with Gaussian Process Models"
   },
   {
     "objectID": "GP_Solutions.html",

@@ -38,9 +38,9 @@ We are assuming familiarity with R basics as well as at least introductory stati
 
 # Live Workshop Materials
 
-## Introduction to the Workshop and Time Dependent Abundance Data
+## Introduction to the Workshop
 
--   [Lecture (coming soon)]()
+-   [Lecture](VB_IntroTimeDepData.qmd)
 
 <br> <br>
 
@@ -76,7 +76,7 @@ We are assuming familiarity with R basics as well as at least introductory stati
 
 -   [The VecDyn website](https://vectorbyte.crc.nd.edu/vecdyn-datasets).
 -   [About the VecDyn API](https://www.vectorbyte.org/blog/vecdyn-api)
--   Other Materials Coming Soon.
+-   Other Materials Coming Soon!
 
 <br> <br>
 

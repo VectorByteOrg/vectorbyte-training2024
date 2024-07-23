@@ -50,21 +50,37 @@ insert_html_math <- make_latex_decorator("", "$$")
 ## classoption: aspectratio=169
 ```
 
-## Learning Objectives
-
-1.  Understand basic concepts in how we understand and model time-dependent population data in VBD applications
-2.  Review basic idea of forecasting
-3.  Overview of course
 
 ## Population dynamics of disease
 
-The number of hosts, vectors, pathogens, and infected individuals change over time
+The number of hosts, vectors, pathogens, and infected individuals change over time. 
 
-We use models to understand and to forecast/predict
+We use models models of various types to: 
+- understand relationships
+- forecast/predict possible future outcomes
 
 ## What types of models?
 
-tactical to strategic
+<center>
+
+![](graphics/model_continuum.png)
+
+</center>
+
+::: columns
+::: {.column width="50%"}
+
+- Focus on describing/quantifying patterns
+- Statistical Models, e.g. regression, time series
+
+:::
+
+::: {.column width="50%"}
+- Seek to understand mechanisms, less prediction
+- ODEs, dynamical systems, Stochastic DEs, Individual Based Models
+
+:::
+:::
 
 We'll focus on the tactical end of things here (i.e., no dif eqs)
 
@@ -153,7 +169,9 @@ for(j in 1:length(sigma)){
 
 ## Observation Models
 
-We also have to go out into the field and take some observations of the populations. Let's say that we observe $N_{\mathrm{obs}}(t)$ individuals at time $t$. How does this relate to the true population size? One possibility is: \begin{align*}
+We also have to go out into the field and take some observations of the populations. 
+
+Let's say that we observe $N_{\mathrm{obs}}(t)$ individuals at time $t$. How does this relate to the true population size? One possibility is: \begin{align*}
 N_{\mathrm{obs}}(t) = N(t) + V(t)
 \end{align*} where $V(t)$ is our "observation uncertainty", and all together this equation describes our `r myblue("observation model")`.
 
@@ -162,19 +180,29 @@ N_{\mathrm{obs}}(t) = N(t) + V(t)
 With the observation model, our full system (process + observation models) might be \begin{align*}
 N(t) & = s N(t-1) + b(t-1) +W(t)\\
 N_{\mathrm{obs}}(t) & =  N(t) + V(t)
-\end{align*} plus distributions for $W(t)$, $V(t)$, and the initial population size.
+\end{align*} 
+
+plus:
+
+- distributions for $W(t)$, $V(t)$
+- the initial population size.
 
 ## Observation process matters
 
-Analysis approach depends on the sampling -- evenly or unevenly spaced, goal of the modeling exercise (understanding vs forecasting/prediction).
+Analysis approach depends on not only the goal of the modeling exercise (understanding vs forecasting/prediction) but also on details of the way that data are observed
 
-## Forecasting process
+- evenly or unevenly spaced observations
+- consistent sampling locations
+- types of observation/instrument (automated? trap type?)
 
-something about forecasting
+Although we focus on tools this week, we'll also talk about general modeling considerations and how to think some of these as we conduct an analyses.
+
 
 ## Outline of Course
 
-1.  Abundance data from VecDyn and NEON
-2.  Regression refresher for time dep data -- basics plus time dependent predictors, transformations, simple AR
+0. Introductions and Goals
+1. Regression refresher focusing on diagnostics and transformations
+2. Regression approaches for time dependent data -- basics plus time dependent predictors, transformations, simple AR
 3.  Analysis of evenly-spaced data: basic time-series methods
-4.  Advanced modeling with Gaussian Process Models
+4.  Abundance data from VecDyn and NEON + climate and meteorological variables
+5.  Advanced modeling with Gaussian Process Models
