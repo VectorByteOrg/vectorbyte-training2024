@@ -1,0 +1,399 @@
+---
+title: "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)"
+author:
+  - name: Leah R. Johnson 
+    url: https://lrjohnson0.github.io/QEDLab/leahJ.html
+    affiliation: Virginia Tech and VectorByte
+citation: true
+date: 2024-07-23
+date-format: long
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(123)
+```
+
+<br>
+
+# Overview and Instructions
+
+The goal of this practical is to practice building models for time-dependent data using simple regression based techniques. This includes incorporated possible transformations, trying out different time dependent predictors (including lagged variables) and assessing model fit using diagnostic plots. 
+
+<br>
+
+# Guided example: Monthly average mosquito counts in Walton County, FL
+
+The file [Culex_erraticus_walton_covariates_aggregated.csv](data/Culex_erraticus_walton_covariates_aggregated.csv) on the course website contains data on **average monthly counts of mosquitos** (`sample_value`) in Walton, FL, together with monthly average maximum temperature (`MaxTemp` in C) and precipitation (`Precip` in inches) for each month from January 2015 through December 2017 (`Month_Yr`).
+
+
+## Exploring the Data
+
+As always, we first want to take a look at the data, to make sure we understand it, and that we don't have missing or weird values.
+
+```{r}
+mozData<-read.csv("data/Culex_erraticus_walton_covariates_aggregated.csv")
+summary(mozData)
+```
+We can see that the minimum observed average number of mosquitoes it zero, and max is only 3 (there are likely many zeros averaged over many days in the month). There don't appear to be any `NA`s in the data. In this case the dataset itself is small enough that we can print the whole thing to ensure it's complete:
+```{r}
+mozData
+```
+
+## Plotting the data
+
+First we'll examine the data itself, including the predictors:
+
+```{r, fig.align='center', fig.height= 10, fig.width=8}
+months<-dim(mozData)[1]
+t<-1:months ## counter for months in the data set
+par(mfrow=c(3,1))
+plot(t, mozData$sample_value, type="l", lwd=2, 
+     main="Average Monthly Abundance", 
+     xlab ="Time (months)", 
+     ylab = "Average Count")
+plot(t, mozData$MaxTemp, type="l",
+     col = 2, lwd=2, 
+     main="Average Maximum Temp", 
+     xlab ="Time (months)", 
+     ylab = "Temperature (C)")
+plot(t, mozData$Precip, type="l",
+     col="dodgerblue", lwd=2,
+     main="Average Monthly Precip", 
+     xlab ="Time (months)", 
+     ylab = "Precipitation (in)")
+
+```
+Visually we noticed that there may be a bit of clumping in the values for abundance (this is subtle) -- in particular, since we have a lot of very small/nearly zero counts, a transform, such as a square root, may spread things out for the abundances. It also looks like both the abundance and temperature data are more cyclical than the precipitation, and thus more likely to be related to each other. There's also not visually a lot of indication of a trend, but it's usually worthwhile to consider it anyway. Replotting the abundance data with a transformation:
+
+```{r, fig.align='center', fig.width=8}
+months<-dim(mozData)[1]
+t<-1:months ## counter for months in the data set
+plot(t, sqrt(mozData$sample_value), type="l", lwd=2, 
+     main="Sqrt Average Monthly Abundance", 
+     xlab ="Time (months)", 
+     ylab = "Average Count")
+```
+
+That looks a little bit better. I suggest we go with this for our response. 
+
+## Building a data frame
+
+Before we get into model building, we always want to build a data frame to contain all of the predictors that we want to consider, at the potential lags that we're interested in. In the lecture we saw building the AR, sine/cosine, and trend predictors:
+```{r}
+t <- 2:months ## to make building the AR1 predictors easier
+
+mozTS <- data.frame(
+  Y=sqrt(mozData$sample_value[t]), # transformed response
+  Yl1=sqrt(mozData$sample_value[t-1]), # AR1 predictor
+  t=t, # trend predictor
+  sin12=sin(2*pi*t/12), 
+  cos12=cos(2*pi*t/12) # periodic predictors
+  )
+```
+
+We will also put in the temperature and precipitation predictors. But we need to think about what might be an appropriate lag. If this were daily or weekly data, we'd probably want to have a fairly sizable lag -- mosquitoes take a while to develop, so the number we see today is not likely related to the temperature today. However, since these data are agregated across a whole month, as is the temperature/precipitaion, the current month values are likely to be useful. However, it's even possible that last month's values may be so we'll add those in as well:
+
+```{r}
+mozTS$MaxTemp<-mozData$MaxTemp[t] ## current temps
+mozTS$MaxTempl1<-mozData$MaxTemp[t-1] ## previous temps
+mozTS$Precip<-mozData$Precip[t] ## current precip
+mozTS$Precipl1<-mozData$Precip[t-1] ## previous precip
+```
+
+Thus our full dataframe:
+```{r}
+summary(mozTS)
+```
+
+```{r}
+head(mozTS)
+```
+
+## Building a first model
+
+We will first build a very simple model -- just a trend  -- to practice building the model, checking diagnostics, and plotting predictions.
+
+```{r}
+mod1<-lm(Y ~ t, data=mozTS)
+summary(mod1)
+```
+
+The model output indicates that this model is not useful -- the trend is not significant and it only explains about 2% of the variability. Let's plot the predictions:
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+## plot points and fitted lines
+plot(Y~t, data=mozTS, col=1, type="l")
+lines(t, mod1$fitted, col="dodgerblue", lwd=2)
+```
+
+
+Not good -- we'll definitely need to try something else! Remember that since we're using a linear model for this, that we should check our residual plots as usual, and then also plot the `acf` of the residuals:
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+par(mfrow=c(1,3), mar=c(4,4,2,0.5))   
+
+## studentized residuals vs fitted
+plot(mod1$fitted, rstudent(mod1), col=1,
+     xlab="Fitted Values", 
+     ylab="Studentized Residuals", 
+     pch=20, main="AR 1 only model")
+
+## qq plot of studentized residuals
+qqnorm(rstudent(mod1), pch=20, col=1, main="" )
+abline(a=0,b=1,lty=2, col=2)
+
+## histogram of studentized residuals
+hist(rstudent(mod1), col=1, 
+     xlab="Studentized Residuals", 
+     main="", border=8)
+```
+
+This doesn't look really bad, although the histogram might be a bit weird. Finally the `acf`
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+acf(mod1$residuals)
+```
+This is where we can see that we definitely aren't able to capture the pattern. There's substantial autocorrelation left at a 1 month lag, and around 6 months. 
+
+Finally, for moving forward, we can extract the BIC for this model so that we can compare with other models that you'll build next. 
+
+```{r}
+n<-length(t)
+extractAIC(mod1, k=log(n))[2]
+```
+
+# Build and compare your own models (Example solution)
+
+Follow the procedure I showed for the model with a simple trend, and build ***at least*** 4 more models:
+
+1. one that contains an AR term
+2. one with the sine/cosine terms
+3. one with the environmental predictors
+4. one with a combination
+
+Check diagnostics/model assumptions as you go. Then at the end compare all of your models via BIC. What is your best model by that metric? We'll share among the group what folks found to be good models. 
+
+***NOTE: The solutions I show below are examples of what one could do, but your models might be a bit different***
+
+## Example Solution: AR1 model only
+
+```{r}
+mod2<-lm(Y ~ Yl1, data=mozTS)
+summary(mod2)
+```
+
+The model is better than the original trend only model -- the AR1 term explains about 48% of the variability. Let's plot the predictions:
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+## plot points and fitted lines
+plot(Y~t, data=mozTS, col=1, type="l")
+lines(t, mod2$fitted, col=2, lwd=2)
+```
+
+Pretty good! Look at all of the diagnostic plots:
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+par(mfrow=c(1,3), mar=c(4,4,2,0.5))   
+
+## studentized residuals vs fitted
+plot(mod2$fitted, rstudent(mod2), col=2,
+     xlab="Fitted Values", 
+     ylab="Studentized Residuals", 
+     pch=20, main="AR 1 only model")
+
+## qq plot of studentized residuals
+qqnorm(rstudent(mod2), pch=20, col=2, main="" )
+abline(a=0,b=1,lty=2, col=1)
+
+## histogram of studentized residuals
+hist(rstudent(mod2), col=2, 
+     xlab="Studentized Residuals", 
+     main="", border=8)
+```
+Maybe one outlier, but not too bad.
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+acf(mod2$residuals)
+```
+We seem to have taken care of all of the autoregression, even at multiple lags!
+
+```{r}
+n<-length(t)
+extractAIC(mod2, k=log(n))[2]
+```
+
+BIC is much lower -- overall a much much better model than the first one. 
+
+## Example Solution:  sine/cosine terms only
+
+```{r}
+mod3<-lm(Y ~ sin12 + cos12, data=mozTS)
+summary(mod3)
+```
+
+The model is better than the original trend only model -- it explains about 55% of the variability (we expect $R^2$ to increase as we have more predictors). Let's plot the predictions:
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+## plot points and fitted lines
+plot(Y~t, data=mozTS, col=1, type="l")
+lines(t, mod3$fitted, col=3, lwd=2)
+```
+
+Pretty good! Look at all of the diagnostic plots:
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+par(mfrow=c(1,3), mar=c(4,4,2,0.5))   
+
+## studentized residuals vs fitted
+plot(mod3$fitted, rstudent(mod3), col=3,
+     xlab="Fitted Values", 
+     ylab="Studentized Residuals", 
+     pch=20, main="sin/cos only model")
+
+## qq plot of studentized residuals
+qqnorm(rstudent(mod3), pch=20, col=3, main="" )
+abline(a=0,b=1,lty=2, col=2)
+
+## histogram of studentized residuals
+hist(rstudent(mod3), col=3, 
+     xlab="Studentized Residuals", 
+     main="", border=8)
+```
+Maybe one outlier, but not too bad.
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+acf(mod3$residuals)
+```
+We seem have taken care of the longer lag autocorrelation, but still some lag 1 left. 
+
+```{r}
+n<-length(t)
+extractAIC(mod3, k=log(n))[2]
+```
+
+This model is even better than the AR1 model. We'll keep this in mind....
+
+## Example Solution: environmental predictors only
+
+I'll put in the predictors at the current time period. Since this is monthly averaged data we could probably do either current or lagged. 
+
+```{r}
+mod4<-lm(Y ~ MaxTemp + Precip, data=mozTS)
+summary(mod4)
+```
+
+The model is even better than the last -- the model explains about 58% of the variability, although the Precip isn't significant and we might want to consider dropping it. Let's plot the predictions:
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+## plot points and fitted lines
+plot(Y~t, data=mozTS, col=1, type="l")
+lines(t, mod4$fitted, col=4, lwd=2)
+```
+
+Pretty good! Look at all of the diagnostic plots:
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+par(mfrow=c(1,3), mar=c(4,4,2,0.5))   
+
+## studentized residuals vs fitted
+plot(mod4$fitted, rstudent(mod4), col=4,
+     xlab="Fitted Values", 
+     ylab="Studentized Residuals", 
+     pch=20, main="weather model")
+
+## qq plot of studentized residuals
+qqnorm(rstudent(mod4), pch=20, col=4, main="" )
+abline(a=0,b=1,lty=2, col=2)
+
+## histogram of studentized residuals
+hist(rstudent(mod4), col=4, 
+     xlab="Studentized Residuals", 
+     main="", border=8)
+```
+Maybe one outlier again, but not too bad.
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+acf(mod4$residuals)
+```
+We seem to have taken care of all of the autoregression, except maybe a bit of AR1.
+
+```{r}
+n<-length(t)
+extractAIC(mod4, k=log(n))[2]
+```
+
+Even better, although it's not much different than the sin/cos
+
+## Example Solution: AR1 plus sin/cos
+
+Ok, now to combine things:
+
+```{r}
+mod5<-lm(Y ~ Yl1 + sin12 + cos12, data=mozTS)
+summary(mod5)
+```
+
+The model is better than the original trend only model -- the AR1 term explains about 48% of the variability. Let's plot the predictions:
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+## plot points and fitted lines
+plot(Y~t, data=mozTS, col=1, type="l")
+lines(t, mod5$fitted, col=5, lwd=2)
+```
+
+Pretty good! Look at all of the diagnostic plots:
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+par(mfrow=c(1,3), mar=c(4,4,2,0.5))   
+
+## studentized residuals vs fitted
+plot(mod5$fitted, rstudent(mod5), col=5,
+     xlab="Fitted Values", 
+     ylab="Studentized Residuals", 
+     pch=20, main="AR 1 only model")
+
+## qq plot of studentized residuals
+qqnorm(rstudent(mod5), pch=20, col=5, main="" )
+abline(a=0,b=1,lty=2, col=2)
+
+## histogram of studentized residuals
+hist(rstudent(mod5), col=5, 
+     xlab="Studentized Residuals", 
+     main="", border=8)
+```
+That's really good!.
+
+```{r, fig.align='center', fig.height=4, fig.width=8}
+acf(mod5$residuals)
+```
+We seem to have taken care of all of the autoregression!
+
+```{r}
+n<-length(t)
+extractAIC(mod5, k=log(n))[2]
+```
+
+
+And definitely the best so far. Just to compare more easily:
+
+```{r}
+c(mod1 = extractAIC(mod1, k=log(n))[2],
+  mod2 = extractAIC(mod2, k=log(n))[2],
+  mod3 = extractAIC(mod3, k=log(n))[2],
+  mod4 = extractAIC(mod4, k=log(n))[2],
+  mod5 = extractAIC(mod5, k=log(n))[2])
+```
+
+We're looking for difference of about 5 to determine if a model is better. Model 5 is about 5 better than model 4, and models 2-4 are all about even. It may be that AR1 plus temperature might be even better, but it's easier to forecast with a sine/cosine than using temperature, so I went for that....
+
+# Extra Practice 
+
+Imagine that you are missing a few months at random -- how would you need to modify the analysis. Try it out by removing about 5 months not at the beginning or end of the time series. 
+
