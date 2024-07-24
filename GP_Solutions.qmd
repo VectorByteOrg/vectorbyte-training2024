@@ -386,7 +386,7 @@ grid_datetime <- seq.Date(startdate, Sys.Date() + 365, by = 7) # create sequence
 # You can pre process to have y transformed or have it in the loop.
 rmse <- matrix(nrow = length(site_names), ncol = 1) # if rmse
 
-for(i in 1:length(site_names)){
+for(i in 1:7){
   df_site <- subset(df, site_id == site_names[i])
   
   # cutoff for sites
@@ -402,7 +402,7 @@ for(i in 1:length(site_names)){
   X1c <- X1/ 53
   X3c <- (X3 - min(X3))/ (max(X3)- min(X3))
   X <- as.matrix(cbind.data.frame(X1c, X2, X3c))
-
+  
   y_obs <- df_train$observation # only at this location
   y <- f(y_obs) # transform y
 
@@ -415,7 +415,7 @@ for(i in 1:length(site_names)){
   XXt1c <- XXt1/53
   XXt3 <- (XXt3 - min(XXt3))/ (max(XXt3)- min(XXt3))
   XXt <- as.matrix(cbind.data.frame(XXt1c, XXt2, XXt3))
- 
+  
   fit <- gpfit(X = X, y = y, XX = XXt)
   
   # Make plots
@@ -437,7 +437,7 @@ for(i in 1:length(site_names)){
   
   yt_true <- f(df_test$observation)
   yt_pred <- f(fit$mean[which(grid_datetime  %in% df_test$datetime)])
-
+  
   # calculate RMSE
   rmse[i, ] <- sqrt(mean((yt_true - yt_pred)^2))
 }
