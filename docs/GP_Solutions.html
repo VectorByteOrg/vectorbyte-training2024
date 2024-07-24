@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Parul Patil">
+<meta name="dcterms.date" content="2024-07-24">
 
-<title>VectorByte Training 2024 - GP_Solutions</title>
+<title>VectorByte Training 2024 - VectorByte Methods Training: Introduction to Gaussian Processes for Time Dependent Data (Practical - solution)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -159,23 +161,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries">Libraries</a></li>
+  <li><a href="#hetgp-sin-wave-eg" id="toc-hetgp-sin-wave-eg" class="nav-link" data-scroll-target="#hetgp-sin-wave-eg">HetGP (sin wave eg)</a></li>
+  <li><a href="#challenges" id="toc-challenges" class="nav-link" data-scroll-target="#challenges">Challenges</a>
+  <ul class="collapse">
+  <li><a href="#fit-a-gp-model-for-the-location-serc" id="toc-fit-a-gp-model-for-the-location-serc" class="nav-link" data-scroll-target="#fit-a-gp-model-for-the-location-serc">Fit a GP Model for the location “SERC”</a></li>
+  <li><a href="#use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location." id="toc-use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location." class="nav-link" data-scroll-target="#use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location.">Use an environmental predictor in your model. Following is a function <code>fx.green</code> that creates the variable given the <code>datetime</code> and the <code>location</code>.</a>
+  <ul class="collapse">
+  <li><a href="#setting-up-the-target-dataframe" id="toc-setting-up-the-target-dataframe" class="nav-link" data-scroll-target="#setting-up-the-target-dataframe">Setting up the target dataframe</a></li>
+  <li><a href="#adding-greenness" id="toc-adding-greenness" class="nav-link" data-scroll-target="#adding-greenness">Adding Greenness</a></li>
+  </ul></li>
+  <li><a href="#fit-a-gp-model-for-all-the-locations-more-advanced." id="toc-fit-a-gp-model-for-all-the-locations-more-advanced." class="nav-link" data-scroll-target="#fit-a-gp-model-for-all-the-locations-more-advanced.">Fit a GP Model for all the locations (<em>More advanced</em>).</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">GP_Solutions</h1>
+<h1 class="title">VectorByte Methods Training: Introduction to Gaussian Processes for Time Dependent Data (Practical - solution)</h1>
 </div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Parul Patil </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Virginia Tech and VectorByte
+          </p>
+      </div>
+  </div>
 
 <div class="quarto-title-meta">
 
-    
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 24, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -185,8 +226,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="libraries" class="level5">
-<h5 class="anchored" data-anchor-id="libraries">Libraries</h5>
+<section id="libraries" class="level1">
+<h1>Libraries</h1>
 <div class="cell" data-warn.conflicts="false">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(laGP)</span>
@@ -194,8 +235,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="hetgp-sin-wave-eg" class="level5">
-<h5 class="anchored" data-anchor-id="hetgp-sin-wave-eg">HetGP (sin wave eg)</h5>
+<section id="hetgp-sin-wave-eg" class="level1">
+<h1>HetGP (sin wave eg)</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your turn</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">26</span>)</span>
@@ -247,8 +288,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="challenges" class="level5">
-<h5 class="anchored" data-anchor-id="challenges">Challenges</h5>
+<section id="challenges" class="level1">
+<h1>Challenges</h1>
 <p>We need to load the data and the functions</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pulling the data from the NEON data base. </span></span>
@@ -291,8 +332,9 @@ date (1): datetime
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x2)</span>
 <span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="fit-a-gp-model-for-the-location-serc-i.e.-site_number-7." class="level6">
-<h6 class="anchored" data-anchor-id="fit-a-gp-model-for-the-location-serc-i.e.-site_number-7.">Fit a GP Model for the location “SERC” i.e.&nbsp;<code>site_number = 7</code>.</h6>
+<section id="fit-a-gp-model-for-the-location-serc" class="level2">
+<h2 class="anchored" data-anchor-id="fit-a-gp-model-for-the-location-serc">Fit a GP Model for the location “SERC”</h2>
+<p>i.e.&nbsp;<code>site_number = 7</code>.</p>
 <p>Just change site = 7</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>site_number <span class="ot">&lt;-</span> <span class="dv">7</span> <span class="co"># (site_number = 4) for the other challenge</span></span>
@@ -412,8 +454,8 @@ date (1): datetime
 </div>
 </div>
 </section>
-<section id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location." class="level6">
-<h6 class="anchored" data-anchor-id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location.">Use an environmental predictor in your model. Following is a function <code>fx.green</code> that creates the variable given the <code>datetime</code> and the <code>location</code>.</h6>
+<section id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location." class="level2">
+<h2 class="anchored" data-anchor-id="use-an-environmental-predictor-in-your-model.-following-is-a-function-fx.green-that-creates-the-variable-given-the-datetime-and-the-location.">Use an environmental predictor in your model. Following is a function <code>fx.green</code> that creates the variable given the <code>datetime</code> and the <code>location</code>.</h2>
 <p>Here is a snippet of the supporting file that you will use; You can look into the data.frame and try to plot <code>ker</code> for one site at a time and see what it yields.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'code/df_spline.R'</span>) <span class="co"># sources the cript to make greenness predictor</span></span>
@@ -443,7 +485,8 @@ date (1): datetime
 <li>set up X3 using <code>fx_green</code></li>
 <li>Scale X3</li>
 </ul>
-<p>Setting up the target dataframe</p>
+<section id="setting-up-the-target-dataframe" class="level3">
+<h3 class="anchored" data-anchor-id="setting-up-the-target-dataframe">Setting up the target dataframe</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtaining site name</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>site_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(target<span class="sc">$</span>site_id)</span>
@@ -459,7 +502,9 @@ date (1): datetime
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>df_train <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, df<span class="sc">$</span>datetime <span class="sc">&lt;=</span> cutoff)</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>df_test <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, df<span class="sc">$</span>datetime <span class="sc">&gt;</span> cutoff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Adding Greenness</p>
+</section>
+<section id="adding-greenness" class="level3">
+<h3 class="anchored" data-anchor-id="adding-greenness">Adding Greenness</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose location </span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>site_number <span class="ot">=</span> <span class="dv">7</span></span>
@@ -574,8 +619,9 @@ date (1): datetime
 </div>
 </div>
 </section>
-<section id="fit-a-gp-model-for-all-the-locations-more-advanced." class="level6">
-<h6 class="anchored" data-anchor-id="fit-a-gp-model-for-all-the-locations-more-advanced.">Fit a GP Model for all the locations (<em>More advanced</em>).</h6>
+</section>
+<section id="fit-a-gp-model-for-all-the-locations-more-advanced." class="level2">
+<h2 class="anchored" data-anchor-id="fit-a-gp-model-for-all-the-locations-more-advanced.">Fit a GP Model for all the locations (<em>More advanced</em>).</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GP function. This can be varied but easiest way is to just take in X, y, XX and return the predicted means and bounds. </span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -609,89 +655,157 @@ date (1): datetime
 <span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>site_number <span class="ot">&lt;-</span> <span class="dv">7</span> <span class="co"># (site_number = 4) for the other challenge</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtaining site name</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>site_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(target<span class="sc">$</span>site_id)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># extracting only the datetime and obs columns</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> target[, <span class="fu">c</span>(<span class="st">"datetime"</span>, <span class="st">"site_id"</span>, <span class="st">"observation"</span>)]</span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtaining site name</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>site_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(target<span class="sc">$</span>site_id)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># extracting only the datetime and obs columns</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> target[, <span class="fu">c</span>(<span class="st">"datetime"</span>, <span class="st">"site_id"</span>, <span class="st">"observation"</span>)]</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">=</span> <span class="fu">as.Date</span>(<span class="st">'2020-12-31'</span>)</span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">=</span> <span class="fu">as.Date</span>(<span class="st">'2020-12-31'</span>)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co"># This was always be prediction set</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>startdate <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">min</span>(df<span class="sc">$</span>datetime))<span class="co"># identify start week</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>grid_datetime <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(startdate, <span class="fu">Sys.Date</span>() <span class="sc">+</span> <span class="dv">365</span>, <span class="at">by =</span> <span class="dv">7</span>) <span class="co"># create sequence</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co"># You can pre process to have y transformed or have it in the loop.</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="fu">length</span>(site_names), <span class="at">ncol =</span> <span class="dv">1</span>) <span class="co"># if rmse</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(site_names)){</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  df_site <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, site_id <span class="sc">==</span> site_names[i])</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># cutoff for sites</span></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  df_train <span class="ot">&lt;-</span> <span class="fu">subset</span>(df_site, df_site<span class="sc">$</span>datetime <span class="sc">&lt;=</span> cutoff)</span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  df_test <span class="ot">&lt;-</span> <span class="fu">subset</span>(df_site, df_site<span class="sc">$</span>datetime <span class="sc">&gt;</span> cutoff)</span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  df_green_site <span class="ot">&lt;-</span> <span class="fu">subset</span>(df_green, site <span class="sc">==</span> site_names[i])</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  X1 <span class="ot">&lt;-</span> <span class="fu">fx.iso_week</span>(df_train<span class="sc">$</span>datetime) <span class="co"># range is 1-53</span></span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  X2 <span class="ot">&lt;-</span> <span class="fu">fx.sin</span>(df_train<span class="sc">$</span>datetime) <span class="co"># range is 0 to 1</span></span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>  X3 <span class="ot">&lt;-</span> <span class="fu">fx.green</span>(df_train<span class="sc">$</span>datetime, <span class="at">site =</span> site_names[site_number], <span class="at">site_info =</span> df_green_site) <span class="co"># optional add</span></span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  X1c <span class="ot">&lt;-</span> X1<span class="sc">/</span> <span class="dv">53</span></span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  X3c <span class="ot">&lt;-</span> (X3 <span class="sc">-</span> <span class="fu">min</span>(X3))<span class="sc">/</span> (<span class="fu">max</span>(X3)<span class="sc">-</span> <span class="fu">min</span>(X3))</span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">cbind.data.frame</span>(X1c, X2, X3c))</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># This was always be prediction set</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>startdate <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">min</span>(df<span class="sc">$</span>datetime))<span class="co"># identify start week</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>grid_datetime <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(startdate, <span class="fu">Sys.Date</span>() <span class="sc">+</span> <span class="dv">365</span>, <span class="at">by =</span> <span class="dv">7</span>) <span class="co"># create sequence</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># You can pre process to have y transformed or have it in the loop.</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="fu">length</span>(site_names), <span class="at">ncol =</span> <span class="dv">1</span>) <span class="co"># if rmse</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>){</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  df_site <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, site_id <span class="sc">==</span> site_names[i])</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># cutoff for sites</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  df_train <span class="ot">&lt;-</span> <span class="fu">subset</span>(df_site, df_site<span class="sc">$</span>datetime <span class="sc">&lt;=</span> cutoff)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  df_test <span class="ot">&lt;-</span> <span class="fu">subset</span>(df_site, df_site<span class="sc">$</span>datetime <span class="sc">&gt;</span> cutoff)</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  df_green_site <span class="ot">&lt;-</span> <span class="fu">subset</span>(df_green, site <span class="sc">==</span> site_names[i])</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  X1 <span class="ot">&lt;-</span> <span class="fu">fx.iso_week</span>(df_train<span class="sc">$</span>datetime) <span class="co"># range is 1-53</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  X2 <span class="ot">&lt;-</span> <span class="fu">fx.sin</span>(df_train<span class="sc">$</span>datetime) <span class="co"># range is 0 to 1</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  X3 <span class="ot">&lt;-</span> <span class="fu">fx.green</span>(df_train<span class="sc">$</span>datetime, <span class="at">site =</span> site_names[i], <span class="at">site_info =</span> df_green_site) <span class="co"># optional add</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  X1c <span class="ot">&lt;-</span> X1<span class="sc">/</span> <span class="dv">53</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>  X3c <span class="ot">&lt;-</span> (X3 <span class="sc">-</span> <span class="fu">min</span>(X3))<span class="sc">/</span> (<span class="fu">max</span>(X3)<span class="sc">-</span> <span class="fu">min</span>(X3))</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">cbind.data.frame</span>(X1c, X2, X3c))</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  y_obs <span class="ot">&lt;-</span> df_train<span class="sc">$</span>observation <span class="co"># only at this location</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">f</span>(y_obs) <span class="co"># transform y</span></span>
 <span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>  y_obs <span class="ot">&lt;-</span> df_train<span class="sc">$</span>observation <span class="co"># only at this location</span></span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">f</span>(y_obs) <span class="co"># transform y</span></span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>  XXt1 <span class="ot">&lt;-</span> <span class="fu">fx.iso_week</span>(grid_datetime)</span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>  XXt2 <span class="ot">&lt;-</span> <span class="fu">fx.sin</span>(grid_datetime)</span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>  XXt3 <span class="ot">&lt;-</span> <span class="fu">fx.green</span>(grid_datetime, <span class="at">site =</span> site_names[site_nunber], <span class="at">site_info =</span></span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>                   df_green_site)</span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standardize</span></span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>  XXt1c <span class="ot">&lt;-</span> XXt1<span class="sc">/</span><span class="dv">53</span></span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>  XXt3 <span class="ot">&lt;-</span> (XXt3 <span class="sc">-</span> <span class="fu">min</span>(XXt3))<span class="sc">/</span> (<span class="fu">max</span>(XXt3)<span class="sc">-</span> <span class="fu">min</span>(XXt3))</span>
-<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>  XXt <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">cbind.data.frame</span>(XXt1c, XXt2, XXt3))</span>
-<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">gpfit</span>(<span class="at">X =</span> X, <span class="at">y =</span> y, <span class="at">XX =</span> XXt)</span>
-<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make plots</span></span>
-<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">as.Date</span>(df_site<span class="sc">$</span>datetime), df_site<span class="sc">$</span>observation,</span>
-<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(site_names[i]), <span class="at">col =</span> <span class="st">"black"</span>,</span>
-<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"Dates"</span> , <span class="at">ylab =</span> <span class="st">"Abundance"</span>,</span>
-<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>       <span class="co"># xlim = c(as.Date(min(df$datetime)), as.Date(cutoff)),</span></span>
-<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(df_train<span class="sc">$</span>observation, df_test<span class="sc">$</span>observation, fit<span class="sc">$</span>q1),</span>
-<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>                <span class="fu">max</span>(df_train<span class="sc">$</span>observation,df_test<span class="sc">$</span>observation, fit<span class="sc">$</span>q2)<span class="sc">*</span> <span class="fl">1.05</span>))</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>  XXt1 <span class="ot">&lt;-</span> <span class="fu">fx.iso_week</span>(grid_datetime)</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>  XXt2 <span class="ot">&lt;-</span> <span class="fu">fx.sin</span>(grid_datetime)</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>  XXt3 <span class="ot">&lt;-</span> <span class="fu">fx.green</span>(grid_datetime, <span class="at">site =</span> site_names[i], <span class="at">site_info =</span></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>                   df_green_site)</span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standardize</span></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>  XXt1c <span class="ot">&lt;-</span> XXt1<span class="sc">/</span><span class="dv">53</span></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>  XXt3 <span class="ot">&lt;-</span> (XXt3 <span class="sc">-</span> <span class="fu">min</span>(XXt3))<span class="sc">/</span> (<span class="fu">max</span>(XXt3)<span class="sc">-</span> <span class="fu">min</span>(XXt3))</span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>  XXt <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">cbind.data.frame</span>(XXt1c, XXt2, XXt3))</span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">gpfit</span>(<span class="at">X =</span> X, <span class="at">y =</span> y, <span class="at">XX =</span> XXt)</span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make plots</span></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">as.Date</span>(df_site<span class="sc">$</span>datetime), df_site<span class="sc">$</span>observation,</span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(site_names[i]), <span class="at">col =</span> <span class="st">"black"</span>,</span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"Dates"</span> , <span class="at">ylab =</span> <span class="st">"Abundance"</span>,</span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>       <span class="co"># xlim = c(as.Date(min(df$datetime)), as.Date(cutoff)),</span></span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(df_train<span class="sc">$</span>observation, df_test<span class="sc">$</span>observation, fit<span class="sc">$</span>q1),</span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>                <span class="fu">max</span>(df_train<span class="sc">$</span>observation,df_test<span class="sc">$</span>observation, fit<span class="sc">$</span>q2)<span class="sc">*</span> <span class="fl">1.05</span>))</span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(<span class="fu">as.Date</span>(df_test<span class="sc">$</span>datetime), df_test<span class="sc">$</span>observation, <span class="at">col =</span><span class="st">"black"</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">as.Date</span>(cutoff), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
 <span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(<span class="fu">as.Date</span>(df_test<span class="sc">$</span>datetime), df_test<span class="sc">$</span>observation, <span class="at">col =</span><span class="st">"black"</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span>
-<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">as.Date</span>(cutoff), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the predicted response and the quantiles</span></span>
-<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(grid_datetime, fit<span class="sc">$</span>mean, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(grid_datetime, fit<span class="sc">$</span>q1, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="fl">1.2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(grid_datetime, fit<span class="sc">$</span>q2, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="fl">1.2</span>, <span class="at">lty =</span><span class="dv">2</span>)</span>
-<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the predicted response and the quantiles</span></span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(grid_datetime, fit<span class="sc">$</span>mean, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(grid_datetime, fit<span class="sc">$</span>q1, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="fl">1.2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(grid_datetime, fit<span class="sc">$</span>q2, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="fl">1.2</span>, <span class="at">lty =</span><span class="dv">2</span>)</span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>  yt_true <span class="ot">&lt;-</span> <span class="fu">f</span>(df_test<span class="sc">$</span>observation)</span>
+<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>  yt_pred <span class="ot">&lt;-</span> <span class="fu">f</span>(fit<span class="sc">$</span>mean[<span class="fu">which</span>(grid_datetime  <span class="sc">%in%</span> df_test<span class="sc">$</span>datetime)])</span>
 <span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>  yt_true <span class="ot">&lt;-</span> <span class="fu">f</span>(df_test<span class="sc">$</span>observation)</span>
-<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>  yt_pred <span class="ot">&lt;-</span> <span class="fu">f</span>(fit<span class="sc">$</span>mean[<span class="fu">which</span>(grid_datetime  <span class="sc">%in%</span> df_test<span class="sc">$</span>datetime)])</span>
-<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate RMSE</span></span>
-<span id="cb24-72"><a href="#cb24-72" aria-hidden="true" tabindex="-1"></a>  rmse[i, ] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((yt_true <span class="sc">-</span> yt_pred)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb24-74"><a href="#cb24-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-75"><a href="#cb24-75" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(rmse) <span class="ot">&lt;-</span> site_names</span>
-<span id="cb24-76"><a href="#cb24-76" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate RMSE</span></span>
+<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>  rmse[i, ] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((yt_true <span class="sc">-</span> yt_pred)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(rmse) <span class="ot">&lt;-</span> site_names</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          [,1]
+BLAN 1.1173576
+KONZ 0.7779042
+LENO 0.6851390
+ORNL 0.9205952
+OSBS 1.2057049
+SCBI 0.8610973
+SERC 1.7385737
+TALL        NA
+UKFS        NA</code></pre>
+</div>
 </div>
 
 
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{patil2024,
+  author = {Patil, Parul},
+  title = {VectorByte {Methods} {Training:} {Introduction} to {Gaussian}
+    {Processes} for {Time} {Dependent} {Data} {(Practical} - Solution)},
+  date = {2024-07-24},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-patil2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Patil, Parul. 2024. <span>“VectorByte Methods Training: Introduction to
+Gaussian Processes for Time Dependent Data (Practical -
+Solution).”</span> July 24, 2024.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

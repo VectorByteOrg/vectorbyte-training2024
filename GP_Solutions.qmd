@@ -1,10 +1,23 @@
 ---
-title: "GP_Solutions"
-format: html
-editor: visual
+title: "VectorByte Methods Training:  Introduction to Gaussian Processes for Time Dependent Data (Practical - solution)"
+author:
+  - name: Parul Patil 
+    affiliation: Virginia Tech and VectorByte
+citation: true
+date: 2024-07-24
+date-format: long
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
+bibliography: references.bib
+link-citations: TRUE
 ---
 
-##### Libraries
+
+# Libraries
 
 ```{r, warning=FALSE, message=FALSE, warn.conflicts = FALSE}
 library(mvtnorm)
@@ -13,7 +26,7 @@ library(hetGP)
 library(ggplot2)
 ```
 
-##### HetGP (sin wave eg)
+# HetGP (sin wave eg)
 
 ```{r}
 # Your turn
@@ -50,7 +63,7 @@ nugs <- het_pred$nugs
 summary(nugs)
 ```
 
-##### Challenges
+# Challenges
 
 We need to load the data and the functions
 
@@ -86,7 +99,9 @@ fx.sin <- function(datetime, f1 = fx.iso_week){
 }
 ```
 
-###### Fit a GP Model for the location "SERC" i.e. `site_number = 7`.
+## Fit a GP Model for the location "SERC" 
+
+i.e. `site_number = 7`.
 
 Just change site = 7
 
@@ -191,7 +206,7 @@ rmse <- sqrt(mean((yt_true - yt_pred)^2))
 rmse
 ```
 
-###### Use an environmental predictor in your model. Following is a function `fx.green` that creates the variable given the `datetime` and the `location`.
+## Use an environmental predictor in your model. Following is a function `fx.green` that creates the variable given the `datetime` and the `location`.
 
 Here is a snippet of the supporting file that you will use; You can look into the data.frame and try to plot `ker` for one site at a time and see what it yields.
 
@@ -215,7 +230,7 @@ fx.green <- function(datetime, site, site_info = df_green){
 -   set up X3 using `fx_green`
 -   Scale X3
 
-Setting up the target dataframe
+### Setting up the target dataframe
 
 ```{r}
 
@@ -234,7 +249,7 @@ df_train <- subset(df, df$datetime <= cutoff)
 df_test <- subset(df, df$datetime > cutoff)
 ```
 
-Adding Greenness
+### Adding Greenness
 
 ```{r}
 # Choose location 
@@ -333,7 +348,7 @@ rmse <- sqrt(mean((yt_true - yt_pred)^2))
 rmse
 ```
 
-###### Fit a GP Model for all the locations (*More advanced*).
+## Fit a GP Model for all the locations (*More advanced*).
 
 ```{r}
 # GP function. This can be varied but easiest way is to just take in X, y, XX and return the predicted means and bounds. 
