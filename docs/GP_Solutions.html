@@ -254,7 +254,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pulling the data from the NEON data base. </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://data.ecoforecast.org/neon4cast-targets/ticks/ticks-targets.csv.gz"</span>, <span class="at">guess_max =</span> <span class="fl">1e1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 637 Columns: 5
+<pre><code>Rows: 505 Columns: 5
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr  (3): site_id, variable, iso_week
@@ -408,7 +408,7 @@ date (1): datetime
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((yt_true <span class="sc">-</span> yt_pred)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9553652</code></pre>
+<pre><code>[1] 1.681545</code></pre>
 </div>
 </div>
 </section>
@@ -570,7 +570,7 @@ date (1): datetime
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((yt_true <span class="sc">-</span> yt_pred)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9532001</code></pre>
+<pre><code>[1] 1.738574</code></pre>
 </div>
 </div>
 </section>
@@ -681,84 +681,10 @@ date (1): datetime
 <span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate RMSE</span></span>
 <span id="cb24-72"><a href="#cb24-72" aria-hidden="true" tabindex="-1"></a>  rmse[i, ] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((yt_true <span class="sc">-</span> yt_pred)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-4.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-5.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-6.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-7.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-8.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="GP_Solutions_files/figure-html/unnamed-chunk-9-9.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(rmse) <span class="ot">&lt;-</span> site_names</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>          [,1]
-BLAN 1.1173576
-KONZ 0.7779042
-LENO 0.6851390
-ORNL 0.9205952
-OSBS 1.2057049
-SCBI 0.8610973
-SERC 0.9532001
-TALL 1.2216955
-UKFS 2.0705090</code></pre>
-</div>
+<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-74"><a href="#cb24-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-75"><a href="#cb24-75" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(rmse) <span class="ot">&lt;-</span> site_names</span>
+<span id="cb24-76"><a href="#cb24-76" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
