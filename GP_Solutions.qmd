@@ -369,8 +369,7 @@ gpfit <- function(X, y , XXt){
   
 ```
 
-```{r, eval=FALSE}
-site_number <- 7 # (site_number = 4) for the other challenge
+```{r}
 
 # Obtaining site name
 site_names <- unique(target$site_id)
@@ -388,7 +387,6 @@ grid_datetime <- seq.Date(startdate, Sys.Date() + 365, by = 7) # create sequence
 rmse <- matrix(nrow = length(site_names), ncol = 1) # if rmse
 
 for(i in 1:length(site_names)){
-  
   df_site <- subset(df, site_id == site_names[i])
   
   # cutoff for sites
@@ -399,7 +397,7 @@ for(i in 1:length(site_names)){
   
   X1 <- fx.iso_week(df_train$datetime) # range is 1-53
   X2 <- fx.sin(df_train$datetime) # range is 0 to 1
-  X3 <- fx.green(df_train$datetime, site = site_names[site_number], site_info = df_green_site) # optional add
+  X3 <- fx.green(df_train$datetime, site = site_names[i], site_info = df_green_site) # optional add
 
   X1c <- X1/ 53
   X3c <- (X3 - min(X3))/ (max(X3)- min(X3))
@@ -410,7 +408,7 @@ for(i in 1:length(site_names)){
 
   XXt1 <- fx.iso_week(grid_datetime)
   XXt2 <- fx.sin(grid_datetime)
-  XXt3 <- fx.green(grid_datetime, site = site_names[site_nunber], site_info =
+  XXt3 <- fx.green(grid_datetime, site = site_names[i], site_info =
                    df_green_site)
 
   # Standardize
