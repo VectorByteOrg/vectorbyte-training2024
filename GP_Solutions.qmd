@@ -50,7 +50,6 @@ nugs <- het_pred$nugs
 summary(nugs)
 ```
 
-
 ##### Challenges
 
 We need to load the data and the functions
@@ -87,10 +86,9 @@ fx.sin <- function(datetime, f1 = fx.iso_week){
 }
 ```
 
-###### Fit a GP Model for the location "SERC" i.e. `site_number = 7`. 
+###### Fit a GP Model for the location "SERC" i.e. `site_number = 7`.
 
 Just change site = 7
-
 
 ```{r}
 site_number <- 7 # (site_number = 4) for the other challenge
@@ -195,7 +193,7 @@ rmse
 
 ###### Use an environmental predictor in your model. Following is a function `fx.green` that creates the variable given the `datetime` and the `location`.
 
-Here is a snippet of the supporting file that you will use; You can look into the data.frame and try to plot `ker` for one site at a time and see what it yields. 
+Here is a snippet of the supporting file that you will use; You can look into the data.frame and try to plot `ker` for one site at a time and see what it yields.
 
 ```{r, warning=FALSE, message=FALSE,}
 source('code/df_spline.R') # sources the cript to make greenness predictor
@@ -213,12 +211,11 @@ fx.green <- function(datetime, site, site_info = df_green){
 }
 ```
 
+-   Choose a site
+-   set up X3 using `fx_green`
+-   Scale X3
 
-- Choose a site
-- set up X3 using `fx_green` 
-- Scale X3
-
-Setting up the target dataframe 
+Setting up the target dataframe
 
 ```{r}
 
@@ -372,7 +369,7 @@ gpfit <- function(X, y , XXt){
   
 ```
 
-```{r}
+```{r, eval=FALSE}
 site_number <- 7 # (site_number = 4) for the other challenge
 
 # Obtaining site name
