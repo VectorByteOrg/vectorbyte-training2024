@@ -80,6 +80,14 @@ We are assuming familiarity with R basics as well as at least introductory stati
 
 <br> <br>
 
+## Introduction to climate and weather data for time dependent analyses
+
+- [Lecture](VByte_2024_Wkshp_climate.pdf)
+- [GEE code (text file)](code/NEON_SJR_MODIC_LST.txt)
+- dataset: [NEON_tickplots_13sites_utf8.csv](data/NEON_tickplots_13sites_utf8.csv)
+
+<br><br>
+
 ## Gaussian Process models (GPs) for Time Dependent Data
 
 -   [Lecture Slides](GP.qmd)
