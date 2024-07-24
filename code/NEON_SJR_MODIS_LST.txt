@@ -1,0 +1,127 @@
+//Pulling MODIS LST data for a collection of NEON points
+//16 January 2024
+//Cat Lippi
+//Modded by S.J. Ryan, July 2024 for VByte Workshop
+
+//Bring in MODIS LST imagery
+var modis = ee.ImageCollection('MODIS/061/MOD11A2').filterDate('2018', Date.now());
+var modis_lst = modis.select('LST_Day_1km');
+var modis_lst_vis = {
+  min: 13000.0,
+  max: 16500.0,
+  palette: [
+    '040274', '040281', '0502a3', '0502b8', '0502ce', '0502e6',
+    '0602ff', '235cb1', '307ef3', '269db1', '30c8e2', '32d3ef',
+    '3be285', '3ff38f', '86e26f', '3ae237', 'b5e22e', 'd6e21f',
+    'fff705', 'ffd611', 'ffb613', 'ff8b13', 'ff6e08', 'ff500d',
+    'ff0000', 'de0101', 'c21301', 'a71001', '911003'
+  ],
+};
+
+//Add MODIS imagery to map
+Map.addLayer(modis_lst, modis_lst_vis,
+    'MODIS LST', false);
+    
+    
+// Rescale MODIS LST and convert to Celsius (C)
+var modis_lst_C = modis_lst.map(function(image) {
+  return image
+    .multiply(0.02)
+    .subtract(273.15)
+    .copyProperties(image, ['system:time_start']);
+});
+
+
+
+///////////////////////////////////////////////////////////////////////////
+//FUNCTIONS//
+//////////////////////////////////////////////////////////////////////////
+// Function to create buffer around each point
+function bufferPoints(radius, bounds) {
+  return function(pt) {
+    pt = ee.Feature(pt);
+    return bounds ? pt.buffer(radius).bounds() : pt.buffer(radius);
+  };
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+//Trying to export LST values for all NEON points at once
+// Pull in points and make FeatureCollection
+// Combine NEON points into one feature collection
+var towers = ee.FeatureCollection([
+  ee.Feature(ee.Geometry.Point([-81.99343, 29.68927]), {plot_id: 'OSBS'}),
+  ee.Feature(ee.Geometry.Point([-71.28731, 44.06388]), {plot_id: 'BART'}),
+  ee.Feature(ee.Geometry.Point([-78.07164, 39.06026]), {plot_id: 'BLAN'}),
+  ee.Feature(ee.Geometry.Point([-76.56001, 38.89008]), {plot_id: 'SERC'}),
+  ee.Feature(ee.Geometry.Point([-81.4362, 28.12504]), {plot_id: 'DSNY'}),
+   ee.Feature(ee.Geometry.Point([-84.46861, 31.19484]), {plot_id: 'JERC'}),
+    ee.Feature(ee.Geometry.Point([-83.50195, 35.68896]), {plot_id: 'GRSM'}),
+     ee.Feature(ee.Geometry.Point([-80.52484, 37.37828]), {plot_id: 'MLBS'}),
+      ee.Feature(ee.Geometry.Point([-72.17266, 42.5369]), {plot_id: 'HARV'}),
+       ee.Feature(ee.Geometry.Point([-78.1395, 38.89292]), {plot_id: 'SCBI'}),
+        ee.Feature(ee.Geometry.Point([-89.53725, 46.23388]), {plot_id: 'UNDE'}),
+         ee.Feature(ee.Geometry.Point([-84.2826, 35.96412]), {plot_id: 'ORNL'}),
+          ee.Feature(ee.Geometry.Point([-87.39327, 32.95046]), {plot_id: 'TALL'}),
+]);
+
+//Read in tick plots from 13 NEON sites
+//Uploaded csv to Assets
+//NOTE: Yours will be named for your asset collection, so change the below variable assignment
+var tickplots = ee.FeatureCollection('projects/ee-sjryan3/assets/NEON_tickplots_13sites_utf8');
+
+
+//view feature collections
+Map.addLayer(towers, {color: 'Red'}, 'NEON Towers');
+Map.addLayer(tickplots, {color: 'Green'}, 'NEON Tick Plots');
+
+
+// Implement buffer function to make each point a 1km^2 polygon
+var ptsbuff = towers.map(bufferPoints(500, true)); //true = square pixel
+var tickbuff = tickplots.map(bufferPoints(500, true));
+
+//Get zonal statistics
+var towreduced = modis_lst_C.map(function(image){
+  return image.reduceRegions({
+    collection:ptsbuff, 
+    reducer:ee.Reducer.mean(), 
+    scale: 1000  //Resolution of MODIS LST (m)
+  });
+});
+
+print(towreduced.limit(50));
+
+var tickreduced = modis_lst_C.map(function(image){
+  return image.reduceRegions({
+    collection:tickbuff, 
+    reducer:ee.Reducer.mean(), 
+    scale: 1000   //Resolution of MODIS LST (m)
+  });
+});
+
+print(tickreduced.limit(50));
+
+// the resulting mean is a FeatureCollection
+// so you can export it as a table
+//NOTE: when you run the export script, it does not automatically write the file
+//after running script, the task tab will highlight in the right GEE editor window
+//need to click the run button under unsubmitted tasks for each csv file
+
+Export.table.toDrive({
+    collection: towreduced.flatten(), 
+    description: 'NEON_towers_MODIS_LST_export', 
+    folder: 'NEON_MODIS', 
+    fileFormat: 'CSV'
+})
+
+Export.table.toDrive({
+    collection: tickreduced.flatten(), 
+    description: 'NEON_tickplots_MODIS_LST_export', 
+    folder: 'NEON_MODIS', 
+    fileFormat: 'CSV'
+})
+//var table = reduced.flatten();
+
+// Print in console  
+//print(table.limit(50));

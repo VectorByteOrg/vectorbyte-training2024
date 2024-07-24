@@ -1,0 +1,79 @@
+plotID,country,state,county,domain,domainID,siteName,siteID,plotType,subtype,plotDim,latitude,longitude,datum,utmZone,nlcdClass,soilOrder
+BART_010,unitedStates,NH,Carroll,Northeast,D01,Bartlett Experimental Forest NEON,BART,distributed,tickPlot,40m x 40m,44.0511,-71.267761,WGS84,19N,deciduousForest,NA
+BART_015,unitedStates,NH,Carroll,Northeast,D01,Bartlett Experimental Forest NEON,BART,distributed,tickPlot,40m x 40m,44.042146,-71.271613,WGS84,19N,mixedForest,NA
+BART_019,unitedStates,NH,Carroll,Northeast,D01,Bartlett Experimental Forest NEON,BART,distributed,tickPlot,40m x 40m,44.069348,-71.287994,WGS84,19N,mixedForest,NA
+BART_002,unitedStates,NH,Carroll,Northeast,D01,Bartlett Experimental Forest NEON,BART,distributed,tickPlot,40m x 40m,44.035239,-71.274681,WGS84,19N,deciduousForest,NA
+BART_029,unitedStates,NH,Carroll,Northeast,D01,Bartlett Experimental Forest NEON,BART,distributed,tickPlot,40m x 40m,44.058949,-71.289334,WGS84,19N,evergreenForest,NA
+BART_011,unitedStates,NH,Carroll,Northeast,D01,Bartlett Experimental Forest NEON,BART,distributed,tickPlot,40m x 40m,44.048783,-71.295353,WGS84,19N,mixedForest,NA
+DSNY_001,unitedStates,FL,Osceola,Southeast,D03,Disney Wilderness Preserve NEON,DSNY,distributed,tickPlot,40m x 40m,28.098062,-81.418561,WGS84,17N,woodyWetlands,Entisols
+DSNY_004,unitedStates,FL,Osceola,Southeast,D03,Disney Wilderness Preserve NEON,DSNY,distributed,tickPlot,40m x 40m,28.101022,-81.399501,WGS84,17N,woodyWetlands,Entisols
+DSNY_006,unitedStates,FL,Osceola,Southeast,D03,Disney Wilderness Preserve NEON,DSNY,distributed,tickPlot,40m x 40m,28.093704,-81.398045,WGS84,17N,woodyWetlands,Alfisols
+DSNY_008,unitedStates,FL,Polk,Southeast,D03,Disney Wilderness Preserve NEON,DSNY,distributed,tickPlot,40m x 40m,28.047337,-81.403204,WGS84,17N,woodyWetlands,Entisols
+DSNY_021,unitedStates,FL,Polk,Southeast,D03,Disney Wilderness Preserve NEON,DSNY,distributed,tickPlot,40m x 40m,28.053635,-81.392353,WGS84,17N,pastureHay,Entisols
+DSNY_005,unitedStates,FL,Polk,Southeast,D03,Disney Wilderness Preserve NEON,DSNY,distributed,tickPlot,40m x 40m,28.040497,-81.394482,WGS84,17N,woodyWetlands,Entisols
+GRSM_003,unitedStates,TN,Sevier,Appalachians & Cumberland Plateau,D07,Great Smoky Mountains National Park NEON,GRSM,distributed,tickPlot,40m x 40m,35.676582,-83.476212,WGS84,17N,deciduousForest,Inceptisols
+GRSM_004,unitedStates,TN,Sevier,Appalachians & Cumberland Plateau,D07,Great Smoky Mountains National Park NEON,GRSM,distributed,tickPlot,40m x 40m,35.688954,-83.535565,WGS84,17N,deciduousForest,Inceptisols
+GRSM_006,unitedStates,TN,Sevier,Appalachians & Cumberland Plateau,D07,Great Smoky Mountains National Park NEON,GRSM,distributed,tickPlot,40m x 40m,35.679075,-83.643672,WGS84,17N,deciduousForest,Inceptisols
+GRSM_009,unitedStates,TN,Sevier,Appalachians & Cumberland Plateau,D07,Great Smoky Mountains National Park NEON,GRSM,distributed,tickPlot,40m x 40m,35.671879,-83.491176,WGS84,17N,deciduousForest,Inceptisols
+GRSM_010,unitedStates,TN,Sevier,Appalachians & Cumberland Plateau,D07,Great Smoky Mountains National Park NEON,GRSM,distributed,tickPlot,40m x 40m,35.669244,-83.524578,WGS84,17N,deciduousForest,Inceptisols
+GRSM_015,unitedStates,TN,Sevier,Appalachians & Cumberland Plateau,D07,Great Smoky Mountains National Park NEON,GRSM,distributed,tickPlot,40m x 40m,35.729087,-83.408065,WGS84,17N,deciduousForest,Inceptisols
+HARV_006,unitedStates,MA,Worcester,Northeast,D01,Harvard Forest & Quabbin Watershed NEON,HARV,distributed,tickPlot,40m x 40m,42.401928,-72.2527,WGS84,18N,deciduousForest,Inceptisols
+HARV_001,unitedStates,MA,Worcester,Northeast,D01,Harvard Forest & Quabbin Watershed NEON,HARV,distributed,tickPlot,40m x 40m,42.424217,-72.260096,WGS84,18N,deciduousForest,Inceptisols
+HARV_022,unitedStates,MA,Worcester,Northeast,D01,Harvard Forest & Quabbin Watershed NEON,HARV,distributed,tickPlot,40m x 40m,42.435458,-72.199287,WGS84,18N,evergreenForest,Entisols
+HARV_002,unitedStates,MA,Worcester,Northeast,D01,Harvard Forest & Quabbin Watershed NEON,HARV,distributed,tickPlot,40m x 40m,42.477231,-72.259454,WGS84,18N,deciduousForest,Inceptisols
+HARV_004,unitedStates,MA,Worcester,Northeast,D01,Harvard Forest & Quabbin Watershed NEON,HARV,distributed,tickPlot,40m x 40m,42.426877,-72.227953,WGS84,18N,mixedForest,Inceptisols
+HARV_026,unitedStates,MA,Worcester,Northeast,D01,Harvard Forest & Quabbin Watershed NEON,HARV,distributed,tickPlot,40m x 40m,42.412057,-72.246527,WGS84,18N,evergreenForest,Inceptisols
+JERC_002,unitedStates,GA,Baker,Southeast,D03,The Jones Center At Ichauway NEON,JERC,distributed,tickPlot,40m x 40m,31.194058,-84.461542,WGS84,16N,evergreenForest,Ultisols
+JERC_004,unitedStates,GA,Baker,Southeast,D03,The Jones Center At Ichauway NEON,JERC,distributed,tickPlot,40m x 40m,31.190116,-84.46738,WGS84,16N,cultivatedCrops,Ultisols
+JERC_010,unitedStates,GA,Baker,Southeast,D03,The Jones Center At Ichauway NEON,JERC,distributed,tickPlot,40m x 40m,31.209229,-84.470521,WGS84,16N,deciduousForest,Ultisols
+JERC_011,unitedStates,GA,Baker,Southeast,D03,The Jones Center At Ichauway NEON,JERC,distributed,tickPlot,40m x 40m,31.184787,-84.4667,WGS84,16N,evergreenForest,Ultisols
+JERC_030,unitedStates,GA,Baker,Southeast,D03,The Jones Center At Ichauway NEON,JERC,distributed,tickPlot,40m x 40m,31.184164,-84.475005,WGS84,16N,mixedForest,Ultisols
+JERC_081,unitedStates,GA,Baker,Southeast,D03,The Jones Center At Ichauway NEON,JERC,distributed,tickPlot,40m x 40m,31.198049,-84.481316,WGS84,16N,mixedForest,Ultisols
+MLBS_003,unitedStates,VA,Giles,Appalachians & Cumberland Plateau,D07,Mountain Lake Biological Station NEON,MLBS,distributed,tickPlot,40m x 40m,37.367225,-80.526897,WGS84,17N,deciduousForest,Ultisols
+MLBS_009,unitedStates,VA,Giles,Appalachians & Cumberland Plateau,D07,Mountain Lake Biological Station NEON,MLBS,distributed,tickPlot,40m x 40m,37.374328,-80.516562,WGS84,17N,deciduousForest,Ultisols
+MLBS_002,unitedStates,VA,Giles,Appalachians & Cumberland Plateau,D07,Mountain Lake Biological Station NEON,MLBS,distributed,tickPlot,40m x 40m,37.371702,-80.525882,WGS84,17N,deciduousForest,Ultisols
+MLBS_005,unitedStates,VA,Giles,Appalachians & Cumberland Plateau,D07,Mountain Lake Biological Station NEON,MLBS,distributed,tickPlot,40m x 40m,37.363063,-80.519781,WGS84,17N,deciduousForest,Ultisols
+MLBS_006,unitedStates,VA,Giles,Appalachians & Cumberland Plateau,D07,Mountain Lake Biological Station NEON,MLBS,distributed,tickPlot,40m x 40m,37.427058,-80.562388,WGS84,17N,deciduousForest,Ultisols
+MLBS_004,unitedStates,VA,Giles,Appalachians & Cumberland Plateau,D07,Mountain Lake Biological Station NEON,MLBS,distributed,tickPlot,40m x 40m,37.429068,-80.510287,WGS84,17N,deciduousForest,Ultisols
+ORNL_040,unitedStates,TN,Anderson,Appalachians & Cumberland Plateau,D07,Oak Ridge NEON,ORNL,distributed,tickPlot,40m x 40m,35.975522,-84.305103,WGS84,16N,evergreenForest,Inceptisols
+ORNL_007,unitedStates,TN,Roane,Appalachians & Cumberland Plateau,D07,Oak Ridge NEON,ORNL,distributed,tickPlot,40m x 40m,35.925842,-84.328415,WGS84,16N,deciduousForest,NA
+ORNL_008,unitedStates,TN,Roane,Appalachians & Cumberland Plateau,D07,Oak Ridge NEON,ORNL,distributed,tickPlot,40m x 40m,35.933531,-84.334026,WGS84,16N,deciduousForest,NA
+ORNL_009,unitedStates,TN,Anderson,Appalachians & Cumberland Plateau,D07,Oak Ridge NEON,ORNL,distributed,tickPlot,40m x 40m,35.974904,-84.226626,WGS84,16N,deciduousForest,Inceptisols
+ORNL_002,unitedStates,TN,Anderson,Appalachians & Cumberland Plateau,D07,Oak Ridge NEON,ORNL,distributed,tickPlot,40m x 40m,35.983081,-84.211655,WGS84,16N,deciduousForest,Inceptisols
+ORNL_003,unitedStates,TN,Anderson,Appalachians & Cumberland Plateau,D07,Oak Ridge NEON,ORNL,distributed,tickPlot,40m x 40m,35.967016,-84.229854,WGS84,16N,deciduousForest,Ultisols
+OSBS_063,unitedStates,FL,Putnam,Southeast,D03,Ordway-Swisher Biological Station NEON,OSBS,distributed,tickPlot,40m x 40m,29.688556,-81.970004,WGS84,17N,mixedForest,Entisols
+OSBS_077,unitedStates,FL,Putnam,Southeast,D03,Ordway-Swisher Biological Station NEON,OSBS,distributed,tickPlot,40m x 40m,29.678312,-82.015674,WGS84,17N,woodyWetlands,Entisols
+OSBS_048,unitedStates,FL,Putnam,Southeast,D03,Ordway-Swisher Biological Station NEON,OSBS,distributed,tickPlot,40m x 40m,29.678818,-81.947792,WGS84,17N,deciduousForest,Entisols
+OSBS_002,unitedStates,FL,Putnam,Southeast,D03,Ordway-Swisher Biological Station NEON,OSBS,distributed,tickPlot,40m x 40m,29.703656,-81.958372,WGS84,17N,evergreenForest,Entisols
+OSBS_004,unitedStates,FL,Putnam,Southeast,D03,Ordway-Swisher Biological Station NEON,OSBS,distributed,tickPlot,40m x 40m,29.683403,-81.960448,WGS84,17N,evergreenForest,Entisols
+OSBS_001,unitedStates,FL,Putnam,Southeast,D03,Ordway-Swisher Biological Station NEON,OSBS,distributed,tickPlot,40m x 40m,29.704063,-82.008061,WGS84,17N,woodyWetlands,Entisols
+SCBI_002,unitedStates,VA,Warren,Mid-Atlantic,D02,Smithsonian Conservation Biology Institute NEON,SCBI,distributed,tickPlot,40m x 40m,38.893863,-78.1427,WGS84,17N,deciduousForest,Alfisols
+SCBI_013,unitedStates,VA,Warren,Mid-Atlantic,D02,Smithsonian Conservation Biology Institute NEON,SCBI,distributed,tickPlot,40m x 40m,38.873041,-78.163313,WGS84,17N,deciduousForest,Alfisols
+SCBI_014,unitedStates,VA,Warren,Mid-Atlantic,D02,Smithsonian Conservation Biology Institute NEON,SCBI,distributed,tickPlot,40m x 40m,38.86574,-78.16312,WGS84,17N,deciduousForest,Alfisols
+SCBI_006,unitedStates,VA,Warren,Mid-Atlantic,D02,Smithsonian Conservation Biology Institute NEON,SCBI,distributed,tickPlot,40m x 40m,38.897079,-78.150277,WGS84,17N,pastureHay,Alfisols
+SCBI_007,unitedStates,VA,Warren,Mid-Atlantic,D02,Smithsonian Conservation Biology Institute NEON,SCBI,distributed,tickPlot,40m x 40m,38.886022,-78.129368,WGS84,17N,deciduousForest,Alfisols
+SCBI_008,unitedStates,VA,Warren,Mid-Atlantic,D02,Smithsonian Conservation Biology Institute NEON,SCBI,distributed,tickPlot,40m x 40m,38.887797,-78.148905,WGS84,17N,deciduousForest,Alfisols
+SERC_012,unitedStates,MD,Anne Arundel,Mid-Atlantic,D02,Smithsonian Environmental Research Center NEON,SERC,distributed,tickPlot,40m x 40m,38.880016,-76.561641,WGS84,18N,deciduousForest,Ultisols
+SERC_001,unitedStates,MD,Anne Arundel,Mid-Atlantic,D02,Smithsonian Environmental Research Center NEON,SERC,distributed,tickPlot,40m x 40m,38.868184,-76.535301,WGS84,18N,deciduousForest,Ultisols
+SERC_023,unitedStates,MD,Anne Arundel,Mid-Atlantic,D02,Smithsonian Environmental Research Center NEON,SERC,distributed,tickPlot,40m x 40m,38.873978,-76.535923,WGS84,18N,cultivatedCrops,Ultisols
+SERC_002,unitedStates,MD,Anne Arundel,Mid-Atlantic,D02,Smithsonian Environmental Research Center NEON,SERC,distributed,tickPlot,40m x 40m,38.896257,-76.55818,WGS84,18N,deciduousForest,Ultisols
+SERC_005,unitedStates,MD,Anne Arundel,Mid-Atlantic,D02,Smithsonian Environmental Research Center NEON,SERC,distributed,tickPlot,40m x 40m,38.894058,-76.546297,WGS84,18N,deciduousForest,Entisols
+SERC_006,unitedStates,MD,Anne Arundel,Mid-Atlantic,D02,Smithsonian Environmental Research Center NEON,SERC,distributed,tickPlot,40m x 40m,38.880025,-76.548383,WGS84,18N,deciduousForest,Ultisols
+TALL_016,unitedStates,AL,Bibb,Ozarks Complex,D08,Talladega National Forest NEON,TALL,distributed,tickPlot,40m x 40m,32.971554,-87.415844,WGS84,16N,evergreenForest,Entisols
+TALL_001,unitedStates,AL,Hale,Ozarks Complex,D08,Talladega National Forest NEON,TALL,distributed,tickPlot,40m x 40m,32.976366,-87.432192,WGS84,16N,deciduousForest,Entisols
+TALL_008,unitedStates,AL,Hale,Ozarks Complex,D08,Talladega National Forest NEON,TALL,distributed,tickPlot,40m x 40m,32.922873,-87.434098,WGS84,16N,deciduousForest,Ultisols
+TALL_003,unitedStates,AL,Bibb,Ozarks Complex,D08,Talladega National Forest NEON,TALL,distributed,tickPlot,40m x 40m,32.894409,-87.416533,WGS84,16N,mixedForest,Entisols
+TALL_006,unitedStates,AL,Hale,Ozarks Complex,D08,Talladega National Forest NEON,TALL,distributed,tickPlot,40m x 40m,32.899153,-87.444554,WGS84,16N,evergreenForest,Ultisols
+TALL_002,unitedStates,AL,Hale,Ozarks Complex,D08,Talladega National Forest NEON,TALL,distributed,tickPlot,40m x 40m,32.920826,-87.42896,WGS84,16N,mixedForest,Entisols
+UNDE_002,unitedStates,MI,Gogebic,Great Lakes,D05,University of Notre Dame Environmental Research Center NEON,UNDE,distributed,tickPlot,40m x 40m,46.242285,-89.543255,WGS84,16N,woodyWetlands,Histosols
+UNDE_999,unitedStates,MI,Gogebic,Great Lakes,D05,University of Notre Dame Environmental Research Center NEON,UNDE,distributed,tickPlot,40m x 40m,46.256241,-89.534199,WGS84,16N,woodyWetlands,Histosols
+UNDE_013,unitedStates,MI,Gogebic,Great Lakes,D05,University of Notre Dame Environmental Research Center NEON,UNDE,distributed,tickPlot,40m x 40m,46.227786,-89.535179,WGS84,16N,deciduousForest,Spodosols
+UNDE_019,unitedStates,MI,Gogebic,Great Lakes,D05,University of Notre Dame Environmental Research Center NEON,UNDE,distributed,tickPlot,40m x 40m,46.257429,-89.542053,WGS84,16N,deciduousForest,Inceptisols
+UNDE_011,unitedStates,WI,Vilas,Great Lakes,D05,University of Notre Dame Environmental Research Center NEON,UNDE,distributed,tickPlot,40m x 40m,46.213935,-89.50595,WGS84,16N,woodyWetlands,Histosols
+UNDE_017,unitedStates,MI,Gogebic,Great Lakes,D05,University of Notre Dame Environmental Research Center NEON,UNDE,distributed,tickPlot,40m x 40m,46.236736,-89.497054,WGS84,16N,mixedForest,Inceptisols
+BLAN_008,unitedStates,VA,Clarke,Mid-Atlantic,D02,Blandy Experimental Farm NEON,BLAN,distributed,tickPlot,40m x 40m,39.083875,-77.966321,WGS84,18N,pastureHay,Ultisols
+BLAN_020,unitedStates,VA,Clarke,Mid-Atlantic,D02,Blandy Experimental Farm NEON,BLAN,distributed,tickPlot,40m x 40m,39.101651,-77.981855,WGS84,18N,pastureHay,Alfisols
+BLAN_015,unitedStates,VA,Clarke,Mid-Atlantic,D02,Blandy Experimental Farm NEON,BLAN,distributed,tickPlot,40m x 40m,39.088729,-77.955492,WGS84,18N,deciduousForest,Entisols
+BLAN_004,unitedStates,VA,Clarke,Mid-Atlantic,D02,Blandy Experimental Farm NEON,BLAN,distributed,tickPlot,40m x 40m,39.088416,-77.961331,WGS84,18N,pastureHay,Entisols
+BLAN_005,unitedStates,VA,Clarke,Mid-Atlantic,D02,Blandy Experimental Farm NEON,BLAN,distributed,tickPlot,40m x 40m,39.086224,-77.972736,WGS84,18N,deciduousForest,Ultisols
+BLAN_012,unitedStates,VA,Clarke,Mid-Atlantic,D02,Blandy Experimental Farm NEON,BLAN,distributed,tickPlot,40m x 40m,39.082719,-77.95959,WGS84,18N,deciduousForest,Ultisols
