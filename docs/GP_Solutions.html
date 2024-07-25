@@ -295,7 +295,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pulling the data from the NEON data base. </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://data.ecoforecast.org/neon4cast-targets/ticks/ticks-targets.csv.gz"</span>, <span class="at">guess_max =</span> <span class="fl">1e1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 505 Columns: 5
+<pre><code>Rows: 516 Columns: 5
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr  (3): site_id, variable, iso_week
@@ -450,7 +450,7 @@ date (1): datetime
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((yt_true <span class="sc">-</span> yt_pred)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.681545</code></pre>
+<pre><code>[1] 1.311571</code></pre>
 </div>
 </div>
 </section>
@@ -615,7 +615,7 @@ date (1): datetime
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((yt_true <span class="sc">-</span> yt_pred)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.738574</code></pre>
+<pre><code>[1] 1.358978</code></pre>
 </div>
 </div>
 </section>
@@ -784,7 +784,7 @@ LENO 0.6851390
 ORNL 0.9205952
 OSBS 1.2057049
 SCBI 0.8610973
-SERC 1.7385737
+SERC 1.3589777
 TALL        NA
 UKFS        NA</code></pre>
 </div>

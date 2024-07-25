@@ -100,4 +100,8 @@ We are assuming familiarity with R basics as well as at least introductory stati
 ## Dengue Forecasting Challenge
 
 - [Description](VB_DengueChallenge.qmd)
-- dataset:[combined_sanjuan.csv](data/combined_sanjuan.csv)
+- dataset: [combined_sanjuan.csv](data/combined_sanjuan.csv)
+
+<br>
+<br>
+
