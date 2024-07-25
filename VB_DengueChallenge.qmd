@@ -1,0 +1,42 @@
+---
+title: "VectorByte Methods Training: Dengue Forecasting Challenge"
+author:
+  - name: Leah R. Johnson 
+    url: https://lrjohnson0.github.io/QEDLab/leahJ.html
+    affiliation: Virginia Tech and VectorByte
+citation: true
+date: 2024-07-24
+date-format: long
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
+---
+
+# Overview
+
+To operate effectively, health departments must be able to predict weekly cases of infectious diseases, as this will correspond to hospital demand and resources.  Your task is to provide a fitted model for forecasting weekly total dengue cases in San Juan, Puerto Rico. The data for this question consist of time series of dengue case counts for the city of San Juan together with environmental and other covariate information across a number of transmission seasons. The data are stored in [combined_sanjuan.csv](data/combined_sanjuan.csv). Detailed descriptions of the data are available at:
+
+<center> [http://dengueforecasting.noaa.gov/](http://dengueforecasting.noaa.gov/) </center>
+
+#  Instructions
+
+You should divide your data into training and testing sets. Specifically, reserve the ***final season*** as a testing set, and all other seasons for training. You may use any modeling approach from the workshop to build a model. You want to examine both in and out of sample predictions.
+
+## Within Sample
+
+Comment on the accuracy of your forecaster with particular focus on peak incidence -- both when it peak occurs and its height -- within the training data set. What does your fitted model forecast for the first week of the last dengue season, i.e., for the week following the last week in the training data?  Be sure to include uncertainty estimates.  
+
+## Out of Sample (forecasting)
+
+Obtain forecasts (and uncertainties) for season week 4 of the testing data set. Compare your predictions to the real values. How do you do? Calculate the RMSE and also check if your prediction is within your calculated range of predicted values. 
+
+***HINT***: Remember, you can only use data from the past to predict the future! This means that if you use an environmental (or other) covariate to predict cases, you will also have to predict that covariate into the future! 
+
+## Extra Challenge!
+
+Create predictions with uncertainties for every 4 weeks within the season, i.e., add predictions for weeks  8, 12, 16, 20, 24, 28, 32, 36, 40, 44, and 48 in the testing set using only data through the last week of the previous season. What is your prediction for the week with the most cases. How does it compare to the real peak week? What proportion of real values ended up within your prediction interval (coverage)? You can also calculate RMSE and MAE. We may compare if enough folks calculate further out. 
+
+
